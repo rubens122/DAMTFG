@@ -5,6 +5,7 @@ import com.example.deezerproyecto.models.Artist
 import com.example.deezerproyecto.models.TrackResponse
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface DeezerService {
@@ -19,6 +20,13 @@ interface DeezerService {
 
     @GET("chart/0/albums")
     fun buscarAlbums(): Call<AlbumResponse>
+
+    // ✅ 🔄 NUEVO método para obtener discografía de un artista
+    @GET("artist/{id}/albums")
+    fun buscarDiscografia(
+        @Path("id") artistaId: Long
+    ): Call<AlbumResponse>
+
 }
 
 /**

@@ -26,9 +26,6 @@ class CancionHomeAdapter(
 
     override fun getItemCount(): Int = canciones.size
 
-    /**
-     * 🔄 Método para actualizar la lista de canciones
-     */
     fun actualizarCanciones(nuevasCanciones: List<Track>) {
         canciones.clear()
         canciones.addAll(nuevasCanciones)
@@ -41,7 +38,15 @@ class CancionHomeAdapter(
 
         fun bind(track: Track) {
             tituloCancion.text = track.title
-            Picasso.get().load(track.album.cover).into(imagenCancion)
+
+            // 🔄 Validación de la URL
+            if (track.album.cover.isNotEmpty()) {
+                Picasso.get()
+                    .load(track.album.cover)
+                    .fit()
+                    .centerCrop()
+                    .into(imagenCancion)
+            }
 
             itemView.setOnClickListener {
                 onClickCancion(track)

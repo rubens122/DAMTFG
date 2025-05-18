@@ -38,7 +38,16 @@ class AlbumAdapter(
 
         fun bind(album: Album) {
             tituloAlbum.text = album.title
-            Picasso.get().load(album.cover).into(imagenAlbum)
+
+            // 🔄 URL de alta calidad para el álbum
+            val urlAltaCalidad = album.cover.replace("/image", "/image?size=1000x1000")
+
+            // 🔄 Carga con Picasso en alta resolución
+            Picasso.get()
+                .load(urlAltaCalidad)
+                .fit()
+                .centerCrop()
+                .into(imagenAlbum)
 
             itemView.setOnClickListener {
                 onClickAlbum(album)

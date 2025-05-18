@@ -15,6 +15,21 @@
           <theme>@style/Theme.DeezerProyecto</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_register.xml">
+        <config>
+          <theme>@style/Theme.DeezerProyecto</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_detalle_album.xml">
+        <config>
+          <theme>@style/Theme.DeezerProyecto</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_detalle_artista.xml">
+        <config>
+          <theme>@style/Theme.DeezerProyecto</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_detalle_playlist.xml">
         <config>
           <theme>@style/Theme.DeezerProyecto</theme>
@@ -66,7 +81,19 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14c22858-c9e5-4c8e-9ec6-c7eec4aa158a" name="Changes" comment="" />
+    <list default="true" id="14c22858-c9e5-4c8e-9ec6-c7eec4aa158a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/fragments/DetalleAlbumFragment.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/fragments/DetalleArtistaFragment.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_detalle_album.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_detalle_artista.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/adapters/AlbumAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/adapters/AlbumAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/adapters/CancionHomeAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/adapters/CancionHomeAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/api/DeezerService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/api/DeezerService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/fragments/HomeFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/fragments/HomeFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_album.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_album.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_cancion_home.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_cancion_home.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -84,15 +111,21 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Kotlin Class" />
         <option value="layoutResourceFile" />
+        <option value="Kotlin Class" />
       </list>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
   <component name="ProjectId" id="2xDnFhLN7Gz7194Nj1IwMstNEUa" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -102,10 +135,13 @@
     "Android App.app.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.readMode.enableVisualFormatting": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "last_opened_file_path": "C:/Users/ruben/Documents/GitHub/ProyectoFinalDAM/DeezerProyecto",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/ruben/Documents/GitHub/DAMTFG/DeezerProyecto",
     "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
   }
 }]]></component>
@@ -199,12 +235,12 @@
       <map>
         <entry key="com.example.deezerproyecto">
           <value>
-            <CheckInfo lastCheckTimestamp="1747492460828" />
+            <CheckInfo lastCheckTimestamp="1747580105887" />
           </value>
         </entry>
         <entry key="com.example.deezerproyecto.test">
           <value>
-            <CheckInfo lastCheckTimestamp="1747492460827" />
+            <CheckInfo lastCheckTimestamp="1747580105887" />
           </value>
         </entry>
       </map>

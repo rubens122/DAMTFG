@@ -41,7 +41,17 @@ class HomeFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-        // 🔄 Inicialización de RecyclerViews
+        inicializarVistas(view)
+        inicializarAdaptadores()
+        cargarDatosDeezer()
+
+        return view
+    }
+
+    /**
+     * 🔄 Inicialización de vistas
+     */
+    private fun inicializarVistas(view: View) {
         recyclerCanciones = view.findViewById(R.id.recyclerCanciones)
         recyclerArtistas = view.findViewById(R.id.recyclerArtistas)
         recyclerAlbums = view.findViewById(R.id.recyclerAlbums)
@@ -49,32 +59,44 @@ class HomeFragment : Fragment() {
         recyclerCanciones.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         recyclerArtistas.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         recyclerAlbums.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+    }
 
-        // ✅ Adaptador para canciones
+    /**
+     * 🔄 Inicialización de adaptadores
+     */
+    private fun inicializarAdaptadores() {
         adapterCanciones = CancionHomeAdapter(mutableListOf()) { track ->
             Toast.makeText(requireContext(), "Pulsado: ${track.title}", Toast.LENGTH_SHORT).show()
         }
 
-        // ✅ Adaptador para artistas
         adapterArtistas = ArtistaAdapter(mutableListOf()) { artist ->
-            Toast.makeText(requireContext(), "Artista: ${artist.name}", Toast.LENGTH_SHORT).show()
+            val fragment = DetalleArtistaFragment(artist.id, artist.name, artist.picture)
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.contenedorFragment, fragment)
+                .addToBackStack(null)
+                .commit()
         }
 
-        // ✅ Adaptador para álbumes
         adapterAlbums = AlbumAdapter(mutableListOf()) { album ->
-            Toast.makeText(requireContext(), "Álbum: ${album.title}", Toast.LENGTH_SHORT).show()
+            val fragment = DetalleAlbumFragment(album.id, album.title, album.cover)
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.contenedorFragment, fragment)
+                .addToBackStack(null)
+                .commit()
         }
 
         recyclerCanciones.adapter = adapterCanciones
         recyclerArtistas.adapter = adapterArtistas
         recyclerAlbums.adapter = adapterAlbums
+    }
 
-        // 🔄 Cargar datos de Deezer
+    /**
+     * 🔄 Cargar datos de Deezer
+     */
+    private fun cargarDatosDeezer() {
         cargarTopCanciones()
         cargarTopArtistas()
         cargarTopAlbums()
-
-        return view
     }
 
     private fun cargarTopCanciones() {
@@ -83,12 +105,15 @@ class HomeFragment : Fragment() {
             override fun onResponse(call: Call<TrackResponse>, response: Response<TrackResponse>) {
                 if (response.isSuccessful) {
                     val canciones = response.body()?.data ?: emptyList()
+                    Log.d("HomeFragment", "📌 Canciones encontradas: ${canciones.size}")
                     adapterCanciones.actualizarCanciones(canciones)
+                } else {
+                    Log.e("HomeFragment", "Error en la respuesta de canciones: ${response.errorBody()}")
                 }
             }
 
             override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                Toast.makeText(requireContext(), "Error al cargar canciones", Toast.LENGTH_SHORT).show()
+                Log.e("HomeFragment", "Error al cargar canciones: ${t.message}")
             }
         })
     }
@@ -99,7 +124,7 @@ class HomeFragment : Fragment() {
             override fun onResponse(call: Call<ArtistResponse>, response: Response<ArtistResponse>) {
                 if (response.isSuccessful) {
                     val artistas = response.body()?.data ?: emptyList()
-                    Log.d("HomeFragment", "Artistas encontrados: ${artistas.size}")
+                    Log.d("HomeFragment", "📌 Artistas encontrados: ${artistas.size}")
                     adapterArtistas.actualizarArtistas(artistas)
                 } else {
                     Log.e("HomeFragment", "Error en la respuesta de artistas: ${response.errorBody()}")
@@ -118,7 +143,7 @@ class HomeFragment : Fragment() {
             override fun onResponse(call: Call<AlbumResponse>, response: Response<AlbumResponse>) {
                 if (response.isSuccessful) {
                     val albums = response.body()?.data ?: emptyList()
-                    Log.d("HomeFragment", "Álbumes encontrados: ${albums.size}")
+                    Log.d("HomeFragment", "📌 Álbumes encontrados: ${albums.size}")
                     adapterAlbums.actualizarAlbums(albums)
                 } else {
                     Log.e("HomeFragment", "Error en la respuesta de álbumes: ${response.errorBody()}")
