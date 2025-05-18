@@ -54,15 +54,8 @@ class PerfilFragment : Fragment() {
         botonCerrarSesion = view.findViewById(R.id.botonCerrarSesion)
 
         // 🔄 Cargar datos del usuario
-        campoNombre.setText(usuario?.displayName)
         campoCorreo.setText(usuario?.email)
-
-        // 🔄 Imagen por defecto
-        Picasso.get()
-            .load("https://cdn-icons-png.flaticon.com/512/1946/1946429.png")
-            .fit()
-            .centerCrop()
-            .into(imagenUsuario)
+        cargarDatosUsuario()
 
         // 🔄 Cambiar imagen al hacer click
         imagenUsuario.setOnClickListener {
@@ -87,6 +80,35 @@ class PerfilFragment : Fragment() {
     }
 
     /**
+     * 🔄 Cargar datos del usuario desde Firebase
+     */
+    private fun cargarDatosUsuario() {
+        val usuarioId = usuario?.uid ?: return
+        reference.child(usuarioId).get().addOnSuccessListener {
+            val nombre = it.child("nombre").value as? String
+            val imagenUrl = it.child("imagenPerfil").value as? String
+
+            campoNombre.setText(nombre ?: "")
+            if (imagenUrl != null) {
+                Picasso.get()
+                    .load(imagenUrl)
+                    .placeholder(R.drawable.ic_user) // Imagen por defecto
+                    .fit()
+                    .centerCrop()
+                    .into(imagenUsuario)
+            } else {
+                Picasso.get()
+                    .load("https://cdn-icons-png.flaticon.com/512/1946/1946429.png")
+                    .fit()
+                    .centerCrop()
+                    .into(imagenUsuario)
+            }
+        }.addOnFailureListener {
+            Toast.makeText(requireContext(), "Error al cargar los datos del perfil", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    /**
      * 🔄 Actualizar datos del perfil y subir imagen si existe
      */
     private fun actualizarPerfil() {
@@ -108,7 +130,7 @@ class PerfilFragment : Fragment() {
      * 🔄 Subir la imagen a Firebase Storage
      */
     private fun subirImagenAFirebase(uri: Uri, onSuccess: (String) -> Unit) {
-        val nombreArchivo = "perfil_${UUID.randomUUID()}.jpg"
+        val nombreArchivo = "perfil_${usuario!!.uid}.jpg"
         val referenciaStorage = FirebaseStorage.getInstance().reference.child("imagenes_perfil/$nombreArchivo")
 
         referenciaStorage.putFile(uri)
@@ -124,7 +146,7 @@ class PerfilFragment : Fragment() {
     }
 
     /**
-     * 🔄 Actualizar el nombre en Firebase
+     * 🔄 Actualizar el nombre en Firebase Realtime Database
      */
     private fun actualizarNombre(nuevoNombre: String) {
         reference.child(usuario!!.uid).child("nombre").setValue(nuevoNombre)
