@@ -55,7 +55,7 @@
             android:id="@+id/switchPrivacidad"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Privada"
+            android:text="Publica"
             android:textColor="@color/colorTexto"
             android:layout_marginBottom="16dp"/>
 

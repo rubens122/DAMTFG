@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,9 +18,6 @@ import com.example.deezerproyecto.api.AlbumResponse
 import com.example.deezerproyecto.api.ArtistResponse
 import com.example.deezerproyecto.api.DeezerClient
 import com.example.deezerproyecto.api.DeezerService
-import com.example.deezerproyecto.models.Album
-import com.example.deezerproyecto.models.Artist
-import com.example.deezerproyecto.models.Track
 import com.example.deezerproyecto.models.TrackResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -33,6 +31,7 @@ class HomeFragment : Fragment() {
     private lateinit var adapterCanciones: CancionHomeAdapter
     private lateinit var adapterArtistas: ArtistaAdapter
     private lateinit var adapterAlbums: AlbumAdapter
+    private lateinit var botonPerfil: ImageButton
     private val deezerService: DeezerService = DeezerClient.retrofit.create(DeezerService::class.java)
 
     override fun onCreateView(
@@ -45,25 +44,29 @@ class HomeFragment : Fragment() {
         inicializarAdaptadores()
         cargarDatosDeezer()
 
+        // ✅ Evento de click para abrir el perfil
+        botonPerfil.setOnClickListener {
+            val fragment = PerfilFragment()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.contenedorFragment, fragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
         return view
     }
 
-    /**
-     * 🔄 Inicialización de vistas
-     */
     private fun inicializarVistas(view: View) {
         recyclerCanciones = view.findViewById(R.id.recyclerCanciones)
         recyclerArtistas = view.findViewById(R.id.recyclerArtistas)
         recyclerAlbums = view.findViewById(R.id.recyclerAlbums)
+        botonPerfil = view.findViewById(R.id.botonPerfil)
 
         recyclerCanciones.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         recyclerArtistas.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         recyclerAlbums.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
     }
 
-    /**
-     * 🔄 Inicialización de adaptadores
-     */
     private fun inicializarAdaptadores() {
         adapterCanciones = CancionHomeAdapter(mutableListOf()) { track ->
             Toast.makeText(requireContext(), "Pulsado: ${track.title}", Toast.LENGTH_SHORT).show()
@@ -91,14 +94,8 @@ class HomeFragment : Fragment() {
     }
 
     /**
-     * 🔄 Cargar datos de Deezer
+     * 🔄 Método para cargar las canciones más populares
      */
-    private fun cargarDatosDeezer() {
-        cargarTopCanciones()
-        cargarTopArtistas()
-        cargarTopAlbums()
-    }
-
     private fun cargarTopCanciones() {
         val call = deezerService.buscarCancion("top")
         call.enqueue(object : Callback<TrackResponse> {
@@ -118,6 +115,9 @@ class HomeFragment : Fragment() {
         })
     }
 
+    /**
+     * 🔄 Método para cargar los artistas más populares
+     */
     private fun cargarTopArtistas() {
         val call = deezerService.buscarArtistas()
         call.enqueue(object : Callback<ArtistResponse> {
@@ -137,6 +137,9 @@ class HomeFragment : Fragment() {
         })
     }
 
+    /**
+     * 🔄 Método para cargar los álbumes más populares
+     */
     private fun cargarTopAlbums() {
         val call = deezerService.buscarAlbums()
         call.enqueue(object : Callback<AlbumResponse> {
@@ -154,5 +157,14 @@ class HomeFragment : Fragment() {
                 Log.e("HomeFragment", "Error al cargar álbumes: ${t.message}")
             }
         })
+    }
+
+    /**
+     * 🔄 Método para cargar toda la información
+     */
+    private fun cargarDatosDeezer() {
+        cargarTopCanciones()
+        cargarTopArtistas()
+        cargarTopAlbums()
     }
 }

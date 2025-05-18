@@ -1,59 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/colorFondo"
-    android:padding="16dp">
+    android:padding="8dp">
 
-    <LinearLayout
+    <!-- 🔹 Header con botón de perfil -->
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:padding="8dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Top Canciones"
-            android:textColor="@color/colorTexto"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="12dp"/>
+        <ImageButton
+            android:id="@+id/botonPerfil"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_user"
+            android:contentDescription="Perfil" />
+    </RelativeLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerCanciones"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginBottom="20dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Top Canciones"
+        android:textSize="18sp"
+        android:textColor="@color/colorVerdeSpotify"
+        android:textStyle="bold"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Top Artistas"
-            android:textColor="@color/colorTexto"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="12dp"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerCanciones"
+        android:layout_width="match_parent"
+        android:layout_height="199dp"
+        android:layout_marginBottom="16dp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerArtistas"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginBottom="20dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Top Artistas"
+        android:textSize="18sp"
+        android:textColor="@color/colorVerdeSpotify"
+        android:textStyle="bold"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Top Álbumes"
-            android:textColor="@color/colorTexto"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="12dp"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerArtistas"
+        android:layout_width="match_parent"
+        android:layout_height="202dp"
+        android:layout_marginBottom="16dp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerAlbums"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginBottom="20dp" />
-    </LinearLayout>
-</ScrollView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Top Álbumes"
+        android:textSize="18sp"
+        android:textColor="@color/colorVerdeSpotify"
+        android:textStyle="bold"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerAlbums"
+        android:layout_width="match_parent"
+        android:layout_height="219dp"
+        android:layout_marginBottom="16dp" />
+
+</LinearLayout>
