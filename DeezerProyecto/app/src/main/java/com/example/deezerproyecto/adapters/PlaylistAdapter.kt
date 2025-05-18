@@ -3,15 +3,16 @@ package com.example.deezerproyecto.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.deezerproyecto.R
-import com.example.deezerproyecto.databinding.ItemPlaylistBinding
 import com.example.deezerproyecto.models.Playlist
 import com.squareup.picasso.Picasso
 
 class PlaylistAdapter(
-    private val playlists: MutableList<Playlist>,
-    private val onItemClick: (Playlist) -> Unit
+    private var playlists: MutableList<Playlist>,
+    private val onClickPlaylist: (Playlist) -> Unit
 ) : RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
@@ -25,22 +26,29 @@ class PlaylistAdapter(
 
     override fun getItemCount(): Int = playlists.size
 
+    /**
+     * 🔄 Método para actualizar la lista de playlists
+     */
+    fun actualizarPlaylists(nuevasPlaylists: List<Playlist>) {
+        playlists.clear()
+        playlists.addAll(nuevasPlaylists)
+        notifyDataSetChanged()
+    }
+
     inner class PlaylistViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val binding = ItemPlaylistBinding.bind(itemView)
+        private val nombrePlaylist: TextView = itemView.findViewById(R.id.nombrePlaylist)
+        private val imagenPlaylist: ImageView = itemView.findViewById(R.id.imagenPlaylist)
 
         fun bind(playlist: Playlist) {
-            binding.nombrePlaylist.text = playlist.nombre
-            binding.privacidadPlaylist.text = if (playlist.esPrivada) "Privada" else "Pública"
-
-            if (playlist.rutaFoto.isNotEmpty()) {
-                Picasso.get()
-                    .load(playlist.rutaFoto)
-                    //.placeholder(R.drawable.ic_baseline_image_24)
-                    .into(binding.imagenPlaylist)
+            nombrePlaylist.text = playlist.nombre
+            if (!playlist.rutaFoto.isNullOrEmpty()) {
+                Picasso.get().load(playlist.rutaFoto).into(imagenPlaylist)
+            } else {
+                imagenPlaylist.setImageResource(R.drawable.placeholder_image) // Imagen por defecto
             }
 
             itemView.setOnClickListener {
-                onItemClick(playlist)
+                onClickPlaylist(playlist)
             }
         }
     }
