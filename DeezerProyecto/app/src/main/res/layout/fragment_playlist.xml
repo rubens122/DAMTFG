@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#1e1e1e">
+
+    <!-- Contenedor para la imagen y el botón sobrepuesto -->
+    <FrameLayout
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp">
+
+        <!-- Imagen de la playlist -->
+        <ImageView
+            android:id="@+id/imagenPreview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:background="@android:color/darker_gray" />
+
+        <!-- Botón flotante para elegir foto -->
+        <ImageButton
+            android:id="@+id/botonSeleccionarImagen"
+            android:layout_width="136dp"
+            android:layout_height="139dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Seleccionar Imagen"
+            android:src="@android:drawable/ic_menu_camera"
+            android:tint="@android:color/white" />
+    </FrameLayout>
+
+    <!-- Campo para el nombre de la playlist -->
+    <EditText
+        android:id="@+id/campoNombrePlaylist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nombre de la Playlist"
+        android:textColor="@android:color/white"
+        android:textColorHint="@android:color/darker_gray"
+        android:backgroundTint="@color/colorGris"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Switch para privacidad -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pública"
+            android:textColor="@android:color/white"
+            android:layout_marginEnd="8dp" />
+
+        <Switch
+            android:id="@+id/switchPrivacidad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textOn="Pública"
+            android:textOff="Privada"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+
+    <!-- Botón para crear la playlist -->
+    <Button
+        android:id="@+id/botonCrearPlaylist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Crear Playlist"
+        android:textColor="@android:color/white"
+        android:background="@color/colorVerdeSpotify" />
+
+</LinearLayout>

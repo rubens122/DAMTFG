@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorFondo"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- 🔄 Contenedor de imagen + botón de cambiar foto -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="16dp">
+
+            <!-- Imagen de la Playlist -->
+            <ImageView
+                android:id="@+id/imagenPlaylist"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:background="@android:color/darker_gray"/>
+
+            <!-- Botón flotante para cambiar foto -->
+            <ImageButton
+                android:id="@+id/botonSeleccionarFoto"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:src="@android:drawable/ic_menu_camera"
+                android:contentDescription="Seleccionar Foto"
+                android:layout_margin="8dp"
+                android:alpha="0.8" />
+        </FrameLayout>
+
+        <!-- Nombre de la Playlist -->
+        <EditText
+            android:id="@+id/campoNombrePlaylist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre de la Playlist"
+            android:textSize="18sp"
+            android:textColor="@color/colorTexto"
+            android:background="@android:color/transparent"
+            android:textColorHint="@android:color/darker_gray"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Switch de Privacidad -->
+        <Switch
+            android:id="@+id/switchPrivacidad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Privada"
+            android:textColor="@color/colorTexto"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Botón para Guardar Cambios -->
+        <Button
+            android:id="@+id/botonGuardarCambios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Guardar Cambios"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/colorVerdeSpotify"
+            android:layout_marginTop="8dp"/>
+    </LinearLayout>
+</ScrollView>

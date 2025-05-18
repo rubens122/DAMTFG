@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/colorFondo">
+
+    <!-- Campo de búsqueda -->
+    <EditText
+        android:id="@+id/campoBusqueda"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Buscar canciones"
+        android:textColor="@color/colorTexto"
+        android:textColorHint="@color/colorGris"
+        android:backgroundTint="@color/colorGris"
+        android:drawableStart="@drawable/ic_search"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Botón de búsqueda -->
+    <Button
+        android:id="@+id/botonBuscar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Buscar"
+        android:backgroundTint="@color/colorVerdeSpotify"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <!-- RecyclerView para mostrar las canciones -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerCanciones"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingTop="8dp" />
+
+</LinearLayout>

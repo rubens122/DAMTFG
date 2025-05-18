@@ -1,0 +1,57 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Tema Base de la Aplicación -->
+    <style name="Base.Theme.DeezerProyecto" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <!-- Colores de la aplicación -->
+        <item name="colorPrimary">@color/colorFondo</item>
+        <item name="colorPrimaryVariant">@color/colorFondo</item>
+        <item name="colorOnPrimary">@color/colorTexto</item>
+
+        <!-- Colores de la AppBar -->
+        <item name="colorSecondary">@color/colorVerdeSpotify</item>
+        <item name="android:windowBackground">@color/colorFondo</item>
+
+        <!-- Color de la barra de estado (Status Bar) -->
+        <item name="android:statusBarColor">@color/colorFondo</item>
+
+        <!-- Ocultar el sombreado de la barra de estado -->
+        <item name="android:windowLightStatusBar">false</item>
+
+        <!-- Fuente del texto -->
+        <item name="android:textColor">@color/colorTexto</item>
+        <item name="android:textColorHint">@color/colorGris</item>
+
+        <!-- Estilo para Botones -->
+        <item name="android:buttonStyle">@style/EstiloBotonSpotify</item>
+        <item name="android:colorAccent">@color/colorVerdeSpotify</item>
+
+        <!-- Ripple Effect -->
+        <item name="android:colorControlHighlight">@color/colorVerdeSpotify</item>
+
+        <!-- Estilo del TextInput -->
+        <item name="textInputStyle">@style/CampoTextoSpotify</item>
+    </style>
+
+    <!-- Tema principal de la app -->
+    <style name="Theme.DeezerProyecto" parent="Base.Theme.DeezerProyecto" />
+
+    <!-- Estilo para Botones -->
+    <style name="EstiloBotonSpotify" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/colorVerdeSpotify</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Estilo para EditText -->
+    <style name="CampoTextoSpotify" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:textColor">@color/colorTexto</item>
+        <item name="android:textColorHint">@color/colorGris</item>
+        <item name="android:backgroundTint">@color/colorGris</item>
+    </style>
+
+    <!-- Estilo para los TextView en los Fragments -->
+    <style name="TextoTituloSpotify" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="android:textColor">@color/colorTexto</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>

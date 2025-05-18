@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorFondo"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/imagenPlaylist"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginBottom="16dp"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/nombrePlaylist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorTexto"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/textoPrivacidad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/colorGris"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/botonEditar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Editar Playlist"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/colorVerdeSpotify"
+        android:layout_marginBottom="16dp" />
+
+    <!-- 🔄 Texto para indicar cuando no hay canciones -->
+    <TextView
+        android:id="@+id/textoVacio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No hay canciones en esta playlist."
+        android:textColor="@android:color/darker_gray"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_marginBottom="16dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerCanciones"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_weight="1"
+        android:background="@color/colorFondo"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp"
+        android:padding="8dp" />
+</LinearLayout>

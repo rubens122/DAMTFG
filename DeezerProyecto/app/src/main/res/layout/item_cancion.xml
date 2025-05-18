@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:gravity="center_vertical"
+    android:background="@color/colorFondo">
+
+    <ImageView
+        android:id="@+id/imagenAlbum"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="12dp"
+        android:scaleType="centerCrop" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tituloCancion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Título de la Canción"
+            android:textColor="@color/colorTexto"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/artistaCancion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nombre del Artista"
+            android:textColor="@color/colorGris"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <!-- 🔥 Botón para reproducir -->
+    <ImageButton
+        android:id="@+id/botonReproducir"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:src="@android:drawable/ic_media_play"
+        android:contentDescription="Reproducir canción" />
+
+    <!-- 🔥 Botón para añadir a la playlist -->
+    <ImageButton
+        android:id="@+id/botonAnadir"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:src="@android:drawable/ic_input_add"
+        android:contentDescription="Añadir a Playlist" />
+</LinearLayout>

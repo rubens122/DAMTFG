@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_home"
+        android:title="Inicio" />
+
+    <item
+        android:id="@+id/nav_buscar"
+        android:icon="@drawable/ic_search"
+        android:title="Buscar" />
+
+    <item
+        android:id="@+id/nav_radio"
+        android:icon="@drawable/ic_radio"
+        android:title="Públicas" />
+
+    <item
+        android:id="@+id/nav_biblioteca"
+        android:icon="@drawable/ic_library"
+        android:title="Biblioteca" />
+</menu>
