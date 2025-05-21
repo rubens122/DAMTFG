@@ -1,19 +1,23 @@
 package com.example.deezerproyecto.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.deezerproyecto.R
 import com.example.deezerproyecto.adapters.CancionPlaylistAdapter
 import com.example.deezerproyecto.models.Playlist
+import com.example.deezerproyecto.models.Track
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.squareup.picasso.Picasso
 
 class DetallePlaylistFragment(private val playlist: Playlist) : Fragment() {
@@ -34,7 +38,6 @@ class DetallePlaylistFragment(private val playlist: Playlist) : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_detalle_playlist, container, false)
 
-        // Enlazar vistas
         recyclerCanciones = view.findViewById(R.id.recyclerCanciones)
         nombrePlaylist = view.findViewById(R.id.nombrePlaylist)
         imagenPlaylist = view.findViewById(R.id.imagenPlaylist)
@@ -42,11 +45,9 @@ class DetallePlaylistFragment(private val playlist: Playlist) : Fragment() {
         textoPrivacidad = view.findViewById(R.id.textoPrivacidad)
         textoVacio = view.findViewById(R.id.textoVacio)
 
-        // Asignar datos
         nombrePlaylist.text = playlist.nombre
         textoPrivacidad.text = if (playlist.esPrivada) "Privada" else "Pública"
 
-        // Cargar imagen
         if (playlist.rutaFoto.isNotEmpty()) {
             Picasso.get().load(playlist.rutaFoto).fit().centerCrop().into(imagenPlaylist)
         } else {
@@ -55,28 +56,49 @@ class DetallePlaylistFragment(private val playlist: Playlist) : Fragment() {
                 .fit().centerCrop().into(imagenPlaylist)
         }
 
-        // Configurar RecyclerView
-        adapter = CancionPlaylistAdapter(playlist.canciones, R.layout.item_cancion_playlist)
+        adapter = CancionPlaylistAdapter(
+            canciones = playlist.canciones,
+            layout = R.layout.item_cancion_playlist,
+            onEliminarCancion = { track -> eliminarCancionDePlaylist(track) }
+        )
+
         recyclerCanciones.layoutManager = LinearLayoutManager(context)
         recyclerCanciones.adapter = adapter
 
-        // Mostrar texto si no hay canciones
         textoVacio.visibility = if (playlist.canciones.isEmpty()) View.VISIBLE else View.GONE
 
-        // Mostrar botón de edición solo si es del usuario
-        if (playlist.idUsuario == uidActual) {
-            botonEditar.visibility = View.VISIBLE
-            botonEditar.setOnClickListener {
-                val editarFragment = EditarPlaylistFragment(playlist)
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.contenedorFragment, editarFragment)
-                    .addToBackStack(null)
-                    .commit()
-            }
-        } else {
-            botonEditar.visibility = View.GONE
+        // Log para depuración
+        Log.d("BOTON_EDITAR", "playlist.idUsuario=${playlist.idUsuario}, uidActual=$uidActual")
+
+        // Visibilidad forzada para verificar funcionamiento
+        botonEditar.visibility = View.VISIBLE
+        botonEditar.setOnClickListener {
+            Toast.makeText(requireContext(), "EDITANDO playlist", Toast.LENGTH_SHORT).show()
+            val editarFragment = EditarPlaylistFragment(playlist)
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.contenedorFragment, editarFragment)
+                .addToBackStack(null)
+                .commit()
         }
 
         return view
+    }
+
+    private fun eliminarCancionDePlaylist(track: Track) {
+        val uid = uidActual ?: return
+
+        playlist.canciones.removeIf { it.id == track.id }
+
+        val dbRef = FirebaseDatabase.getInstance().getReference("usuarios")
+        dbRef.child(uid).child("playlists").child(playlist.id).setValue(playlist)
+            .addOnSuccessListener {
+                adapter.notifyDataSetChanged()
+                if (playlist.canciones.isEmpty()) {
+                    textoVacio.visibility = View.VISIBLE
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(requireContext(), "Error al eliminar canción", Toast.LENGTH_SHORT).show()
+            }
     }
 }

@@ -137,31 +137,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="14c22858-c9e5-4c8e-9ec6-c7eec4aa158a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/models/Usuario.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/RegisterActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/RegisterActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/adapters/AmigoAdapterBuscar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/adapters/AmigoAdapterBuscar.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/adapters/AmigoAdapterLista.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/adapters/AmigoAdapterLista.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/fragments/BibliotecaFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/fragments/BibliotecaFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/fragments/BuscarAmigosFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/fragments/BuscarAmigosFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/fragments/BuscarFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/fragments/BuscarFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/fragments/CrearPlaylistFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/fragments/CrearPlaylistFragment.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/fragments/DetallePlaylistFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/fragments/DetallePlaylistFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/fragments/EditarPlaylistFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/fragments/EditarPlaylistFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/fragments/ListaAmigosFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/fragments/ListaAmigosFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/fragments/ListaPlaylistsFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/fragments/ListaPlaylistsFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/fragments/PerfilAmigoFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/fragments/PerfilAmigoFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/fragments/PlaylistFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/fragments/PlaylistFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/models/Playlist.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/deezerproyecto/models/Playlist.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_crear_playlist.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_crear_playlist.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_detalle_playlist.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_detalle_playlist.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_home.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_home.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_lista_amigos.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_lista_amigos.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_playlist.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_playlist.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_amigo_buscar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_amigo_buscar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_amigo_lista.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_amigo_lista.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
