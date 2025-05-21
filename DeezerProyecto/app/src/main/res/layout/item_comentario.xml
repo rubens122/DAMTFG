@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/autorComentario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textColor="@color/colorGris"
+        android:text="correo@ejemplo.com" />
+
+    <TextView
+        android:id="@+id/textoComentario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Comentario aquí"
+        android:textColor="@color/colorTexto"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/fechaComentario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="21/05/2025 15:47"
+        android:textSize="12sp"
+        android:textColor="@color/colorGris"
+        android:layout_marginTop="2dp" />
+</LinearLayout>

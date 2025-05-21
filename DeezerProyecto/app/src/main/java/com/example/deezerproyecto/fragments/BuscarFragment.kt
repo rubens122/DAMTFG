@@ -113,19 +113,41 @@ class BuscarFragment : Fragment() {
     }
 
     private fun anadirCancionAPlaylist(track: Track, playlist: Playlist) {
-        val existe = playlist.canciones.any { it.id == track.id }
-        if (existe) {
-            Toast.makeText(requireContext(), "La canción ya existe en esta Playlist", Toast.LENGTH_SHORT).show()
-            return
-        }
+        val uid = uidActual ?: return
+        val playlistRef = reference.child(uid).child("playlists").child(playlist.id)
 
-        playlist.canciones.add(track)
-        reference.child(uidActual!!).child("playlists").child(playlist.id).setValue(playlist)
-            .addOnSuccessListener {
-                Toast.makeText(requireContext(), "Canción añadida a ${playlist.nombre}", Toast.LENGTH_SHORT).show()
+        playlistRef.child("comentarios").get().addOnSuccessListener { snapshot ->
+            val comentariosGuardados = snapshot.value
+
+            // Añadir canción si no existe
+            if (playlist.canciones.none { it.id == track.id }) {
+                playlist.canciones.add(track)
             }
-            .addOnFailureListener {
-                Toast.makeText(requireContext(), "Error al añadir canción", Toast.LENGTH_SHORT).show()
+
+            // Crear mapa manual con los comentarios incluidos
+            val playlistMap = mutableMapOf<String, Any?>(
+                "id" to playlist.id,
+                "nombre" to playlist.nombre,
+                "esPrivada" to playlist.esPrivada,
+                "rutaFoto" to playlist.rutaFoto,
+                "idUsuario" to playlist.idUsuario,
+                "canciones" to playlist.canciones
+            )
+
+            if (comentariosGuardados != null) {
+                playlistMap["comentarios"] = comentariosGuardados
             }
+
+            playlistRef.setValue(playlistMap)
+                .addOnSuccessListener {
+                    Toast.makeText(requireContext(), "Canción añadida", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(requireContext(), "Error al guardar canción", Toast.LENGTH_SHORT).show()
+                }
+
+        }.addOnFailureListener {
+            Toast.makeText(requireContext(), "Error al conservar comentarios", Toast.LENGTH_SHORT).show()
+        }
     }
 }

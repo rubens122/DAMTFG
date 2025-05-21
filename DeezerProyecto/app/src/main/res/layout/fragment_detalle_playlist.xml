@@ -1,64 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/colorFondo"
-    android:padding="16dp">
+    android:fillViewport="true"
+    android:background="@color/colorFondo">
 
-    <ImageView
-        android:id="@+id/imagenPlaylist"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginBottom="16dp"
-        android:scaleType="centerCrop" />
-
-    <TextView
-        android:id="@+id/nombrePlaylist"
-        android:layout_width="377dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:textColor="@color/colorTexto"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/textoPrivacidad"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="@color/colorGris"
-        android:layout_marginBottom="16dp" />
-
-    <Button
-        android:id="@+id/botonEditar"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Editar Playlist"
-        android:textColor="@color/white"
-        android:backgroundTint="@color/colorVerdeSpotify"
-        android:layout_marginBottom="16dp" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <!-- 🔄 Texto para indicar cuando no hay canciones -->
-    <TextView
-        android:id="@+id/textoVacio"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="No hay canciones en esta playlist."
-        android:textColor="@android:color/darker_gray"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:visibility="gone"
-        android:layout_marginBottom="16dp" />
+        <!-- Imagen de la playlist -->
+        <ImageView
+            android:id="@+id/imagenPlaylist"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="16dp"
+            android:scaleType="centerCrop" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerCanciones"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_weight="1"
-        android:background="@color/colorFondo"
-        android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp"
-        android:padding="8dp" />
-</LinearLayout>
+        <!-- Nombre -->
+        <TextView
+            android:id="@+id/nombrePlaylist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorTexto"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Privacidad -->
+        <TextView
+            android:id="@+id/textoPrivacidad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/colorGris"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Botón Editar Playlist -->
+        <Button
+            android:id="@+id/botonEditar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Editar Playlist"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/colorVerdeSpotify"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Texto si no hay canciones -->
+        <TextView
+            android:id="@+id/textoVacio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No hay canciones en esta playlist."
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Lista de canciones -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerCanciones"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:background="@color/colorFondo"
+            android:padding="8dp" />
+
+        <!-- Título sección comentarios -->
+        <TextView
+            android:id="@+id/tituloComentarios"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Comentarios"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorTexto"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Comentarios uno por uno -->
+        <LinearLayout
+            android:id="@+id/contenedorComentarios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:divider="?android:attr/dividerHorizontal"
+            android:showDividers="middle"
+            android:dividerPadding="4dp" />
+
+        <!-- Campo para nuevo comentario -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <EditText
+                android:id="@+id/inputComentario"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Escribe un comentario..." />
+
+            <Button
+                android:id="@+id/botonEnviarComentario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enviar" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
