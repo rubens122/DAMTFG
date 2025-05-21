@@ -1,6 +1,7 @@
 package com.example.deezerproyecto.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.deezerproyecto.R
 import com.example.deezerproyecto.adapters.AmigoAdapterBuscar
+import com.example.deezerproyecto.models.Usuario
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 
 class BuscarAmigosFragment : Fragment() {
 
@@ -34,9 +36,8 @@ class BuscarAmigosFragment : Fragment() {
         botonBuscar = view.findViewById(R.id.botonBuscar)
         recyclerAmigos = view.findViewById(R.id.recyclerAmigos)
 
-        // 🔄 Inicialización del Adapter
-        adapter = AmigoAdapterBuscar(mutableListOf()) { amigoId ->
-            enviarSolicitudAmistad(amigoId)
+        adapter = AmigoAdapterBuscar(mutableListOf()) { amigo ->
+            enviarSolicitudAmistad(amigo.uid)
         }
 
         recyclerAmigos.layoutManager = LinearLayoutManager(context)
@@ -52,37 +53,68 @@ class BuscarAmigosFragment : Fragment() {
         return view
     }
 
-    /**
-     * 🔄 Método para buscar usuarios en Firebase
-     */
-    private fun buscarUsuarios(nombre: String) {
-        database.orderByChild("nombre").equalTo(nombre).get()
+    private fun buscarUsuarios(correo: String) {
+        Log.d("BuscarAmigosFragment", "🔍 Buscando usuarios con correo: $correo")
+        database.orderByChild("correo").equalTo(correo).get()
             .addOnSuccessListener { snapshot ->
-                val listaAmigos = mutableListOf<String>()
-                snapshot.children.forEach { usuario ->
-                    val uid = usuario.key
-                    if (uid != uidActual) {
-                        listaAmigos.add(uid!!)
+                if (snapshot.exists()) {
+                    val listaAmigos = mutableListOf<Usuario>()
+                    snapshot.children.forEach { usuarioSnapshot ->
+                        val usuario = usuarioSnapshot.getValue(Usuario::class.java)
+                        if (usuario != null && usuarioSnapshot.key != uidActual) {
+                            val usuarioConUid = usuario.copy(uid = usuarioSnapshot.key!!)
+                            listaAmigos.add(usuarioConUid)
+                        }
                     }
+                    adapter.actualizarAmigos(listaAmigos)
+                } else {
+                    Log.w("BuscarAmigosFragment", "⚠️ No se encontraron usuarios con ese correo")
+                    Toast.makeText(requireContext(), "No se encontraron usuarios con ese correo", Toast.LENGTH_SHORT).show()
                 }
-                adapter.actualizarAmigos(listaAmigos)
             }
             .addOnFailureListener {
+                Log.e("BuscarAmigosFragment", "❌ Error al buscar usuarios: ${it.message}")
                 Toast.makeText(requireContext(), "Error al buscar usuarios", Toast.LENGTH_SHORT).show()
             }
     }
 
-    /**
-     * 🔄 Método para enviar solicitud de amistad
-     */
     private fun enviarSolicitudAmistad(amigoId: String) {
-        val referenciaAmigos = database.child(uidActual!!).child("solicitudes")
-        referenciaAmigos.child(amigoId).setValue("pendiente")
-            .addOnSuccessListener {
-                Toast.makeText(requireContext(), "Solicitud enviada", Toast.LENGTH_SHORT).show()
+        val uid = uidActual
+        if (uid == null) {
+            Log.e("Amigos", "❌ uidActual es null")
+            return
+        }
+
+        Log.d("Amigos", "📤 Agregando amigo $amigoId a $uid")
+
+        val usuariosRef = FirebaseDatabase.getInstance().getReference("usuarios")
+        val referenciaAmigos = usuariosRef.child(uid).child("amigos")
+
+        referenciaAmigos.get().addOnSuccessListener { snapshot ->
+            val nuevosDatos = mutableMapOf<String, Any?>()
+
+            snapshot.children.forEach {
+                val key = it.key
+                val value = it.value
+                if (key != null && value != null) {
+                    nuevosDatos[key] = value
+                }
             }
-            .addOnFailureListener {
-                Toast.makeText(requireContext(), "Error al enviar solicitud", Toast.LENGTH_SHORT).show()
-            }
+
+            nuevosDatos[amigoId] = true
+
+            referenciaAmigos.setValue(nuevosDatos)
+                .addOnSuccessListener {
+                    Log.d("Amigos", "✅ Amigo agregado correctamente")
+                    Toast.makeText(requireContext(), "Solicitud enviada", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener {
+                    Log.e("Amigos", "❌ Error al agregar amigo: ${it.message}")
+                    Toast.makeText(requireContext(), "Error al enviar solicitud", Toast.LENGTH_SHORT).show()
+                }
+        }.addOnFailureListener {
+            Log.e("Amigos", "❌ Error al leer nodo amigos: ${it.message}")
+            Toast.makeText(requireContext(), "Error al preparar la solicitud", Toast.LENGTH_SHORT).show()
+        }
     }
 }

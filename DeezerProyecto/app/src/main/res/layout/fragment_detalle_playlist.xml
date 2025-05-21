@@ -16,12 +16,12 @@
 
     <TextView
         android:id="@+id/nombrePlaylist"
-        android:layout_width="wrap_content"
+        android:layout_width="16dp"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:layout_marginBottom="8dp"
         android:textColor="@color/colorTexto"
-        android:layout_marginBottom="8dp" />
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textoPrivacidad"

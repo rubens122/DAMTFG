@@ -1,35 +1,32 @@
 package com.example.deezerproyecto.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.deezerproyecto.R
 import com.example.deezerproyecto.adapters.CancionPlaylistAdapter
 import com.example.deezerproyecto.models.Playlist
-import com.example.deezerproyecto.models.Track
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
 
 class DetallePlaylistFragment(private val playlist: Playlist) : Fragment() {
 
+    private lateinit var recyclerCanciones: RecyclerView
     private lateinit var adapter: CancionPlaylistAdapter
-    private lateinit var recyclerViewCanciones: RecyclerView
-    private lateinit var textoVacio: TextView
-    private lateinit var botonEditar: Button
-    private lateinit var imagenPlaylist: ImageView
     private lateinit var nombrePlaylist: TextView
+    private lateinit var imagenPlaylist: ImageView
+    private lateinit var botonEditar: Button
     private lateinit var textoPrivacidad: TextView
-    private val database = FirebaseDatabase.getInstance()
-    private val reference = database.getReference("playlists")
+    private lateinit var textoVacio: TextView
+
+    private val uidActual = FirebaseAuth.getInstance().currentUser?.uid
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,125 +34,49 @@ class DetallePlaylistFragment(private val playlist: Playlist) : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_detalle_playlist, container, false)
 
-        recyclerViewCanciones = view.findViewById(R.id.recyclerCanciones)
-        textoVacio = view.findViewById(R.id.textoVacio)
-        botonEditar = view.findViewById(R.id.botonEditar)
-        imagenPlaylist = view.findViewById(R.id.imagenPlaylist)
+        // Enlazar vistas
+        recyclerCanciones = view.findViewById(R.id.recyclerCanciones)
         nombrePlaylist = view.findViewById(R.id.nombrePlaylist)
+        imagenPlaylist = view.findViewById(R.id.imagenPlaylist)
+        botonEditar = view.findViewById(R.id.botonEditar)
         textoPrivacidad = view.findViewById(R.id.textoPrivacidad)
+        textoVacio = view.findViewById(R.id.textoVacio)
 
-        textoVacio.visibility = View.GONE
+        // Asignar datos
+        nombrePlaylist.text = playlist.nombre
+        textoPrivacidad.text = if (playlist.esPrivada) "Privada" else "Pública"
 
-        adapter = CancionPlaylistAdapter(
-            canciones = mutableListOf(),
-            layout = R.layout.item_cancion_playlist,
-            onEliminarCancion = { track ->
-                eliminarCancionDePlaylist(track)
+        // Cargar imagen
+        if (playlist.rutaFoto.isNotEmpty()) {
+            Picasso.get().load(playlist.rutaFoto).fit().centerCrop().into(imagenPlaylist)
+        } else {
+            Picasso.get()
+                .load("https://cdn-icons-png.flaticon.com/512/833/833281.png")
+                .fit().centerCrop().into(imagenPlaylist)
+        }
+
+        // Configurar RecyclerView
+        adapter = CancionPlaylistAdapter(playlist.canciones, R.layout.item_cancion_playlist)
+        recyclerCanciones.layoutManager = LinearLayoutManager(context)
+        recyclerCanciones.adapter = adapter
+
+        // Mostrar texto si no hay canciones
+        textoVacio.visibility = if (playlist.canciones.isEmpty()) View.VISIBLE else View.GONE
+
+        // Mostrar botón de edición solo si es del usuario
+        if (playlist.idUsuario == uidActual) {
+            botonEditar.visibility = View.VISIBLE
+            botonEditar.setOnClickListener {
+                val editarFragment = EditarPlaylistFragment(playlist)
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.contenedorFragment, editarFragment)
+                    .addToBackStack(null)
+                    .commit()
             }
-        )
-
-        recyclerViewCanciones.layoutManager = LinearLayoutManager(context)
-        recyclerViewCanciones.adapter = adapter
-
-        // 🔄 Cargar canciones al iniciar
-        cargarCanciones()
-        cargarDatosPlaylist()
-
-        // 🚀 Navegación al fragmento de edición
-        botonEditar.setOnClickListener {
-            val fragment = EditarPlaylistFragment(playlist)
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.contenedorFragment, fragment)
-                .addToBackStack(null)
-                .commit()
+        } else {
+            botonEditar.visibility = View.GONE
         }
 
         return view
-    }
-
-    /**
-     * 🔄 Método para cargar las canciones desde Firebase
-     */
-    private fun cargarCanciones() {
-        Log.d("DetallePlaylistFragment", "📌 Iniciando carga manual de canciones...")
-
-        reference.child(playlist.id).child("canciones")
-            .get()
-            .addOnSuccessListener { snapshot ->
-                Log.d("DetallePlaylistFragment", "📌 Datos recibidos de Firebase: ${snapshot.value}")
-
-                if (snapshot.exists()) {
-                    val listaCanciones = mutableListOf<Track>()
-
-                    for (cancionSnapshot in snapshot.children) {
-                        val track = cancionSnapshot.getValue(Track::class.java)
-                        if (track != null) {
-                            listaCanciones.add(track)
-                        }
-                    }
-
-                    if (listaCanciones.isEmpty()) {
-                        textoVacio.visibility = View.VISIBLE
-                    } else {
-                        textoVacio.visibility = View.GONE
-                    }
-
-                    adapter.actualizarCanciones(listaCanciones)
-
-                } else {
-                    Log.w("DetallePlaylistFragment", "⚠️ No se encontraron canciones en la playlist.")
-                    textoVacio.visibility = View.VISIBLE
-                }
-            }
-            .addOnFailureListener {
-                Log.e("DetallePlaylistFragment", "❌ Error al acceder a Firebase: ${it.message}")
-                Toast.makeText(requireContext(), "Error al cargar canciones", Toast.LENGTH_SHORT).show()
-            }
-    }
-
-    /**
-     * 🔄 Método para cargar los datos principales de la Playlist
-     */
-    private fun cargarDatosPlaylist() {
-        reference.child(playlist.id)
-            .get()
-            .addOnSuccessListener { snapshot ->
-                val datosActualizados = snapshot.getValue(Playlist::class.java)
-                if (datosActualizados != null) {
-                    nombrePlaylist.text = datosActualizados.nombre
-                    textoPrivacidad.text = if (datosActualizados.esPrivada) "Privada" else "Pública"
-                    if (datosActualizados.rutaFoto.isNotEmpty()) {
-                        Picasso.get().load(datosActualizados.rutaFoto).into(imagenPlaylist)
-                    }
-                }
-            }
-            .addOnFailureListener {
-                Log.e("DetallePlaylistFragment", "❌ Error al cargar datos de la playlist: ${it.message}")
-            }
-    }
-
-    /**
-     * 🔥 Eliminar canción y actualizar en Firebase
-     */
-    private fun eliminarCancionDePlaylist(track: Track) {
-        playlist.canciones.removeIf { it.id == track.id }
-        reference.child(playlist.id).child("canciones").setValue(playlist.canciones)
-            .addOnSuccessListener {
-                adapter.eliminarCancion(track)
-                Toast.makeText(requireContext(), "Canción eliminada correctamente", Toast.LENGTH_SHORT).show()
-
-                if (playlist.canciones.isEmpty()) {
-                    textoVacio.visibility = View.VISIBLE
-                }
-            }
-            .addOnFailureListener {
-                Toast.makeText(requireContext(), "Error al eliminar la canción", Toast.LENGTH_SHORT).show()
-            }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        // 🔄 Recargar datos al volver
-        cargarDatosPlaylist()
     }
 }

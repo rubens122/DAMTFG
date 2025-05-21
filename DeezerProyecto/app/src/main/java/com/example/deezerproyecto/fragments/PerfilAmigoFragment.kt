@@ -56,7 +56,7 @@ class PerfilAmigoFragment(private val amigoId: String) : Fragment() {
             val fotoUrl = it.child("imagenPerfil").value as? String
             nombreUsuario.text = nombre
 
-            if (fotoUrl != null) {
+            if (!fotoUrl.isNullOrEmpty()) {
                 Picasso.get().load(fotoUrl).fit().centerCrop().into(imagenPerfil)
             } else {
                 Picasso.get().load("https://cdn-icons-png.flaticon.com/512/1946/1946429.png")
@@ -74,22 +74,22 @@ class PerfilAmigoFragment(private val amigoId: String) : Fragment() {
      */
     private fun cargarPlaylistsPublicas() {
         database.child(amigoId).child("playlists")
-            .orderByChild("esPrivada")
-            .equalTo(false) // 🔥 Solo las públicas
-            .get()
-            .addOnSuccessListener { snapshot ->
-                val listaPlaylists = mutableListOf<Playlist>()
-                for (playlistSnapshot in snapshot.children) {
-                    val playlist = playlistSnapshot.getValue(Playlist::class.java)
-                    if (playlist != null) {
-                        listaPlaylists.add(playlist)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val listaPlaylists = mutableListOf<Playlist>()
+                    for (playlistSnapshot in snapshot.children) {
+                        val playlist = playlistSnapshot.getValue(Playlist::class.java)
+                        if (playlist != null && !playlist.esPrivada) {
+                            listaPlaylists.add(playlist)
+                        }
                     }
+                    adapter.actualizarPlaylists(listaPlaylists)
                 }
-                adapter.actualizarPlaylists(listaPlaylists)
-            }
-            .addOnFailureListener {
-                Toast.makeText(requireContext(), "Error al cargar las playlists", Toast.LENGTH_SHORT).show()
-            }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(requireContext(), "Error al cargar playlists", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 
     /**

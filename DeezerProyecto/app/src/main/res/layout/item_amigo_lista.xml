@@ -6,11 +6,20 @@
     android:orientation="horizontal"
     android:padding="8dp">
 
+    <ImageView
+        android:id="@+id/imagenPerfilAmigo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="12dp"
+        android:scaleType="centerCrop"
+        android:background="@android:color/darker_gray" />
+
     <TextView
-        android:id="@+id/nombreAmigoLista"
-        android:layout_width="match_parent"
+        android:id="@+id/textoCorreoAmigo"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Nombre de Usuario"
+        android:layout_weight="1"
+        android:textColor="@android:color/white"
         android:textSize="16sp"
-        android:textColor="@android:color/white" />
+        android:text="Correo del amigo" />
 </LinearLayout>

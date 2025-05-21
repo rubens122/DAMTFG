@@ -18,6 +18,7 @@ import com.example.deezerproyecto.api.DeezerService
 import com.example.deezerproyecto.models.Playlist
 import com.example.deezerproyecto.models.Track
 import com.example.deezerproyecto.models.TrackResponse
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import retrofit2.Call
 import retrofit2.Callback
@@ -30,7 +31,8 @@ class BuscarFragment : Fragment() {
     private lateinit var recyclerViewCanciones: RecyclerView
     private lateinit var adapter: CancionAdapter
     private val database = FirebaseDatabase.getInstance()
-    private val reference = database.getReference("playlists")
+    private val reference = database.getReference("usuarios")
+    private val uidActual = FirebaseAuth.getInstance().currentUser?.uid
     private val deezerService: DeezerService = DeezerClient.retrofit.create(DeezerService::class.java)
     private val playlists = mutableListOf<Playlist>()
 
@@ -44,7 +46,6 @@ class BuscarFragment : Fragment() {
         botonBuscar = view.findViewById(R.id.botonBuscar)
         recyclerViewCanciones = view.findViewById(R.id.recyclerCanciones)
 
-        // 🔄 Inicializamos el nuevo Adapter
         adapter = CancionAdapter(
             canciones = mutableListOf(),
             layout = R.layout.item_cancion,
@@ -67,9 +68,6 @@ class BuscarFragment : Fragment() {
         return view
     }
 
-    /**
-     * 🔍 Método para buscar canciones en Deezer
-     */
     private fun buscarCanciones(query: String) {
         val call = deezerService.buscarCancion(query)
         call.enqueue(object : Callback<TrackResponse> {
@@ -88,26 +86,20 @@ class BuscarFragment : Fragment() {
         })
     }
 
-    /**
-     * 🔄 Método para cargar las playlists del usuario desde Firebase
-     */
     private fun cargarPlaylists() {
-        reference.get().addOnSuccessListener { snapshot ->
+        if (uidActual == null) return
+
+        reference.child(uidActual).child("playlists").get().addOnSuccessListener { snapshot ->
             playlists.clear()
             for (playlistSnapshot in snapshot.children) {
                 val playlist = playlistSnapshot.getValue(Playlist::class.java)
-                playlist?.let {
-                    playlists.add(it)
-                }
+                playlist?.let { playlists.add(it) }
             }
         }.addOnFailureListener {
             Toast.makeText(requireContext(), "Error al cargar las playlists", Toast.LENGTH_SHORT).show()
         }
     }
 
-    /**
-     * 🔥 Diálogo para seleccionar playlist
-     */
     private fun mostrarDialogoSeleccionPlaylist(track: Track) {
         val nombresPlaylists = playlists.map { it.nombre }.toTypedArray()
         AlertDialog.Builder(requireContext())
@@ -120,20 +112,15 @@ class BuscarFragment : Fragment() {
             .show()
     }
 
-    /**
-     * 🔄 Método para añadir canción a la playlist
-     */
     private fun anadirCancionAPlaylist(track: Track, playlist: Playlist) {
-        // 🔎 Verificación de duplicados
         val existe = playlist.canciones.any { it.id == track.id }
         if (existe) {
             Toast.makeText(requireContext(), "La canción ya existe en esta Playlist", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // 🔄 Si no existe, se añade
         playlist.canciones.add(track)
-        reference.child(playlist.id).setValue(playlist)
+        reference.child(uidActual!!).child("playlists").child(playlist.id).setValue(playlist)
             .addOnSuccessListener {
                 Toast.makeText(requireContext(), "Canción añadida a ${playlist.nombre}", Toast.LENGTH_SHORT).show()
             }

@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.deezerproyecto.R
 import com.example.deezerproyecto.adapters.PlaylistAdapter
 import com.example.deezerproyecto.databinding.FragmentListaPlaylistsBinding
 import com.example.deezerproyecto.models.Playlist
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
 class ListaPlaylistsFragment : Fragment() {
@@ -20,6 +22,7 @@ class ListaPlaylistsFragment : Fragment() {
     private lateinit var adapter: PlaylistAdapter
     private lateinit var database: FirebaseDatabase
     private lateinit var reference: DatabaseReference
+    private val uidUsuario = FirebaseAuth.getInstance().currentUser?.uid
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,22 +30,24 @@ class ListaPlaylistsFragment : Fragment() {
     ): View {
         _binding = FragmentListaPlaylistsBinding.inflate(inflater, container, false)
 
-        // Configuración del RecyclerView
         adapter = PlaylistAdapter(playlists) { playlist ->
             parentFragmentManager.beginTransaction()
                 .replace(R.id.contenedorFragment, DetallePlaylistFragment(playlist))
                 .addToBackStack(null)
                 .commit()
         }
+
         binding.recyclerViewPlaylists.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewPlaylists.adapter = adapter
 
-        // Inicializar Firebase
         database = FirebaseDatabase.getInstance()
-        reference = database.getReference("playlists")
 
-        // Cargar playlists desde Firebase
-        cargarPlaylists()
+        if (uidUsuario != null) {
+            reference = database.getReference("usuarios").child(uidUsuario).child("playlists")
+            cargarPlaylists()
+        } else {
+            Toast.makeText(requireContext(), "Usuario no autenticado", Toast.LENGTH_SHORT).show()
+        }
 
         return binding.root
     }
@@ -61,7 +66,7 @@ class ListaPlaylistsFragment : Fragment() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Error al leer datos
+                Toast.makeText(requireContext(), "Error al cargar playlists", Toast.LENGTH_SHORT).show()
             }
         })
     }

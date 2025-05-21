@@ -9,11 +9,13 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.deezerproyecto.databinding.ActivityRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
     private lateinit var auth: FirebaseAuth
+    private val database = FirebaseDatabase.getInstance().getReference("usuarios")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,18 +37,31 @@ class RegisterActivity : AppCompatActivity() {
                 auth.createUserWithEmailAndPassword(correo, contrasena)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            Toast.makeText(this, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show()
-                            startActivity(Intent(this, MainActivity::class.java))
-                            finish()
+                            val usuario = auth.currentUser
+                            val referenciaUsuario = database.child(usuario!!.uid)
+
+                            // 🔄 Mapa con la información del usuario
+                            val datosUsuario = mapOf(
+                                "correo" to correo,
+                                "nombre" to "Usuario Nuevo", // Nombre por defecto, se podrá editar en el perfil
+                                "imagenPerfil" to "https://cdn-icons-png.flaticon.com/512/1946/1946429.png"
+                            )
+
+                            // 🔄 Guardar en Firebase Database
+                            referenciaUsuario.setValue(datosUsuario)
+                                .addOnSuccessListener {
+                                    Toast.makeText(this, "Usuario registrado y guardado con éxito", Toast.LENGTH_SHORT).show()
+                                    startActivity(Intent(this, MainActivity::class.java))
+                                    finish()
+                                }
+                                .addOnFailureListener {
+                                    Toast.makeText(this, "Error al guardar datos del usuario", Toast.LENGTH_SHORT).show()
+                                }
                         } else {
                             Toast.makeText(this, "Error al registrar el usuario", Toast.LENGTH_SHORT).show()
                         }
                     }
             }
         }
-        // binding.enlaceLogin.setOnClickListener {
-        //    startActivity(Intent(this, MainActivity::class.java))
-        //    finish()
-        //}
     }
 }

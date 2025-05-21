@@ -7,10 +7,11 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.deezerproyecto.R
+import com.example.deezerproyecto.models.Usuario
 
 class AmigoAdapterBuscar(
-    private var amigos: MutableList<String>,
-    private val onEnviarSolicitud: (String) -> Unit
+    private var listaAmigos: MutableList<Usuario>,
+    private val onEnviarSolicitud: (Usuario) -> Unit
 ) : RecyclerView.Adapter<AmigoAdapterBuscar.AmigoViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AmigoViewHolder {
@@ -19,25 +20,25 @@ class AmigoAdapterBuscar(
     }
 
     override fun onBindViewHolder(holder: AmigoViewHolder, position: Int) {
-        holder.bind(amigos[position])
+        holder.bind(listaAmigos[position])
     }
 
-    override fun getItemCount(): Int = amigos.size
+    override fun getItemCount(): Int = listaAmigos.size
 
-    fun actualizarAmigos(nuevosAmigos: List<String>) {
-        amigos.clear()
-        amigos.addAll(nuevosAmigos)
+    fun actualizarAmigos(nuevaLista: List<Usuario>) {
+        listaAmigos.clear()
+        listaAmigos.addAll(nuevaLista)
         notifyDataSetChanged()
     }
 
     inner class AmigoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val nombreAmigo: TextView = itemView.findViewById(R.id.nombreAmigoBuscar)
+        private val textoCorreo: TextView = itemView.findViewById(R.id.textoCorreo)
         private val botonAgregar: Button = itemView.findViewById(R.id.botonAgregarAmigo)
 
-        fun bind(amigoId: String) {
-            nombreAmigo.text = amigoId
+        fun bind(usuario: Usuario) {
+            textoCorreo.text = usuario.correo
             botonAgregar.setOnClickListener {
-                onEnviarSolicitud(amigoId)
+                onEnviarSolicitud(usuario)
             }
         }
     }

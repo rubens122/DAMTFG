@@ -7,13 +7,12 @@
     android:padding="8dp">
 
     <TextView
-        android:id="@+id/nombreAmigoBuscar"
+        android:id="@+id/textoCorreo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Nombre de Usuario"
-        android:textSize="16sp"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/botonAgregarAmigo"
@@ -21,5 +20,5 @@
         android:layout_height="wrap_content"
         android:text="Agregar"
         android:textColor="@android:color/white"
-        android:backgroundTint="@color/colorVerdeSpotify" />
+        android:background="@color/colorVerdeSpotify"/>
 </LinearLayout>

@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.deezerproyecto.databinding.FragmentPlaylistBinding
 import com.example.deezerproyecto.models.Playlist
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
 class PlaylistFragment : Fragment() {
@@ -17,6 +18,7 @@ class PlaylistFragment : Fragment() {
     private val binding get() = _binding!!
     private var imageUri: Uri? = null
     private lateinit var database: FirebaseDatabase
+    private val uidUsuario = FirebaseAuth.getInstance().currentUser?.uid
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,10 +35,10 @@ class PlaylistFragment : Fragment() {
             if (nombre.isNotEmpty()) {
                 val idUnico = database.getReference("playlists").push().key ?: ""
 
-                // 🔥 Comprobación de datos para evitar errores en Firebase
                 if (nombre.isNotEmpty() && idUnico.isNotEmpty()) {
                     val nuevaPlaylist = Playlist(idUnico, nombre, esPrivada, rutaFoto)
-                    database.getReference("playlists").child(idUnico).setValue(nuevaPlaylist)
+                    database.getReference("usuarios").child(uidUsuario!!).child("playlists").child(idUnico)
+                        .setValue(nuevaPlaylist)
                         .addOnSuccessListener {
                             Toast.makeText(requireContext(), "Playlist creada correctamente", Toast.LENGTH_SHORT).show()
                             parentFragmentManager.popBackStack()
@@ -45,7 +47,7 @@ class PlaylistFragment : Fragment() {
                             Toast.makeText(requireContext(), "Error al crear la playlist", Toast.LENGTH_SHORT).show()
                         }
                 } else {
-                    Toast.makeText(requireContext(), "Datos inválidos, no se guardó la playlist.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Datos inválidos", Toast.LENGTH_SHORT).show()
                 }
             } else {
                 Toast.makeText(requireContext(), "El nombre no puede estar vacío", Toast.LENGTH_SHORT).show()
