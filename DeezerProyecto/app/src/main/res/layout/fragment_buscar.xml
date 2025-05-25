@@ -7,36 +7,51 @@
     android:padding="16dp"
     android:background="@color/colorFondo">
 
-    <!-- Campo de búsqueda -->
-    <EditText
-        android:id="@+id/campoBusqueda"
+    <!-- Buscador fijo arriba -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Buscar canciones"
-        android:textColor="@color/colorTexto"
-        android:textColorHint="@color/colorGris"
-        android:backgroundTint="@color/colorGris"
-        android:drawableStart="@drawable/ic_search"
-        android:padding="12dp"
-        android:layout_marginBottom="16dp" />
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
 
-    <!-- Botón de búsqueda -->
-    <Button
-        android:id="@+id/botonBuscar"
+        <EditText
+            android:id="@+id/campoBusqueda"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:hint="Buscar canciones..."
+            android:backgroundTint="@color/colorGris"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/darker_gray"
+            android:paddingStart="12dp"/>
+
+        <Button
+            android:id="@+id/botonBuscar"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:text="Buscar"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="@color/colorVerdeSpotify"
+            android:textColor="@android:color/white"/>
+    </LinearLayout>
+
+    <!-- Título para artistas sugeridos -->
+    <TextView
+        android:id="@+id/tituloArtistas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Buscar"
-        android:backgroundTint="@color/colorVerdeSpotify"
-        android:textColor="@color/white"
+        android:text="Artistas sugeridos"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
         android:textStyle="bold"
-        android:layout_marginBottom="16dp" />
+        android:visibility="visible"
+        android:layout_marginBottom="8dp" />
 
-    <!-- RecyclerView para mostrar las canciones -->
+    <!-- Recycler para artistas sugeridos o canciones -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerCanciones"
+        android:id="@+id/recyclerContenido"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingTop="8dp" />
-
+        android:layout_height="match_parent"
+        android:nestedScrollingEnabled="true"
+        android:clipToPadding="false"/>
 </LinearLayout>

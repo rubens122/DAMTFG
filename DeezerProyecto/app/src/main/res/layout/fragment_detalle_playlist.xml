@@ -3,14 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:background="@color/colorFondo">
+    android:background="@color/colorFondo"
+    android:padding="16dp"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
         <!-- Imagen de la playlist -->
         <ImageView
@@ -18,36 +18,41 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_marginBottom="16dp"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:background="@drawable/borde_redondo"
+            android:contentDescription="Imagen de la Playlist" />
 
         <!-- Nombre -->
         <TextView
             android:id="@+id/nombrePlaylist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Nombre de la Playlist"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/colorTexto"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="4dp" />
 
         <!-- Privacidad -->
         <TextView
             android:id="@+id/textoPrivacidad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Pública"
             android:textSize="16sp"
             android:textColor="@color/colorGris"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="12dp" />
 
-        <!-- Botón Editar Playlist -->
+        <!-- Botón Editar (visible por defecto ahora) -->
         <Button
             android:id="@+id/botonEditar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Editar Playlist"
-            android:textColor="@color/white"
+            android:textColor="@android:color/white"
             android:backgroundTint="@color/colorVerdeSpotify"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:visibility="visible" />
 
         <!-- Texto si no hay canciones -->
         <TextView
@@ -61,16 +66,15 @@
             android:visibility="gone"
             android:layout_marginBottom="16dp" />
 
-        <!-- Lista de canciones -->
+        <!-- Canciones -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerCanciones"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false"
-            android:background="@color/colorFondo"
             android:padding="8dp" />
 
-        <!-- Título sección comentarios -->
+        <!-- Comentarios -->
         <TextView
             android:id="@+id/tituloComentarios"
             android:layout_width="wrap_content"
@@ -79,10 +83,9 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/colorTexto"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="8dp" />
 
-        <!-- Comentarios uno por uno -->
         <LinearLayout
             android:id="@+id/contenedorComentarios"
             android:layout_width="match_parent"
@@ -92,19 +95,22 @@
             android:showDividers="middle"
             android:dividerPadding="4dp" />
 
-        <!-- Campo para nuevo comentario -->
+        <!-- Campo para escribir comentario -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="8dp">
+            android:padding="8dp"
+            android:layout_marginTop="12dp">
 
             <EditText
                 android:id="@+id/inputComentario"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Escribe un comentario..." />
+                android:hint="Escribe un comentario..."
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/darker_gray" />
 
             <Button
                 android:id="@+id/botonEnviarComentario"

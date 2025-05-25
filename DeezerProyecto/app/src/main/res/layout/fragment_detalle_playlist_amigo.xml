@@ -1,25 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:background="@color/colorFondo"
+    android:padding="16dp"
+    android:fillViewport="true">
 
-    <TextView
-        android:id="@+id/nombrePlaylist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Nombre de la Playlist"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="16dp"
-        android:textColor="@android:color/white" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerCanciones"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="8dp"
-        android:clipToPadding="false" />
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Imagen de la playlist del amigo -->
+        <ImageView
+            android:id="@+id/imagenPlaylistAmigo"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/borde_redondo"
+            android:contentDescription="Imagen de la Playlist" />
+
+        <!-- Nombre -->
+        <TextView
+            android:id="@+id/nombrePlaylistAmigo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nombre de la Playlist"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorTexto"
+            android:layout_marginBottom="4dp" />
+
+        <!-- Privacidad -->
+        <TextView
+            android:id="@+id/textoPrivacidadAmigo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pública"
+            android:textSize="16sp"
+            android:textColor="@color/colorGris"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Canciones -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerCancionesAmigo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:padding="8dp"
+            android:layout_marginBottom="20dp" />
+
+        <!-- Comentarios -->
+        <TextView
+            android:id="@+id/tituloComentariosAmigo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Comentarios"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorTexto"
+            android:layout_marginBottom="8dp" />
+
+        <LinearLayout
+            android:id="@+id/contenedorComentariosAmigo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:divider="?android:attr/dividerHorizontal"
+            android:showDividers="middle"
+            android:dividerPadding="4dp" />
+
+        <!-- Campo para escribir comentario -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginTop="12dp">
+
+            <EditText
+                android:id="@+id/inputComentarioAmigo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Escribe un comentario..."
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/darker_gray" />
+
+            <Button
+                android:id="@+id/botonEnviarComentarioAmigo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enviar" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

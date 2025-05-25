@@ -1,87 +1,86 @@
 package com.example.deezerproyecto.fragments
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.deezerproyecto.R
 import com.example.deezerproyecto.adapters.PlaylistAdapter
-import com.example.deezerproyecto.databinding.FragmentBibliotecaBinding
 import com.example.deezerproyecto.models.Playlist
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
+import com.google.firebase.database.FirebaseDatabase
 
 class BibliotecaFragment : Fragment() {
 
-    private var _binding: FragmentBibliotecaBinding? = null
-    private val binding get() = _binding!!
-    private val playlists = mutableListOf<Playlist>()
+    private lateinit var campoBusqueda: EditText
+    private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PlaylistAdapter
-    private lateinit var database: FirebaseDatabase
-    private lateinit var reference: DatabaseReference
+    private val playlists = mutableListOf<Playlist>()
+    private val database = FirebaseDatabase.getInstance()
     private val uidUsuario = FirebaseAuth.getInstance().currentUser?.uid
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentBibliotecaBinding.inflate(inflater, container, false)
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_biblioteca, container, false)
 
-        adapter = PlaylistAdapter(playlists) { playlist ->
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.contenedorFragment, DetallePlaylistFragment(playlist))
+        campoBusqueda = view.findViewById(R.id.campoBusqueda)
+        recyclerView = view.findViewById(R.id.recyclerPlaylists)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        adapter = PlaylistAdapter(playlists.toMutableList()) { playlist ->
+            val fragment = DetallePlaylistFragment(playlist)
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.contenedorFragment, fragment)
                 .addToBackStack(null)
                 .commit()
         }
 
-        binding.recyclerPlaylists.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerPlaylists.adapter = adapter
+        recyclerView.adapter = adapter
 
-        database = FirebaseDatabase.getInstance()
+        campoBusqueda.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val texto = s.toString().lowercase()
+                val filtradas = playlists.filter {
+                    it.nombre.lowercase().contains(texto)
+                }
+                adapter.actualizarPlaylists(filtradas)
+            }
 
-        if (uidUsuario != null) {
-            reference = database.getReference("usuarios").child(uidUsuario).child("playlists")
-            cargarPlaylists()
-        } else {
-            Toast.makeText(requireContext(), "Usuario no autenticado", Toast.LENGTH_SHORT).show()
-        }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
 
-        binding.fabAddPlaylist.setOnClickListener {
+        view.findViewById<FloatingActionButton>(R.id.fabAddPlaylist).setOnClickListener {
             parentFragmentManager.beginTransaction()
-                .replace(R.id.contenedorFragment, PlaylistFragment())
+                .replace(R.id.contenedorFragment, CrearPlaylistFragment())
                 .addToBackStack(null)
                 .commit()
         }
 
-        return binding.root
+        cargarPlaylists()
+        return view
     }
 
     private fun cargarPlaylists() {
-        reference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                playlists.clear()
-                for (playlistSnapshot in snapshot.children) {
-                    val playlist = playlistSnapshot.getValue(Playlist::class.java)
-                    playlist?.let {
-                        playlists.add(it)
+        uidUsuario?.let { uid ->
+            database.getReference("usuarios").child(uid).child("playlists")
+                .get().addOnSuccessListener { snapshot ->
+                    playlists.clear()
+                    for (playlistSnapshot in snapshot.children) {
+                        val playlist = playlistSnapshot.getValue(Playlist::class.java)
+                        playlist?.let { playlists.add(it) }
                     }
+                    adapter.actualizarPlaylists(playlists)
                 }
-                adapter.notifyDataSetChanged()
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                context?.let {
-                    Toast.makeText(it, "Error al cargar playlists", Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+        }
     }
 }

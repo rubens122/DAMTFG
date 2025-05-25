@@ -11,45 +11,45 @@ import com.example.deezerproyecto.models.Playlist
 import com.squareup.picasso.Picasso
 
 class PlaylistAdapter(
-    private var playlists: MutableList<Playlist>,
+    private val playlists: MutableList<Playlist>,
     private val onClickPlaylist: (Playlist) -> Unit
 ) : RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_playlist, parent, false)
-        return PlaylistViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
-        holder.bind(playlists[position])
-    }
-
-    override fun getItemCount(): Int = playlists.size
-
-    /**
-     * 🔄 Método para actualizar la lista de playlists
-     */
-    fun actualizarPlaylists(nuevasPlaylists: List<Playlist>) {
-        playlists.clear()
-        playlists.addAll(nuevasPlaylists)
-        notifyDataSetChanged()
-    }
-
-    inner class PlaylistViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val nombrePlaylist: TextView = itemView.findViewById(R.id.nombrePlaylist)
-        private val imagenPlaylist: ImageView = itemView.findViewById(R.id.imagenPlaylist)
+    inner class PlaylistViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val nombre: TextView = view.findViewById(R.id.nombrePlaylist)
+        private val canciones: TextView = view.findViewById(R.id.textoCanciones)
+        private val imagen: ImageView = view.findViewById(R.id.imagenPlaylist)
 
         fun bind(playlist: Playlist) {
-            nombrePlaylist.text = playlist.nombre
-            if (!playlist.rutaFoto.isNullOrEmpty()) {
-                Picasso.get().load(playlist.rutaFoto).into(imagenPlaylist)
+            nombre.text = playlist.nombre
+            canciones.text = "${playlist.canciones.size} canciones"
+            if (playlist.rutaFoto.isNotEmpty()) {
+                Picasso.get().load(playlist.rutaFoto).into(imagen)
             } else {
-                imagenPlaylist.setImageResource(R.drawable.placeholder_image) // Imagen por defecto
+                imagen.setImageResource(R.drawable.placeholder_image)
             }
 
             itemView.setOnClickListener {
                 onClickPlaylist(playlist)
             }
         }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_playlist_dialog, parent, false)
+        return PlaylistViewHolder(view)
+    }
+
+    override fun getItemCount(): Int = playlists.size
+
+    override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
+        holder.bind(playlists[position])
+    }
+
+    fun actualizarPlaylists(nuevas: List<Playlist>) {
+        playlists.clear()
+        playlists.addAll(nuevas)
+        notifyDataSetChanged()
     }
 }

@@ -1,76 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/colorFondo"
-    android:padding="8dp">
+    android:padding="16dp"
+    android:fillViewport="true">
 
-    <!-- 🔹 Header con botón de perfil -->
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp">
+        android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/botonPerfil"
-            android:layout_marginTop="15dp"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_user"
-            android:contentDescription="Perfil" />
-    </RelativeLayout>
+        <!-- Encabezado con título y botón de perfil -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="24dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Top Canciones"
-        android:textSize="18sp"
-        android:textColor="@color/colorVerdeSpotify"
-        android:textStyle="bold"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp" />
+            <!-- Título centrado -->
+            <TextView
+                android:id="@+id/tituloApp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Social Music"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:gravity="center" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerCanciones"
-        android:layout_width="match_parent"
-        android:layout_height="199dp"
-        android:layout_marginBottom="16dp" />
+            <!-- Botón perfil -->
+            <ImageButton
+                android:id="@+id/botonPerfil"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/ic_user"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Ir al perfil" />
+        </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Top Artistas"
-        android:textSize="18sp"
-        android:textColor="@color/colorVerdeSpotify"
-        android:textStyle="bold"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp" />
+        <!-- Sección Canciones Populares -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Canciones Populares"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerArtistas"
-        android:layout_width="match_parent"
-        android:layout_height="202dp"
-        android:layout_marginBottom="16dp" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerCanciones"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:nestedScrollingEnabled="false"
+            android:clipToPadding="false" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Top Álbumes"
-        android:textSize="18sp"
-        android:textColor="@color/colorVerdeSpotify"
-        android:textStyle="bold"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp" />
+        <!-- Sección Artistas -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Artistas Destacados"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerAlbums"
-        android:layout_width="match_parent"
-        android:layout_height="219dp"
-        android:layout_marginBottom="16dp" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerArtistas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:nestedScrollingEnabled="false"
+            android:clipToPadding="false" />
 
-</LinearLayout>
+        <!-- Sección Álbumes -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Álbumes Recomendados"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerAlbums"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:nestedScrollingEnabled="false"
+            android:clipToPadding="false" />
+    </LinearLayout>
+</ScrollView>

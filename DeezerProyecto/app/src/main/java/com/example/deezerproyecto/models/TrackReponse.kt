@@ -29,8 +29,9 @@ data class Artist(
 data class Album(
     val id: Long = 0,
     val title: String = "",
-    val cover: String = ""
+    val cover: String = "",
+    val artist: Artist = Artist()
 ) {
-    constructor() : this(0, "", "")
+    constructor() : this(0, "", "", Artist())
 }
 

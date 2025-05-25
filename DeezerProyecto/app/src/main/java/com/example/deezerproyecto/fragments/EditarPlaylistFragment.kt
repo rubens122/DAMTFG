@@ -5,34 +5,34 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.deezerproyecto.databinding.FragmentEditarPlaylistBinding
 import com.example.deezerproyecto.models.Playlist
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 
 class EditarPlaylistFragment(private val playlist: Playlist) : Fragment() {
 
     private var _binding: FragmentEditarPlaylistBinding? = null
     private val binding get() = _binding!!
+
     private var imagenUri: Uri? = null
-    private val database = FirebaseDatabase.getInstance()
-    private val reference = database.getReference("usuarios")
-    private val uidUsuario = FirebaseAuth.getInstance().currentUser?.uid
+    private val database = FirebaseDatabase.getInstance().getReference("usuarios")
+    private val storage = FirebaseStorage.getInstance().getReference("imagenesPlaylists")
+    private val uid = FirebaseAuth.getInstance().currentUser?.uid
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentEditarPlaylistBinding.inflate(inflater, container, false)
 
         binding.campoNombrePlaylist.setText(playlist.nombre)
-        binding.switchPrivacidad.isChecked = !playlist.esPrivada
+        binding.switchPrivacidad.isChecked = playlist.esPrivada
 
         if (playlist.rutaFoto.isNotEmpty()) {
             Picasso.get().load(playlist.rutaFoto).into(binding.imagenPlaylist)
@@ -44,7 +44,7 @@ class EditarPlaylistFragment(private val playlist: Playlist) : Fragment() {
         }
 
         binding.botonGuardarCambios.setOnClickListener {
-            actualizarPlaylist()
+            guardarCambios()
         }
 
         return binding.root
@@ -58,24 +58,44 @@ class EditarPlaylistFragment(private val playlist: Playlist) : Fragment() {
         }
     }
 
-    private fun actualizarPlaylist() {
+    private fun guardarCambios() {
         playlist.nombre = binding.campoNombrePlaylist.text.toString()
-        playlist.esPrivada = !binding.switchPrivacidad.isChecked
-        playlist.rutaFoto = imagenUri?.toString() ?: playlist.rutaFoto
+        playlist.esPrivada = binding.switchPrivacidad.isChecked
 
-        uidUsuario?.let { uid ->
-            playlist.idUsuario = uid // ✅ Muy importante: conservar el dueño de la playlist
+        if (imagenUri != null) {
+            val nombreImagen = "playlist_${playlist.id}.jpg"
+            val refImagen = storage.child(nombreImagen)
 
-            reference.child(uid).child("playlists").child(playlist.id).setValue(playlist)
+            refImagen.putFile(imagenUri!!)
+                .addOnSuccessListener {
+                    refImagen.downloadUrl.addOnSuccessListener { uri ->
+                        playlist.rutaFoto = uri.toString()
+                        actualizarCampos()
+                    }.addOnFailureListener {
+                        Toast.makeText(requireContext(), "Error al obtener imagen", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .addOnFailureListener {
+                    Toast.makeText(requireContext(), "Error al subir imagen", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            actualizarCampos()
+        }
+    }
+
+    private fun actualizarCampos() {
+        uid?.let { usuarioId ->
+            val ref = database.child(usuarioId).child("playlists").child(playlist.id)
+            ref.child("nombre").setValue(playlist.nombre)
+            ref.child("esPrivada").setValue(playlist.esPrivada)
+            ref.child("rutaFoto").setValue(playlist.rutaFoto)
                 .addOnSuccessListener {
                     Toast.makeText(requireContext(), "Playlist actualizada", Toast.LENGTH_SHORT).show()
                     parentFragmentManager.popBackStack()
                 }
                 .addOnFailureListener {
-                    Toast.makeText(requireContext(), "Error al actualizar", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Error al guardar", Toast.LENGTH_SHORT).show()
                 }
-        } ?: run {
-            Toast.makeText(requireContext(), "Error: usuario no autenticado", Toast.LENGTH_SHORT).show()
         }
     }
 

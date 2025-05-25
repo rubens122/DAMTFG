@@ -1,10 +1,7 @@
 package com.example.deezerproyecto.fragments
 
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -32,6 +29,7 @@ class HomeFragment : Fragment() {
     private lateinit var adapterArtistas: ArtistaAdapter
     private lateinit var adapterAlbums: AlbumAdapter
     private lateinit var botonPerfil: ImageButton
+
     private val deezerService: DeezerService = DeezerClient.retrofit.create(DeezerService::class.java)
 
     override fun onCreateView(
@@ -44,7 +42,6 @@ class HomeFragment : Fragment() {
         inicializarAdaptadores()
         cargarDatosDeezer()
 
-        // ✅ Evento de click para abrir el perfil
         botonPerfil.setOnClickListener {
             val fragment = PerfilFragment()
             requireActivity().supportFragmentManager.beginTransaction()
@@ -81,7 +78,12 @@ class HomeFragment : Fragment() {
         }
 
         adapterAlbums = AlbumAdapter(mutableListOf()) { album ->
-            val fragment = DetalleAlbumFragment(album.id, album.title, album.cover)
+            val fragment = DetalleAlbumFragment(
+                album.id.toString(),
+                album.title,
+                album.artist.name,
+                album.cover
+            )
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.contenedorFragment, fragment)
                 .addToBackStack(null)
@@ -93,75 +95,57 @@ class HomeFragment : Fragment() {
         recyclerAlbums.adapter = adapterAlbums
     }
 
-    /**
-     * 🔄 Método para cargar las canciones más populares
-     */
     private fun cargarTopCanciones() {
-        val call = deezerService.buscarCancion("top")
-        call.enqueue(object : Callback<TrackResponse> {
+        deezerService.obtenerTopCanciones().enqueue(object : Callback<TrackResponse> {
             override fun onResponse(call: Call<TrackResponse>, response: Response<TrackResponse>) {
                 if (response.isSuccessful) {
                     val canciones = response.body()?.data ?: emptyList()
-                    Log.d("HomeFragment", "📌 Canciones encontradas: ${canciones.size}")
                     adapterCanciones.actualizarCanciones(canciones)
                 } else {
-                    Log.e("HomeFragment", "Error en la respuesta de canciones: ${response.errorBody()}")
+                    Toast.makeText(requireContext(), "Error al cargar canciones populares", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                Log.e("HomeFragment", "Error al cargar canciones: ${t.message}")
+                Toast.makeText(requireContext(), "Error de conexión", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
-    /**
-     * 🔄 Método para cargar los artistas más populares
-     */
     private fun cargarTopArtistas() {
-        val call = deezerService.buscarArtistas()
-        call.enqueue(object : Callback<ArtistResponse> {
+        deezerService.buscarArtistas().enqueue(object : Callback<ArtistResponse> {
             override fun onResponse(call: Call<ArtistResponse>, response: Response<ArtistResponse>) {
                 if (response.isSuccessful) {
                     val artistas = response.body()?.data ?: emptyList()
-                    Log.d("HomeFragment", "📌 Artistas encontrados: ${artistas.size}")
                     adapterArtistas.actualizarArtistas(artistas)
                 } else {
-                    Log.e("HomeFragment", "Error en la respuesta de artistas: ${response.errorBody()}")
+                    Toast.makeText(requireContext(), "Error al cargar artistas", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<ArtistResponse>, t: Throwable) {
-                Log.e("HomeFragment", "Error al cargar artistas: ${t.message}")
+                Toast.makeText(requireContext(), "Error de conexión", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
-    /**
-     * 🔄 Método para cargar los álbumes más populares
-     */
     private fun cargarTopAlbums() {
-        val call = deezerService.buscarAlbums()
-        call.enqueue(object : Callback<AlbumResponse> {
+        deezerService.buscarAlbums().enqueue(object : Callback<AlbumResponse> {
             override fun onResponse(call: Call<AlbumResponse>, response: Response<AlbumResponse>) {
                 if (response.isSuccessful) {
                     val albums = response.body()?.data ?: emptyList()
-                    Log.d("HomeFragment", "📌 Álbumes encontrados: ${albums.size}")
                     adapterAlbums.actualizarAlbums(albums)
                 } else {
-                    Log.e("HomeFragment", "Error en la respuesta de álbumes: ${response.errorBody()}")
+                    Toast.makeText(requireContext(), "Error al cargar álbumes", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<AlbumResponse>, t: Throwable) {
-                Log.e("HomeFragment", "Error al cargar álbumes: ${t.message}")
+                Toast.makeText(requireContext(), "Error de conexión", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
-    /**
-     * 🔄 Método para cargar toda la información
-     */
     private fun cargarDatosDeezer() {
         cargarTopCanciones()
         cargarTopArtistas()

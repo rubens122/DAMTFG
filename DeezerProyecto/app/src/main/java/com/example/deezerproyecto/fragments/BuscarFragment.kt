@@ -2,17 +2,17 @@ package com.example.deezerproyecto.fragments
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.view.*
+import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.deezerproyecto.R
+import com.example.deezerproyecto.adapters.ArtistaSugeridoAdapter
 import com.example.deezerproyecto.adapters.CancionAdapter
+import com.example.deezerproyecto.adapters.PlaylistSeleccionAdapter
+import com.example.deezerproyecto.api.ArtistResponse
 import com.example.deezerproyecto.api.DeezerClient
 import com.example.deezerproyecto.api.DeezerService
 import com.example.deezerproyecto.models.Playlist
@@ -28,67 +28,98 @@ class BuscarFragment : Fragment() {
 
     private lateinit var campoBusqueda: EditText
     private lateinit var botonBuscar: Button
-    private lateinit var recyclerViewCanciones: RecyclerView
-    private lateinit var adapter: CancionAdapter
-    private val database = FirebaseDatabase.getInstance()
-    private val reference = database.getReference("usuarios")
-    private val uidActual = FirebaseAuth.getInstance().currentUser?.uid
-    private val deezerService: DeezerService = DeezerClient.retrofit.create(DeezerService::class.java)
+    private lateinit var recyclerContenido: RecyclerView
+    private lateinit var tituloArtistas: TextView
+
+    private lateinit var adapterCanciones: CancionAdapter
+    private lateinit var adapterArtistas: ArtistaSugeridoAdapter
+
     private val playlists = mutableListOf<Playlist>()
+    private val uidActual = FirebaseAuth.getInstance().currentUser?.uid
+    private val reference = FirebaseDatabase.getInstance().getReference("usuarios")
+    private val deezerService = DeezerClient.retrofit.create(DeezerService::class.java)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val view = inflater.inflate(R.layout.fragment_buscar, container, false)
 
         campoBusqueda = view.findViewById(R.id.campoBusqueda)
         botonBuscar = view.findViewById(R.id.botonBuscar)
-        recyclerViewCanciones = view.findViewById(R.id.recyclerCanciones)
+        recyclerContenido = view.findViewById(R.id.recyclerContenido)
+        tituloArtistas = view.findViewById(R.id.tituloArtistas)
 
-        adapter = CancionAdapter(
+        adapterCanciones = CancionAdapter(
             canciones = mutableListOf(),
             layout = R.layout.item_cancion,
-            onClickAdd = { track ->
-                mostrarDialogoSeleccionPlaylist(track)
-            }
+            onClickAdd = { track -> mostrarDialogoSeleccionPlaylist(track) }
         )
 
-        recyclerViewCanciones.layoutManager = LinearLayoutManager(context)
-        recyclerViewCanciones.adapter = adapter
+        recyclerContenido.layoutManager = LinearLayoutManager(context)
+        recyclerContenido.adapter = adapterCanciones
 
         botonBuscar.setOnClickListener {
-            val query = campoBusqueda.text.toString()
+            val query = campoBusqueda.text.toString().trim()
             if (query.isNotEmpty()) {
                 buscarCanciones(query)
             }
         }
 
         cargarPlaylists()
+        cargarArtistasSugeridos()
+
         return view
     }
 
+    private fun cargarArtistasSugeridos() {
+        deezerService.obtenerArtistasPopulares().enqueue(object : Callback<ArtistResponse> {
+            override fun onResponse(call: Call<ArtistResponse>, response: Response<ArtistResponse>) {
+                if (response.isSuccessful) {
+                    val artistas = response.body()?.data ?: emptyList()
+
+                    tituloArtistas.visibility = View.VISIBLE
+                    recyclerContenido.layoutManager = GridLayoutManager(context, 2)
+
+                    adapterArtistas = ArtistaSugeridoAdapter(artistas.take(20)) { nombreArtista ->
+                        campoBusqueda.setText(nombreArtista)
+                        buscarCanciones(nombreArtista)
+                    }
+
+                    recyclerContenido.adapter = adapterArtistas
+                } else {
+                    Toast.makeText(requireContext(), "Error al cargar artistas", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ArtistResponse>, t: Throwable) {
+                Toast.makeText(requireContext(), "Error de conexión", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
     private fun buscarCanciones(query: String) {
-        val call = deezerService.buscarCancion(query)
-        call.enqueue(object : Callback<TrackResponse> {
+        deezerService.buscarCancion(query).enqueue(object : Callback<TrackResponse> {
             override fun onResponse(call: Call<TrackResponse>, response: Response<TrackResponse>) {
                 if (response.isSuccessful) {
                     val canciones = response.body()?.data ?: emptyList()
-                    adapter.actualizarCanciones(canciones)
+                    tituloArtistas.visibility = View.GONE
+                    recyclerContenido.layoutManager = LinearLayoutManager(context)
+                    adapterCanciones.actualizarCanciones(canciones)
+                    recyclerContenido.adapter = adapterCanciones
                 } else {
                     Toast.makeText(requireContext(), "Error al buscar canciones", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                Toast.makeText(requireContext(), "Error en la conexión", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Error de conexión", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
     private fun cargarPlaylists() {
-        if (uidActual == null) return
-
+        uidActual ?: return
         reference.child(uidActual).child("playlists").get().addOnSuccessListener { snapshot ->
             playlists.clear()
             for (playlistSnapshot in snapshot.children) {
@@ -96,58 +127,46 @@ class BuscarFragment : Fragment() {
                 playlist?.let { playlists.add(it) }
             }
         }.addOnFailureListener {
-            Toast.makeText(requireContext(), "Error al cargar las playlists", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Error al cargar playlists", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun mostrarDialogoSeleccionPlaylist(track: Track) {
-        val nombresPlaylists = playlists.map { it.nombre }.toTypedArray()
-        AlertDialog.Builder(requireContext())
-            .setTitle("Selecciona una Playlist")
-            .setItems(nombresPlaylists) { _, index ->
-                val playlistSeleccionada = playlists[index]
-                anadirCancionAPlaylist(track, playlistSeleccionada)
-            }
-            .setNegativeButton("Cancelar", null)
-            .show()
+    fun mostrarDialogoSeleccionPlaylist(track: Track) {
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.layout_dialog_elegir_playlist, null)
+        val recycler = dialogView.findViewById<RecyclerView>(R.id.recyclerPlaylists)
+        recycler.layoutManager = LinearLayoutManager(requireContext())
+
+        val alert = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .setCancelable(true)
+            .create()
+
+        val adapter = PlaylistSeleccionAdapter(playlists) { playlist ->
+            anadirCancionAPlaylist(track, playlist)
+            alert.dismiss()
+        }
+
+        recycler.adapter = adapter
+        alert.show()
     }
 
     private fun anadirCancionAPlaylist(track: Track, playlist: Playlist) {
         val uid = uidActual ?: return
         val playlistRef = reference.child(uid).child("playlists").child(playlist.id)
 
-        playlistRef.child("comentarios").get().addOnSuccessListener { snapshot ->
-            val comentariosGuardados = snapshot.value
-
-            // Añadir canción si no existe
-            if (playlist.canciones.none { it.id == track.id }) {
-                playlist.canciones.add(track)
-            }
-
-            // Crear mapa manual con los comentarios incluidos
-            val playlistMap = mutableMapOf<String, Any?>(
-                "id" to playlist.id,
-                "nombre" to playlist.nombre,
-                "esPrivada" to playlist.esPrivada,
-                "rutaFoto" to playlist.rutaFoto,
-                "idUsuario" to playlist.idUsuario,
-                "canciones" to playlist.canciones
-            )
-
-            if (comentariosGuardados != null) {
-                playlistMap["comentarios"] = comentariosGuardados
-            }
-
-            playlistRef.setValue(playlistMap)
-                .addOnSuccessListener {
-                    Toast.makeText(requireContext(), "Canción añadida", Toast.LENGTH_SHORT).show()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(requireContext(), "Error al guardar canción", Toast.LENGTH_SHORT).show()
-                }
-
-        }.addOnFailureListener {
-            Toast.makeText(requireContext(), "Error al conservar comentarios", Toast.LENGTH_SHORT).show()
+        if (playlist.canciones.none { it.id == track.id }) {
+            playlist.canciones.add(track)
+        } else {
+            Toast.makeText(requireContext(), "La canción ya está en la playlist", Toast.LENGTH_SHORT).show()
+            return
         }
+
+        playlistRef.child("canciones").setValue(playlist.canciones)
+            .addOnSuccessListener {
+                Toast.makeText(requireContext(), "Canción añadida", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(requireContext(), "Error al guardar canción", Toast.LENGTH_SHORT).show()
+            }
     }
 }

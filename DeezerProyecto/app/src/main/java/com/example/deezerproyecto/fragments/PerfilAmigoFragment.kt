@@ -47,19 +47,21 @@ class PerfilAmigoFragment(private val amigoId: String) : Fragment() {
         return view
     }
 
-    /**
-     * 🔄 Cargar datos del amigo (nombre e imagen)
-     */
     private fun cargarDatosAmigo() {
         database.child(amigoId).get().addOnSuccessListener {
             val nombre = it.child("nombre").value as? String ?: "Sin Nombre"
             val fotoUrl = it.child("imagenPerfil").value as? String
+
             nombreUsuario.text = nombre
 
             if (!fotoUrl.isNullOrEmpty()) {
-                Picasso.get().load(fotoUrl).fit().centerCrop().into(imagenPerfil)
+                Picasso.get().load(fotoUrl)
+                    .fit()
+                    .centerCrop()
+                    .into(imagenPerfil)
             } else {
-                Picasso.get().load("https://cdn-icons-png.flaticon.com/512/1946/1946429.png")
+                Picasso.get()
+                    .load("https://cdn-icons-png.flaticon.com/512/1946/1946429.png")
                     .fit()
                     .centerCrop()
                     .into(imagenPerfil)
@@ -69,9 +71,6 @@ class PerfilAmigoFragment(private val amigoId: String) : Fragment() {
         }
     }
 
-    /**
-     * 🔄 Cargar solo las playlists públicas del amigo
-     */
     private fun cargarPlaylistsPublicas() {
         database.child(amigoId).child("playlists")
             .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -92,11 +91,8 @@ class PerfilAmigoFragment(private val amigoId: String) : Fragment() {
             })
     }
 
-    /**
-     * 🔄 Abrir Playlist en un Fragment Detalle
-     */
     private fun abrirPlaylist(playlist: Playlist) {
-        val fragment = DetallePlaylistAmigoFragment(playlist)
+        val fragment = DetallePlaylistAmigoFragment(playlist, amigoId)
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.contenedorFragment, fragment)
             .addToBackStack(null)

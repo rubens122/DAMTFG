@@ -4,8 +4,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorFondo"
     android:padding="16dp">
 
+    <!-- 🧭 Título -->
+    <TextView
+        android:id="@+id/tituloBiblioteca"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tu biblioteca"
+        android:textSize="22sp"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <!-- 🔍 Buscador -->
+    <EditText
+        android:id="@+id/campoBusqueda"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Buscar en tus playlists..."
+        android:textColor="@android:color/white"
+        android:textColorHint="@android:color/darker_gray"
+        android:backgroundTint="@color/colorGris"
+        android:drawableStart="@android:drawable/ic_menu_search"
+        android:padding="10dp"
+        android:layout_marginBottom="12dp"/>
+
+    <!-- 📜 Lista de playlists -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerPlaylists"
         android:layout_width="match_parent"
@@ -13,6 +39,7 @@
         android:layout_weight="1"
         android:paddingTop="8dp" />
 
+    <!-- ➕ Botón flotante para añadir -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddPlaylist"
         android:layout_width="wrap_content"

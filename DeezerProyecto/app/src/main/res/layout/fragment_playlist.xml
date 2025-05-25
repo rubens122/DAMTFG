@@ -3,31 +3,31 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1e1e1e"
+    android:background="@color/colorFondo"
+    android:padding="24dp"
     android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:gravity="center_horizontal">
 
-        <!-- Contenedor para la imagen y el botón sobrepuesto -->
+        <!-- Imagen con botón de cámara -->
         <FrameLayout
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="24dp">
 
-            <!-- Imagen de la playlist -->
             <ImageView
                 android:id="@+id/imagenPreview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:background="@android:color/darker_gray" />
+                android:background="@drawable/borde_redondo"
+                android:contentDescription="Imagen de la Playlist" />
 
-            <!-- Botón flotante para elegir foto -->
             <ImageButton
                 android:id="@+id/botonSeleccionarImagen"
                 android:layout_width="36dp"
@@ -35,12 +35,12 @@
                 android:layout_gravity="bottom|end"
                 android:layout_margin="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Seleccionar Imagen"
                 android:src="@android:drawable/ic_menu_camera"
-                android:tint="@android:color/white" />
+                android:tint="@android:color/white"
+                android:contentDescription="Cambiar imagen" />
         </FrameLayout>
 
-        <!-- Campo para el nombre de la playlist -->
+        <!-- Campo de nombre -->
         <EditText
             android:id="@+id/campoNombrePlaylist"
             android:layout_width="match_parent"
@@ -50,41 +50,43 @@
             android:textColorHint="@android:color/darker_gray"
             android:backgroundTint="@color/colorGris"
             android:padding="12dp"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="20dp" />
 
-        <!-- Switch para privacidad -->
+        <!-- Switch de privacidad -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="24dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pública"
+                android:text="Privada"
                 android:textColor="@android:color/white"
-                android:layout_marginEnd="8dp" />
+                android:textSize="16sp"
+                android:layout_marginEnd="12dp" />
 
             <Switch
                 android:id="@+id/switchPrivacidad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:textOn="Pública"
-                android:textOff="Privada"
-                android:layout_gravity="center"/>
+                android:text=""
+                android:thumbTint="@color/colorVerdeSpotify"
+                android:trackTint="@color/colorGris" />
         </LinearLayout>
 
-        <!-- Botón para crear la playlist -->
+        <!-- Botón para crear -->
         <Button
             android:id="@+id/botonCrearPlaylist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Crear Playlist"
             android:textColor="@android:color/white"
-            android:background="@color/colorVerdeSpotify" />
-
+            android:backgroundTint="@color/colorVerdeSpotify"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:padding="12dp" />
     </LinearLayout>
 </ScrollView>

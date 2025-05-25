@@ -1,36 +1,39 @@
 package com.example.deezerproyecto.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.deezerproyecto.R
-import com.example.deezerproyecto.adapters.CancionHomeAdapter
+import com.example.deezerproyecto.adapters.CancionDescubrimientoAdapter
 import com.example.deezerproyecto.api.DeezerClient
 import com.example.deezerproyecto.api.DeezerService
+import com.example.deezerproyecto.models.Track
 import com.example.deezerproyecto.models.TrackResponse
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.concurrent.TimeUnit
 
 class DetalleAlbumFragment(
-    private val albumId: Long,
-    private val albumNombre: String,
-    private val albumImagen: String
+    private val albumId: String,
+    private val nombreAlbumTexto: String,
+    private val nombreArtistaTexto: String,
+    private val imagenUrl: String
 ) : Fragment() {
 
     private lateinit var imagenAlbum: ImageView
     private lateinit var nombreAlbum: TextView
+    private lateinit var detallesAlbum: TextView
     private lateinit var recyclerCanciones: RecyclerView
-    private lateinit var adapterCanciones: CancionHomeAdapter
-    private val deezerService: DeezerService = DeezerClient.retrofit.create(DeezerService::class.java)
+    private lateinit var adapter: CancionDescubrimientoAdapter
+
+    private val canciones = mutableListOf<Track>()
+    private val deezerService = DeezerClient.retrofit.create(DeezerService::class.java)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,50 +43,45 @@ class DetalleAlbumFragment(
 
         imagenAlbum = view.findViewById(R.id.imagenAlbum)
         nombreAlbum = view.findViewById(R.id.nombreAlbum)
-        recyclerCanciones = view.findViewById(R.id.recyclerCanciones)
+        detallesAlbum = view.findViewById(R.id.detallesAlbum)
+        recyclerCanciones = view.findViewById(R.id.recyclerCancionesAlbum)
 
-        nombreAlbum.text = albumNombre
+        // ✅ Título y detalles
+        nombreAlbum.text = nombreAlbumTexto
+        detallesAlbum.text = "$nombreArtistaTexto • Álbum"
 
-        // 🔄 URL de alta calidad para el álbum
-        val urlAltaCalidad = albumImagen.replace("/image", "/image?size=1000x1000")
-
-        // 🔄 Cargar con alta resolución
-        Picasso.get()
-            .load(urlAltaCalidad)
-            .fit()
-            .centerCrop()
-            .into(imagenAlbum)
-
-        // 🔄 Inicializar el RecyclerView
-        recyclerCanciones.layoutManager = LinearLayoutManager(context)
-        adapterCanciones = CancionHomeAdapter(mutableListOf()) { track ->
-            Toast.makeText(requireContext(), "Reproduciendo: ${track.title}", Toast.LENGTH_SHORT).show()
+        // ✅ Imagen en alta calidad si es posible
+        val imagenAlta = imagenUrl.replace("/image", "/image?size=1000x1000")
+        if (imagenAlta.isNotEmpty()) {
+            Picasso.get().load(imagenAlta).fit().centerCrop().into(imagenAlbum)
+        } else {
+            Picasso.get()
+                .load("https://cdn-icons-png.flaticon.com/512/833/833281.png")
+                .fit().centerCrop()
+                .into(imagenAlbum)
         }
-        recyclerCanciones.adapter = adapterCanciones
 
-        // 🔄 Cargar las canciones del álbum
-        cargarCanciones()
+        adapter = CancionDescubrimientoAdapter(canciones)
+        recyclerCanciones.layoutManager = LinearLayoutManager(requireContext())
+        recyclerCanciones.adapter = adapter
+
+        cargarCancionesDelAlbum()
 
         return view
     }
 
-    /**
-     * 🔄 Método para cargar las canciones del álbum seleccionado
-     */
-    private fun cargarCanciones() {
-        val call = deezerService.buscarCancion(albumNombre)
-        call.enqueue(object : Callback<TrackResponse> {
+    private fun cargarCancionesDelAlbum() {
+        deezerService.obtenerCancionesAlbum(albumId).enqueue(object : Callback<TrackResponse> {
             override fun onResponse(call: Call<TrackResponse>, response: Response<TrackResponse>) {
                 if (response.isSuccessful) {
-                    val canciones = response.body()?.data ?: emptyList()
-                    adapterCanciones.actualizarCanciones(canciones)
-                } else {
-                    Toast.makeText(requireContext(), "Error al cargar canciones", Toast.LENGTH_SHORT).show()
+                    canciones.clear()
+                    canciones.addAll(response.body()?.data ?: emptyList())
+                    adapter.notifyDataSetChanged()
                 }
             }
 
             override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                Toast.makeText(requireContext(), "Error de conexión", Toast.LENGTH_SHORT).show()
+                // Opcional: Toast de error si lo deseas
             }
         })
     }

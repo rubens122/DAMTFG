@@ -5,12 +5,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
+import android.view.*
+import android.widget.*
 import androidx.fragment.app.Fragment
-import com.example.deezerproyecto.databinding.FragmentCrearPlaylistBinding
+import com.example.deezerproyecto.R
 import com.example.deezerproyecto.models.Playlist
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -19,104 +17,99 @@ import java.util.*
 
 class CrearPlaylistFragment : Fragment() {
 
-    private var _binding: FragmentCrearPlaylistBinding? = null
-    private val binding get() = _binding!!
-    private var imageUri: Uri? = null
-    private val database = FirebaseDatabase.getInstance()
-    private val storage = FirebaseStorage.getInstance()
-    private val uidUsuario = FirebaseAuth.getInstance().currentUser?.uid
+    private lateinit var imagenPreview: ImageView
+    private lateinit var botonSeleccionarImagen: ImageButton
+    private lateinit var campoNombrePlaylist: EditText
+    private lateinit var switchPrivacidad: Switch
+    private lateinit var botonCrearPlaylist: Button
+
+    private var imagenUri: Uri? = null
+    private val database = FirebaseDatabase.getInstance().getReference("usuarios")
+    private val storage = FirebaseStorage.getInstance().getReference("imagenesPlaylists")
+    private val uid = FirebaseAuth.getInstance().currentUser?.uid
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentCrearPlaylistBinding.inflate(inflater, container, false)
+        val view = inflater.inflate(R.layout.fragment_crear_playlist, container, false)
 
-        binding.botonSeleccionarImagen.setOnClickListener {
+        imagenPreview = view.findViewById(R.id.imagenPreview)
+        botonSeleccionarImagen = view.findViewById(R.id.botonSeleccionarImagen)
+        campoNombrePlaylist = view.findViewById(R.id.campoNombrePlaylist)
+        switchPrivacidad = view.findViewById(R.id.switchPrivacidad)
+        botonCrearPlaylist = view.findViewById(R.id.botonCrearPlaylist)
+
+        botonSeleccionarImagen.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(intent, 1000)
         }
 
-        binding.botonCrearPlaylist.setOnClickListener {
+        botonCrearPlaylist.setOnClickListener {
             crearPlaylist()
         }
 
-        return binding.root
-    }
-
-    private fun crearPlaylist() {
-        val nombre = binding.campoNombrePlaylist.text.toString().trim()
-        val esPrivada = binding.switchPrivacidad.isChecked
-
-        if (nombre.isNotEmpty()) {
-            val idPlaylist = database.reference.push().key ?: return
-            if (imageUri != null) {
-                subirImagenAFirebase(imageUri!!) { url ->
-                    guardarPlaylistEnFirebase(idPlaylist, nombre, esPrivada, url)
-                }
-            } else {
-                guardarPlaylistEnFirebase(idPlaylist, nombre, esPrivada, "")
-            }
-        } else {
-            Toast.makeText(requireContext(), "El nombre no puede estar vacío", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun subirImagenAFirebase(uri: Uri, onSuccess: (String) -> Unit) {
-        val nombreArchivo = "playlist_${UUID.randomUUID()}.jpg"
-        val referenciaStorage = storage.getReference("imagenes_playlists/$nombreArchivo")
-
-        referenciaStorage.putFile(uri)
-            .addOnSuccessListener {
-                referenciaStorage.downloadUrl.addOnSuccessListener { url ->
-                    onSuccess(url.toString())
-                    Toast.makeText(requireContext(), "Imagen subida correctamente", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .addOnFailureListener {
-                Toast.makeText(requireContext(), "Error al subir la imagen", Toast.LENGTH_SHORT).show()
-            }
-    }
-
-    private fun guardarPlaylistEnFirebase(idPlaylist: String, nombre: String, esPrivada: Boolean, rutaFoto: String) {
-        if (uidUsuario == null) {
-            Toast.makeText(requireContext(), "Usuario no autenticado", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val nuevaPlaylist = Playlist(
-            id = idPlaylist,
-            nombre = nombre,
-            esPrivada = esPrivada,
-            rutaFoto = rutaFoto,
-            idUsuario = uidUsuario // ✅ Guardamos el UID
-        )
-
-        database.reference.child("usuarios").child(uidUsuario)
-            .child("playlists").child(idPlaylist)
-            .setValue(nuevaPlaylist)
-            .addOnSuccessListener {
-                Toast.makeText(requireContext(), "Playlist creada correctamente", Toast.LENGTH_SHORT).show()
-                parentFragmentManager.popBackStack()
-            }
-            .addOnFailureListener {
-                Toast.makeText(requireContext(), "Error al crear la playlist", Toast.LENGTH_SHORT).show()
-            }
-
-        // Opcional: también guardar en nodo global
-        database.reference.child("playlists").child(idPlaylist).setValue(nuevaPlaylist)
+        return view
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1000 && resultCode == Activity.RESULT_OK) {
-            imageUri = data?.data
-            binding.imagenPreview.setImageURI(imageUri)
+            imagenUri = data?.data
+            imagenPreview.setImageURI(imagenUri)
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun crearPlaylist() {
+        val nombre = campoNombrePlaylist.text.toString().trim()
+        val esPrivada = switchPrivacidad.isChecked
+
+        if (nombre.isEmpty()) {
+            Toast.makeText(requireContext(), "Escribe un nombre", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val id = UUID.randomUUID().toString()
+        val playlist = Playlist(
+            id = id,
+            nombre = nombre,
+            esPrivada = esPrivada,
+            rutaFoto = "",
+            idUsuario = uid ?: ""
+        )
+
+        if (imagenUri != null) {
+            val nombreImagen = "playlist_$id.jpg"
+            val refImagen = storage.child(nombreImagen)
+
+            refImagen.putFile(imagenUri!!)
+                .addOnSuccessListener {
+                    refImagen.downloadUrl.addOnSuccessListener { uri ->
+                        playlist.rutaFoto = uri.toString()
+                        guardarPlaylist(playlist)
+                    }.addOnFailureListener {
+                        Toast.makeText(requireContext(), "Error al obtener imagen", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .addOnFailureListener {
+                    Toast.makeText(requireContext(), "Error al subir imagen", Toast.LENGTH_SHORT).show()
+                }
+
+        } else {
+            guardarPlaylist(playlist)
+        }
+    }
+
+    private fun guardarPlaylist(playlist: Playlist) {
+        uid?.let { usuarioId ->
+            database.child(usuarioId).child("playlists").child(playlist.id).setValue(playlist)
+                .addOnSuccessListener {
+                    Toast.makeText(requireContext(), "Playlist creada", Toast.LENGTH_SHORT).show()
+                    parentFragmentManager.popBackStack()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(requireContext(), "Error al crear playlist", Toast.LENGTH_SHORT).show()
+                }
+        }
     }
 }
