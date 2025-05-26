@@ -10,7 +10,8 @@ import com.example.deezerproyecto.models.Track
 import java.util.concurrent.TimeUnit
 
 class CancionDescubrimientoAdapter(
-    private val canciones: List<Track>
+    private val canciones: List<Track>,
+    private val onItemClick: ((Track) -> Unit)? = null
 ) : RecyclerView.Adapter<CancionDescubrimientoAdapter.CancionViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CancionViewHolder {
@@ -36,6 +37,10 @@ class CancionDescubrimientoAdapter(
             tituloCancion.text = track.title
             artistaCancion.text = track.artist.name
             duracionCancion.text = formatearDuracion(track.duration)
+
+            itemView.setOnClickListener {
+                onItemClick?.invoke(track)
+            }
         }
 
         private fun formatearDuracion(segundos: Int): String {

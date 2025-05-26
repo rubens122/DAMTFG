@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.deezerproyecto.HomeActivity
 import com.example.deezerproyecto.R
 import com.example.deezerproyecto.adapters.CancionDescubrimientoAdapter
 import com.example.deezerproyecto.api.DeezerClient
@@ -17,7 +18,6 @@ import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.concurrent.TimeUnit
 
 class DetalleAlbumFragment(
     private val albumId: String,
@@ -46,11 +46,9 @@ class DetalleAlbumFragment(
         detallesAlbum = view.findViewById(R.id.detallesAlbum)
         recyclerCanciones = view.findViewById(R.id.recyclerCancionesAlbum)
 
-        // ✅ Título y detalles
         nombreAlbum.text = nombreAlbumTexto
         detallesAlbum.text = "$nombreArtistaTexto • Álbum"
 
-        // ✅ Imagen en alta calidad si es posible
         val imagenAlta = imagenUrl.replace("/image", "/image?size=1000x1000")
         if (imagenAlta.isNotEmpty()) {
             Picasso.get().load(imagenAlta).fit().centerCrop().into(imagenAlbum)
@@ -61,7 +59,15 @@ class DetalleAlbumFragment(
                 .into(imagenAlbum)
         }
 
-        adapter = CancionDescubrimientoAdapter(canciones)
+        adapter = CancionDescubrimientoAdapter(canciones) { track ->
+            (activity as? HomeActivity)?.iniciarBarra(
+                titulo = track.title,
+                artista = track.artist.name,
+                imagenUrl = track.album.cover,
+                urlCancion = track.preview
+            )
+        }
+
         recyclerCanciones.layoutManager = LinearLayoutManager(requireContext())
         recyclerCanciones.adapter = adapter
 
@@ -81,7 +87,7 @@ class DetalleAlbumFragment(
             }
 
             override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                // Opcional: Toast de error si lo deseas
+                // opcional: mostrar error
             }
         })
     }
