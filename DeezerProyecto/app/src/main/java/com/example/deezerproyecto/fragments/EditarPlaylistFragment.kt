@@ -72,11 +72,13 @@ class EditarPlaylistFragment(private val playlist: Playlist) : Fragment() {
                         playlist.rutaFoto = uri.toString()
                         actualizarCampos()
                     }.addOnFailureListener {
-                        Toast.makeText(requireContext(), "Error al obtener imagen", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Error al obtener URL", Toast.LENGTH_SHORT).show()
+                        actualizarCampos()
                     }
                 }
                 .addOnFailureListener {
                     Toast.makeText(requireContext(), "Error al subir imagen", Toast.LENGTH_SHORT).show()
+                    actualizarCampos()
                 }
         } else {
             actualizarCampos()

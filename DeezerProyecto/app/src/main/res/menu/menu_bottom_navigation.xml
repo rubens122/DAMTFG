@@ -14,7 +14,7 @@
     <item
         android:id="@+id/nav_radio"
         android:icon="@drawable/ic_radio"
-        android:title="Públicas" />
+        android:title="Social" />
 
     <item
         android:id="@+id/nav_biblioteca"

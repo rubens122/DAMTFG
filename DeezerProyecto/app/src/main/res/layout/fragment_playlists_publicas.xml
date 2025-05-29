@@ -1,27 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
-    android:gravity="center"
-    android:background="@color/colorFondo">
+    android:background="@color/colorFondo"
+    android:padding="16dp">
 
-    <Button
-        android:id="@+id/botonBuscarAmigos"
+    <LinearLayout
+        android:id="@+id/layoutOpciones"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Buscar Amigos"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/colorVerdeSpotify"
-        android:textColor="@android:color/white" />
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:paddingTop="24dp">
 
-    <Button
-        android:id="@+id/botonListaAmigos"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Mis Amigos"
-        android:backgroundTint="@color/colorGris"
-        android:textColor="@android:color/white" />
-</LinearLayout>
+        <!-- TÍTULO -->
+        <TextView
+            android:id="@+id/titulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Explora lo Social"
+            android:textColor="@android:color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
+
+        <!-- SUBTÍTULO -->
+        <TextView
+            android:id="@+id/subtitulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Busca amigos o explora sus playlists públicas"
+            android:textColor="#BBBBBB"
+            android:textSize="14sp"
+            android:layout_marginBottom="24dp" />
+
+        <!-- BOTÓN: Buscar Amigos -->
+        <LinearLayout
+            android:id="@+id/botonBuscarAmigos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:background="@drawable/fondo_tarjeta"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_buscar_amigos"
+                android:contentDescription="Buscar Amigos"
+                android:layout_marginEnd="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Buscar Amigos"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- BOTÓN: Mis Amigos -->
+        <LinearLayout
+            android:id="@+id/botonMisAmigos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:background="@drawable/fondo_tarjeta_gris"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_mis_amigos"
+                android:contentDescription="Mis Amigos"
+                android:layout_marginEnd="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mis Amigos"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

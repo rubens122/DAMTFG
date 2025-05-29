@@ -1,10 +1,10 @@
 package com.example.deezerproyecto.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.deezerproyecto.R
 import com.example.deezerproyecto.databinding.FragmentPlaylistsPublicasBinding
 
@@ -14,24 +14,21 @@ class PlaylistsPublicasFragment : Fragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentPlaylistsPublicasBinding.inflate(inflater, container, false)
 
-        // 🔹 Navegar a Buscar Amigos
         binding.botonBuscarAmigos.setOnClickListener {
-            val fragment = BuscarAmigosFragment()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.contenedorFragment, fragment)
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.contenedorFragment, BuscarAmigosFragment())
                 .addToBackStack(null)
                 .commit()
         }
 
-        // 🔹 Navegar a Lista de Amigos
-        binding.botonListaAmigos.setOnClickListener {
-            val fragment = ListaAmigosFragment()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.contenedorFragment, fragment)
+        binding.botonMisAmigos.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.contenedorFragment, ListaAmigosFragment())
                 .addToBackStack(null)
                 .commit()
         }

@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import java.util.*
+import android.util.Log
 
 class CrearPlaylistFragment : Fragment() {
 
@@ -70,6 +71,11 @@ class CrearPlaylistFragment : Fragment() {
         }
 
         val id = UUID.randomUUID().toString()
+        if (id.isEmpty()) {
+            Toast.makeText(requireContext(), "Error generando ID", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val playlist = Playlist(
             id = id,
             nombre = nombre,
@@ -79,22 +85,23 @@ class CrearPlaylistFragment : Fragment() {
         )
 
         if (imagenUri != null) {
-            val nombreImagen = "playlist_$id.jpg"
-            val refImagen = storage.child(nombreImagen)
+            val refImagen = storage.child("playlist_$id.jpg")
 
             refImagen.putFile(imagenUri!!)
                 .addOnSuccessListener {
                     refImagen.downloadUrl.addOnSuccessListener { uri ->
                         playlist.rutaFoto = uri.toString()
+                        Log.d("RutaFirebase", "URL guardada: ${playlist.rutaFoto}")
                         guardarPlaylist(playlist)
                     }.addOnFailureListener {
-                        Toast.makeText(requireContext(), "Error al obtener imagen", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Error al obtener URL", Toast.LENGTH_SHORT).show()
+                        guardarPlaylist(playlist)
                     }
                 }
                 .addOnFailureListener {
                     Toast.makeText(requireContext(), "Error al subir imagen", Toast.LENGTH_SHORT).show()
+                    guardarPlaylist(playlist)
                 }
-
         } else {
             guardarPlaylist(playlist)
         }
@@ -108,7 +115,7 @@ class CrearPlaylistFragment : Fragment() {
                     parentFragmentManager.popBackStack()
                 }
                 .addOnFailureListener {
-                    Toast.makeText(requireContext(), "Error al crear playlist", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Error al guardar playlist", Toast.LENGTH_SHORT).show()
                 }
         }
     }
