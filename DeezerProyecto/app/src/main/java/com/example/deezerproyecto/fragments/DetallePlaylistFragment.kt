@@ -60,16 +60,14 @@ class DetallePlaylistFragment(private val playlist: Playlist) : Fragment() {
         ).fit().centerCrop().into(imagenPlaylist)
 
         adapter = CancionPlaylistAdapter(
-            playlist.canciones,
+            playlist.canciones?.values?.toList()?.toMutableList() ?: mutableListOf(),
             R.layout.item_cancion_playlist
-        ) { track ->
-            eliminarCancion(track)
-        }
+        ) { track -> eliminarCancion(track) }
 
         recyclerCanciones.layoutManager = LinearLayoutManager(context)
         recyclerCanciones.adapter = adapter
 
-        textoVacio.visibility = if (playlist.canciones.isEmpty()) View.VISIBLE else View.GONE
+        textoVacio.visibility = if (playlist.canciones?.isEmpty() != false) View.VISIBLE else View.GONE
 
         botonEditar.visibility = View.VISIBLE
         botonEditar.setOnClickListener {
@@ -94,15 +92,15 @@ class DetallePlaylistFragment(private val playlist: Playlist) : Fragment() {
     }
 
     private fun eliminarCancion(track: Track) {
-        playlist.canciones.removeIf { it.id == track.id }
+        val nuevasCanciones = playlist.canciones?.toMutableMap() ?: mutableMapOf()
+        nuevasCanciones.entries.removeIf { it.value.id == track.id }
 
         uidActual?.let { uid ->
-            // ✅ Solo actualizar canciones para no borrar comentarios
             database.child(uid).child("playlists").child(playlist.id)
-                .child("canciones").setValue(playlist.canciones)
+                .child("canciones").setValue(nuevasCanciones)
                 .addOnSuccessListener {
-                    adapter.notifyDataSetChanged()
-                    textoVacio.visibility = if (playlist.canciones.isEmpty()) View.VISIBLE else View.GONE
+                    adapter.actualizarCanciones(nuevasCanciones.values.toList().toMutableList())
+                    textoVacio.visibility = if (nuevasCanciones.isEmpty()) View.VISIBLE else View.GONE
                 }
         }
     }

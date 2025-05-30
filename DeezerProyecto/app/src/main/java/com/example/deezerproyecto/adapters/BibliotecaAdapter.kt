@@ -30,12 +30,10 @@ class BibliotecaAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val playlist = listaInterna[position]
         holder.nombre.text = playlist.nombre
-        holder.subtitulo.text = "${playlist.canciones.size} canciones"
+        holder.subtitulo.text = "${playlist.canciones?.size ?: 0} canciones"
 
         if (playlist.rutaFoto.isNotEmpty()) {
             Picasso.get().load(playlist.rutaFoto).into(holder.imagen)
-        } else {
-
         }
 
         holder.itemView.setOnClickListener {

@@ -19,7 +19,7 @@ import com.example.deezerproyecto.models.Playlist
 import com.example.deezerproyecto.models.Track
 import com.example.deezerproyecto.models.TrackResponse
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,7 +34,6 @@ class BuscarFragment : Fragment() {
     private lateinit var adapterCanciones: CancionAdapter
     private lateinit var adapterArtistas: ArtistaSugeridoAdapter
 
-    private val playlists = mutableListOf<Playlist>()
     private val uidActual = FirebaseAuth.getInstance().currentUser?.uid
     private val reference = FirebaseDatabase.getInstance().getReference("usuarios")
     private val deezerService = DeezerClient.retrofit.create(DeezerService::class.java)
@@ -66,7 +65,6 @@ class BuscarFragment : Fragment() {
             }
         }
 
-        cargarPlaylists()
         cargarArtistasSugeridos()
 
         return view
@@ -118,19 +116,6 @@ class BuscarFragment : Fragment() {
         })
     }
 
-    private fun cargarPlaylists() {
-        uidActual ?: return
-        reference.child(uidActual).child("playlists").get().addOnSuccessListener { snapshot ->
-            playlists.clear()
-            for (playlistSnapshot in snapshot.children) {
-                val playlist = playlistSnapshot.getValue(Playlist::class.java)
-                playlist?.let { playlists.add(it) }
-            }
-        }.addOnFailureListener {
-            Toast.makeText(requireContext(), "Error al cargar playlists", Toast.LENGTH_SHORT).show()
-        }
-    }
-
     fun mostrarDialogoSeleccionPlaylist(track: Track) {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.layout_dialog_elegir_playlist, null)
         val recycler = dialogView.findViewById<RecyclerView>(R.id.recyclerPlaylists)
@@ -141,32 +126,50 @@ class BuscarFragment : Fragment() {
             .setCancelable(true)
             .create()
 
-        val adapter = PlaylistSeleccionAdapter(playlists) { playlist ->
-            anadirCancionAPlaylist(track, playlist)
-            alert.dismiss()
-        }
-
-        recycler.adapter = adapter
-        alert.show()
-    }
-
-    private fun anadirCancionAPlaylist(track: Track, playlist: Playlist) {
         val uid = uidActual ?: return
-        val playlistRef = reference.child(uid).child("playlists").child(playlist.id)
 
-        if (playlist.canciones.none { it.id == track.id }) {
-            playlist.canciones.add(track)
-        } else {
-            Toast.makeText(requireContext(), "La canción ya está en la playlist", Toast.LENGTH_SHORT).show()
-            return
-        }
+        reference.child(uid).child("playlists")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val listaActualizada = mutableListOf<Playlist>()
 
-        playlistRef.child("canciones").setValue(playlist.canciones)
-            .addOnSuccessListener {
-                Toast.makeText(requireContext(), "Canción añadida", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener {
-                Toast.makeText(requireContext(), "Error al guardar canción", Toast.LENGTH_SHORT).show()
-            }
+                    for (playlistSnapshot in snapshot.children) {
+                        val playlist = playlistSnapshot.getValue(Playlist::class.java)
+                        if (playlist != null) {
+                            listaActualizada.add(playlist)
+                        }
+                    }
+
+                    val adapter = PlaylistSeleccionAdapter(listaActualizada) { playlist ->
+                        val idCancion = track.id.toString()
+                        val yaExiste = playlist.canciones?.containsKey(idCancion) == true
+
+                        if (yaExiste) {
+                            Toast.makeText(requireContext(), "La canción ya está en la playlist", Toast.LENGTH_SHORT).show()
+                        } else {
+                            val nuevasCanciones = playlist.canciones?.toMutableMap() ?: mutableMapOf()
+                            nuevasCanciones[idCancion] = track
+
+                            reference.child(uid).child("playlists").child(playlist.id)
+                                .child("canciones").setValue(nuevasCanciones)
+                                .addOnSuccessListener {
+                                    Toast.makeText(requireContext(), "Canción añadida", Toast.LENGTH_SHORT).show()
+                                }
+                                .addOnFailureListener {
+                                    Toast.makeText(requireContext(), "Error al guardar canción", Toast.LENGTH_SHORT).show()
+                                }
+                        }
+
+                        alert.dismiss()
+                    }
+
+                    recycler.adapter = adapter
+                    alert.show()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(requireContext(), "Error al cargar playlists", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 }

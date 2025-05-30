@@ -7,7 +7,6 @@ data class Playlist(
     var nombre: String = "",
     var esPrivada: Boolean = false,
     var rutaFoto: String = "",
-    var idUsuario: String = "", // <== requerido
-    var canciones: MutableList<Track> = mutableListOf()
-)
-
+    var idUsuario: String = "",
+    var canciones: Map<String, Track>? = null
+) : Serializable

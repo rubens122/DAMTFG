@@ -16,6 +16,7 @@ import com.example.deezerproyecto.models.Playlist
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.GenericTypeIndicator
 
 class BibliotecaFragment : Fragment() {
 
@@ -70,17 +71,20 @@ class BibliotecaFragment : Fragment() {
         return view
     }
 
-    private fun cargarPlaylists() {
+    fun cargarPlaylists() {
         uidUsuario?.let { uid ->
             database.getReference("usuarios").child(uid).child("playlists")
                 .get().addOnSuccessListener { snapshot ->
                     playlists.clear()
-                    for (playlistSnapshot in snapshot.children) {
-                        val playlist = playlistSnapshot.getValue(Playlist::class.java)
-                        playlist?.let { playlists.add(it) }
-                    }
+
+                    val playlistsMap = snapshot.getValue(object : GenericTypeIndicator<HashMap<String, Playlist>>() {})
+                    val listaPlaylists = playlistsMap?.values?.toList() ?: listOf()
+
+                    playlists.addAll(listaPlaylists)
                     adapter.actualizarPlaylists(playlists)
                 }
         }
     }
+
+
 }

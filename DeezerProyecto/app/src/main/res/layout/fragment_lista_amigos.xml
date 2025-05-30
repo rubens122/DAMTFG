@@ -1,20 +1,34 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@color/colorFondo"
+    android:padding="16dp">
 
+    <!-- Título estilo Spotify -->
+    <TextView
+        android:id="@+id/tituloMisAmigos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mis amigos"
+        android:textColor="@android:color/white"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:paddingBottom="8dp" />
+
+    <!-- Lista de amigos -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerAmigos"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp" />
+
+    <!-- Cargando -->
     <ProgressBar
         android:id="@+id/progressBarAmigos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerAmigos"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="8dp" />
+        android:layout_gravity="center" />
 </LinearLayout>

@@ -16,13 +16,19 @@ import com.example.deezerproyecto.models.Playlist
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
 
-class PerfilAmigoFragment(private val amigoId: String) : Fragment() {
+class PerfilAmigoFragment : Fragment() {
 
+    private lateinit var amigoId: String
     private lateinit var imagenPerfil: ImageView
     private lateinit var nombreUsuario: TextView
     private lateinit var recyclerPlaylists: RecyclerView
     private lateinit var adapter: PlaylistAdapter
     private val database = FirebaseDatabase.getInstance().getReference("usuarios")
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        amigoId = requireArguments().getString("amigoId") ?: ""
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,18 +60,14 @@ class PerfilAmigoFragment(private val amigoId: String) : Fragment() {
 
             nombreUsuario.text = nombre
 
-            if (!fotoUrl.isNullOrEmpty()) {
-                Picasso.get().load(fotoUrl)
-                    .fit()
-                    .centerCrop()
-                    .into(imagenPerfil)
-            } else {
-                Picasso.get()
-                    .load("https://cdn-icons-png.flaticon.com/512/1946/1946429.png")
-                    .fit()
-                    .centerCrop()
-                    .into(imagenPerfil)
-            }
+            val imagenUrl = fotoUrl.takeUnless { it.isNullOrEmpty() }
+                ?: "https://cdn-icons-png.flaticon.com/512/1946/1946429.png"
+
+            Picasso.get().load(imagenUrl)
+                .fit()
+                .centerCrop()
+                .into(imagenPerfil)
+
         }.addOnFailureListener {
             Toast.makeText(requireContext(), "Error al cargar el perfil", Toast.LENGTH_SHORT).show()
         }
@@ -92,8 +94,13 @@ class PerfilAmigoFragment(private val amigoId: String) : Fragment() {
     }
 
     private fun abrirPlaylist(playlist: Playlist) {
-        val fragment = DetallePlaylistAmigoFragment(playlist, amigoId)
-        requireActivity().supportFragmentManager.beginTransaction()
+        val fragment = DetallePlaylistAmigoFragment()
+        fragment.arguments = Bundle().apply {
+            putSerializable("playlist", playlist)
+            putString("uidAmigo", amigoId)
+        }
+
+        parentFragmentManager.beginTransaction()
             .replace(R.id.contenedorFragment, fragment)
             .addToBackStack(null)
             .commit()

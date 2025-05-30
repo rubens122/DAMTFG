@@ -22,7 +22,8 @@ class PlaylistAdapter(
 
         fun bind(playlist: Playlist) {
             nombre.text = playlist.nombre
-            canciones.text = "${playlist.canciones.size} canciones"
+            canciones.text = "${playlist.canciones?.size ?: 0} canciones"
+
             if (playlist.rutaFoto.isNotEmpty()) {
                 Picasso.get().load(playlist.rutaFoto).into(imagen)
             } else {

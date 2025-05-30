@@ -29,7 +29,7 @@ class PlaylistSeleccionAdapter(
         val playlist = playlists[position]
 
         holder.nombre.text = playlist.nombre
-        holder.subtitulo.text = "${playlist.canciones.size} canciones"
+        holder.subtitulo.text = "${playlist.canciones?.size ?: 0} canciones"
 
         if (playlist.rutaFoto.isNotEmpty()) {
             Picasso.get().load(playlist.rutaFoto).into(holder.imagen)

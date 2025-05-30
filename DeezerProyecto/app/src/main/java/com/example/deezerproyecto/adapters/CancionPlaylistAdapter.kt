@@ -15,7 +15,7 @@ import com.example.deezerproyecto.models.Track
 import com.squareup.picasso.Picasso
 
 class CancionPlaylistAdapter(
-    private val canciones: List<Track>,
+    private val canciones: MutableList<Track>,
     private val layout: Int,
     private val onEliminarCancion: ((Track) -> Unit)? = null
 ) : RecyclerView.Adapter<CancionPlaylistAdapter.ViewHolder>() {
@@ -60,9 +60,14 @@ class CancionPlaylistAdapter(
             onEliminarCancion?.invoke(track)
         }
 
-        // Siempre mostramos el icono de play (la barra ya maneja el estado global)
         holder.botonReproducir.setImageResource(android.R.drawable.ic_media_play)
     }
 
     override fun getItemCount(): Int = canciones.size
+
+    fun actualizarCanciones(nuevas: List<Track>) {
+        canciones.clear()
+        canciones.addAll(nuevas)
+        notifyDataSetChanged()
+    }
 }
