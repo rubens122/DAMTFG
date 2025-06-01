@@ -37,5 +37,30 @@
             android:text="Pública"
             android:textColor="@android:color/darker_gray"
             android:textSize="14sp" />
+
+        <!-- NUEVA SECCIÓN: Likes -->
+        <LinearLayout
+            android:id="@+id/seccionLikes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dp">
+
+            <ImageView
+                android:id="@+id/botonLike"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_corazon_vacio"
+                android:contentDescription="Botón me gusta" />
+
+            <TextView
+                android:id="@+id/textoLikes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 me gusta"
+                android:textColor="@android:color/white"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

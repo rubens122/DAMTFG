@@ -16,7 +16,8 @@ import com.squareup.picasso.Picasso
 class CancionAdapter(
     private val canciones: MutableList<Track>,
     private val layout: Int,
-    private val onClickAdd: ((Track) -> Unit)? = null
+    private val onClickAdd: ((Track) -> Unit)? = null,
+    private val onClickPlay: ((Track) -> Unit)? = null
 ) : RecyclerView.Adapter<CancionAdapter.CancionViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CancionViewHolder {
@@ -37,7 +38,6 @@ class CancionAdapter(
     }
 
     inner class CancionViewHolder(itemView: View, private val context: Context) : RecyclerView.ViewHolder(itemView) {
-
         private val imagenAlbum: ImageView = itemView.findViewById(R.id.imagenAlbum)
         private val tituloCancion: TextView = itemView.findViewById(R.id.tituloCancion)
         private val artistaCancion: TextView = itemView.findViewById(R.id.artistaCancion)
@@ -55,6 +55,7 @@ class CancionAdapter(
             botonReproducir?.setImageResource(android.R.drawable.ic_media_play)
 
             botonReproducir?.setOnClickListener {
+                onClickPlay?.invoke(track)  // <--- aquí disparamos el callback
                 (context as? HomeActivity)?.iniciarBarra(
                     titulo = track.title,
                     artista = track.artist.name,
@@ -69,3 +70,4 @@ class CancionAdapter(
         }
     }
 }
+

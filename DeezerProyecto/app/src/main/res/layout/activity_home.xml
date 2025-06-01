@@ -22,5 +22,7 @@
         android:background="@color/colorFondo"
         app:itemIconTint="@color/colorTexto"
         app:itemTextColor="@color/colorTexto"
+        app:itemBackground="@drawable/fondo_item_seleccionado"
+
         app:menu="@menu/menu_bottom_navigation" />
 </LinearLayout>

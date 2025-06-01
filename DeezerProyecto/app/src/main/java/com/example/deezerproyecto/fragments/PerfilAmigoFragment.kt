@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.deezerproyecto.R
 import com.example.deezerproyecto.adapters.PlaylistAdapter
+import com.example.deezerproyecto.adapters.UltimosArtistasAdapter
 import com.example.deezerproyecto.models.Playlist
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
@@ -22,7 +23,10 @@ class PerfilAmigoFragment : Fragment() {
     private lateinit var imagenPerfil: ImageView
     private lateinit var nombreUsuario: TextView
     private lateinit var recyclerPlaylists: RecyclerView
+    private lateinit var recyclerUltimosArtistas: RecyclerView
+    private lateinit var tituloUltimosArtistas: TextView
     private lateinit var adapter: PlaylistAdapter
+
     private val database = FirebaseDatabase.getInstance().getReference("usuarios")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,16 +43,20 @@ class PerfilAmigoFragment : Fragment() {
         imagenPerfil = view.findViewById(R.id.imagenPerfilAmigo)
         nombreUsuario = view.findViewById(R.id.nombreAmigo)
         recyclerPlaylists = view.findViewById(R.id.recyclerPlaylists)
-
-        adapter = PlaylistAdapter(mutableListOf()) { playlist ->
-            abrirPlaylist(playlist)
-        }
+        recyclerUltimosArtistas = view.findViewById(R.id.recyclerUltimosArtistas)
+        tituloUltimosArtistas = view.findViewById(R.id.tituloUltimosArtistas)
 
         recyclerPlaylists.layoutManager = LinearLayoutManager(context)
+        adapter = PlaylistAdapter(mutableListOf(), soloContador = false) { playlist ->
+            abrirPlaylist(playlist)
+        }
         recyclerPlaylists.adapter = adapter
+
+        recyclerUltimosArtistas.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
         cargarDatosAmigo()
         cargarPlaylistsPublicas()
+        cargarUltimosArtistas()
 
         return view
     }
@@ -93,11 +101,39 @@ class PerfilAmigoFragment : Fragment() {
             })
     }
 
+    private fun cargarUltimosArtistas() {
+        database.child(amigoId).child("ultimosArtistas")
+            .orderByChild("timestamp")
+            .limitToLast(10)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val lista = mutableListOf<Pair<String, String>>() // nombre, imagen
+
+                    for (artistaSnap in snapshot.children.reversed()) {
+                        val nombre = artistaSnap.key ?: continue
+                        val imagen = artistaSnap.child("imagen").getValue(String::class.java) ?: ""
+                        lista.add(Pair(nombre, imagen))
+                    }
+
+                    if (lista.isNotEmpty()) {
+                        recyclerUltimosArtistas.adapter = UltimosArtistasAdapter(lista)
+                        recyclerUltimosArtistas.visibility = View.VISIBLE
+                        tituloUltimosArtistas.visibility = View.VISIBLE
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(requireContext(), "Error al cargar artistas", Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
+
     private fun abrirPlaylist(playlist: Playlist) {
-        val fragment = DetallePlaylistAmigoFragment()
-        fragment.arguments = Bundle().apply {
-            putSerializable("playlist", playlist)
-            putString("uidAmigo", amigoId)
+        val fragment = DetallePlaylistAmigoFragment().apply {
+            arguments = Bundle().apply {
+                putSerializable("playlist", playlist)
+                putString("uidAmigo", amigoId)
+            }
         }
 
         parentFragmentManager.beginTransaction()

@@ -86,19 +86,24 @@ class EditarPlaylistFragment(private val playlist: Playlist) : Fragment() {
     }
 
     private fun actualizarCampos() {
-        uid?.let { usuarioId ->
-            val ref = database.child(usuarioId).child("playlists").child(playlist.id)
-            ref.child("nombre").setValue(playlist.nombre)
-            ref.child("esPrivada").setValue(playlist.esPrivada)
-            ref.child("rutaFoto").setValue(playlist.rutaFoto)
-                .addOnSuccessListener {
-                    Toast.makeText(requireContext(), "Playlist actualizada", Toast.LENGTH_SHORT).show()
-                    parentFragmentManager.popBackStack()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(requireContext(), "Error al guardar", Toast.LENGTH_SHORT).show()
-                }
+        val usuarioId = FirebaseAuth.getInstance().currentUser?.uid
+        if (usuarioId == null) {
+            Toast.makeText(requireContext(), "Usuario no identificado", Toast.LENGTH_SHORT).show()
+            return
         }
+
+        // Aseguramos que idUsuario esté actualizado
+        playlist.idUsuario = usuarioId
+
+        val ref = database.child(usuarioId).child("playlists").child(playlist.id)
+        ref.setValue(playlist)
+            .addOnSuccessListener {
+                Toast.makeText(requireContext(), "Playlist actualizada", Toast.LENGTH_SHORT).show()
+                parentFragmentManager.popBackStack()
+            }
+            .addOnFailureListener {
+                Toast.makeText(requireContext(), "Error al guardar", Toast.LENGTH_SHORT).show()
+            }
     }
 
     override fun onDestroyView() {

@@ -33,6 +33,13 @@ class PlaylistsPublicasFragment : Fragment() {
                 .commit()
         }
 
+        binding.botonTopPlaylists.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.contenedorFragment, TopPlaylistsFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
         return binding.root
     }
 

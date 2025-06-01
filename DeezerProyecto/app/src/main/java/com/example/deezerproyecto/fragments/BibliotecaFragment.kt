@@ -37,7 +37,7 @@ class BibliotecaFragment : Fragment() {
         recyclerView = view.findViewById(R.id.recyclerPlaylists)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        adapter = PlaylistAdapter(playlists.toMutableList()) { playlist ->
+        adapter = PlaylistAdapter(playlists.toMutableList(), soloContador = true) { playlist ->
             val fragment = DetallePlaylistFragment(playlist)
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.contenedorFragment, fragment)
@@ -71,7 +71,7 @@ class BibliotecaFragment : Fragment() {
         return view
     }
 
-    fun cargarPlaylists() {
+    private fun cargarPlaylists() {
         uidUsuario?.let { uid ->
             database.getReference("usuarios").child(uid).child("playlists")
                 .get().addOnSuccessListener { snapshot ->
@@ -85,6 +85,4 @@ class BibliotecaFragment : Fragment() {
                 }
         }
     }
-
-
 }

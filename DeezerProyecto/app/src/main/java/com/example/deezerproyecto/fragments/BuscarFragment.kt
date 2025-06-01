@@ -52,8 +52,16 @@ class BuscarFragment : Fragment() {
         adapterCanciones = CancionAdapter(
             canciones = mutableListOf(),
             layout = R.layout.item_cancion,
-            onClickAdd = { track -> mostrarDialogoSeleccionPlaylist(track) }
+            onClickAdd = { track ->
+                registrarArtistaEscuchado(track.artist.name, track.artist.picture)
+                mostrarDialogoSeleccionPlaylist(track)
+            },
+            onClickPlay = { track ->
+                registrarArtistaEscuchado(track.artist.name, track.artist.picture)
+            }
         )
+
+
 
         recyclerContenido.layoutManager = LinearLayoutManager(context)
         recyclerContenido.adapter = adapterCanciones
@@ -172,4 +180,16 @@ class BuscarFragment : Fragment() {
                 }
             })
     }
+    private fun registrarArtistaEscuchado(nombreArtista: String, urlImagen: String = "") {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val timestamp = System.currentTimeMillis()
+        val datos = mapOf("timestamp" to timestamp, "imagen" to urlImagen)
+
+        FirebaseDatabase.getInstance().getReference("usuarios")
+            .child(uid)
+            .child("ultimosArtistas")
+            .child(nombreArtista)
+            .setValue(datos)
+    }
+
 }

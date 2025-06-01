@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
@@ -14,7 +15,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import java.util.*
-import android.util.Log
 
 class CrearPlaylistFragment : Fragment() {
 
@@ -64,24 +64,25 @@ class CrearPlaylistFragment : Fragment() {
     private fun crearPlaylist() {
         val nombre = campoNombrePlaylist.text.toString().trim()
         val esPrivada = switchPrivacidad.isChecked
+        val usuarioId = FirebaseAuth.getInstance().currentUser?.uid
 
         if (nombre.isEmpty()) {
             Toast.makeText(requireContext(), "Escribe un nombre", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val id = UUID.randomUUID().toString()
-        if (id.isEmpty()) {
-            Toast.makeText(requireContext(), "Error generando ID", Toast.LENGTH_SHORT).show()
+        if (usuarioId == null) {
+            Toast.makeText(requireContext(), "Error: usuario no autenticado", Toast.LENGTH_SHORT).show()
             return
         }
 
+        val id = UUID.randomUUID().toString()
         val playlist = Playlist(
             id = id,
             nombre = nombre,
             esPrivada = esPrivada,
             rutaFoto = "",
-            idUsuario = uid ?: ""
+            idUsuario = usuarioId
         )
 
         if (imagenUri != null) {
@@ -108,15 +109,14 @@ class CrearPlaylistFragment : Fragment() {
     }
 
     private fun guardarPlaylist(playlist: Playlist) {
-        uid?.let { usuarioId ->
-            database.child(usuarioId).child("playlists").child(playlist.id).setValue(playlist)
-                .addOnSuccessListener {
-                    Toast.makeText(requireContext(), "Playlist creada", Toast.LENGTH_SHORT).show()
-                    parentFragmentManager.popBackStack()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(requireContext(), "Error al guardar playlist", Toast.LENGTH_SHORT).show()
-                }
-        }
+        val usuarioId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        database.child(usuarioId).child("playlists").child(playlist.id).setValue(playlist)
+            .addOnSuccessListener {
+                Toast.makeText(requireContext(), "Playlist creada", Toast.LENGTH_SHORT).show()
+                parentFragmentManager.popBackStack()
+            }
+            .addOnFailureListener {
+                Toast.makeText(requireContext(), "Error al guardar playlist", Toast.LENGTH_SHORT).show()
+            }
     }
 }

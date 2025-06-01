@@ -2,6 +2,7 @@ package com.example.deezerproyecto.fragments
 
 import android.os.Bundle
 import android.view.*
+import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -40,6 +41,7 @@ class HomeFragment : Fragment() {
 
         inicializarVistas(view)
         inicializarAdaptadores()
+        aplicarAnimaciones()
         cargarDatosDeezer()
 
         botonPerfil.setOnClickListener {
@@ -93,6 +95,13 @@ class HomeFragment : Fragment() {
         recyclerCanciones.adapter = adapterCanciones
         recyclerArtistas.adapter = adapterArtistas
         recyclerAlbums.adapter = adapterAlbums
+    }
+
+    private fun aplicarAnimaciones() {
+        val animacion = AnimationUtils.loadAnimation(context, R.anim.slide_in_bottom)
+        recyclerCanciones.startAnimation(animacion)
+        recyclerArtistas.startAnimation(animacion)
+        recyclerAlbums.startAnimation(animacion)
     }
 
     private fun cargarTopCanciones() {

@@ -14,6 +14,8 @@ import com.example.deezerproyecto.api.DeezerClient
 import com.example.deezerproyecto.api.DeezerService
 import com.example.deezerproyecto.models.Track
 import com.example.deezerproyecto.models.TrackResponse
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
@@ -60,6 +62,14 @@ class DetalleAlbumFragment(
         }
 
         adapter = CancionDescubrimientoAdapter(canciones) { track ->
+            val imagenArtista = if (track.artist.picture.isNullOrEmpty()) {
+                track.album.cover
+            } else {
+                track.artist.picture
+            }
+
+            registrarArtistaEscuchado(track.artist.name, imagenArtista)
+
             (activity as? HomeActivity)?.iniciarBarra(
                 titulo = track.title,
                 artista = track.artist.name,
@@ -67,6 +77,8 @@ class DetalleAlbumFragment(
                 urlCancion = track.preview
             )
         }
+
+
 
         recyclerCanciones.layoutManager = LinearLayoutManager(requireContext())
         recyclerCanciones.adapter = adapter
@@ -91,4 +103,16 @@ class DetalleAlbumFragment(
             }
         })
     }
+    private fun registrarArtistaEscuchado(nombreArtista: String, urlImagen: String = "") {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val timestamp = System.currentTimeMillis()
+        val datos = mapOf("timestamp" to timestamp, "imagen" to urlImagen)
+
+        FirebaseDatabase.getInstance().getReference("usuarios")
+            .child(uid)
+            .child("ultimosArtistas")
+            .child(nombreArtista)
+            .setValue(datos)
+    }
+
 }

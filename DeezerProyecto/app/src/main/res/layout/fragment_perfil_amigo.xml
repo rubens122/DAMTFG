@@ -1,45 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorFondo"
-    android:fillViewport="true"
-    android:padding="24dp">
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:orientation="vertical">
 
-        <!-- Imagen del amigo -->
-        <ImageView
-            android:id="@+id/imagenPerfilAmigo"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginBottom="16dp"
-            android:scaleType="centerCrop"
-            android:background="@drawable/borde_redondo"
-            android:contentDescription="Foto del amigo" />
+        <!-- CABECERA CON DEGRADADO Y FOTO DE PERFIL -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="@drawable/fondo_degradado_perfil"
+            android:paddingTop="48dp"
+            android:paddingBottom="32dp">
 
-        <!-- Nombre del amigo -->
+            <ImageView
+                android:id="@+id/imagenPerfilAmigo"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:scaleType="centerCrop"
+                android:background="@drawable/borde_redondo"
+                android:contentDescription="Foto del amigo" />
+
+            <TextView
+                android:id="@+id/nombreAmigo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre del amigo"
+                android:textColor="@android:color/white"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:animation="@anim/deslizar_arriba" />
+        </LinearLayout>
+
+        <!-- TÍTULO PLAYLISTS -->
         <TextView
-            android:id="@+id/nombreAmigo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nombre del amigo"
-            android:textSize="20sp"
-            android:textStyle="bold"
+            android:text="Playlists públicas"
             android:textColor="@android:color/white"
-            android:layout_marginBottom="24dp" />
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp" />
 
-        <!-- Lista de playlists públicas -->
+        <!-- RECYCLER DE PLAYLISTS -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerPlaylists"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false"
             android:padding="8dp" />
+
+        <!-- TÍTULO ARTISTAS ESCUCHADOS -->
+        <TextView
+            android:id="@+id/tituloUltimosArtistas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Últimos artistas escuchados"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone" />
+
+        <!-- RECYCLER DE ARTISTAS -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerUltimosArtistas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            android:paddingBottom="16dp" />
+
     </LinearLayout>
 </ScrollView>

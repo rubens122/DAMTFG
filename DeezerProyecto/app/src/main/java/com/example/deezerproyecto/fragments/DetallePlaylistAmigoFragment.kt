@@ -54,8 +54,12 @@ class DetallePlaylistAmigoFragment : Fragment() {
 
         adapter = CancionAmigoAdapter(
             canciones = mutableListOf(),
-            onAnadir = { track -> mostrarDialogoSeleccionPlaylist(track) }
+            onAnadir = { track ->
+                registrarArtistaEscuchado(track.artist.name, track.artist.picture)
+                mostrarDialogoSeleccionPlaylist(track)
+            }
         )
+
 
         binding.recyclerCancionesAmigo.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerCancionesAmigo.adapter = adapter
@@ -98,8 +102,14 @@ class DetallePlaylistAmigoFragment : Fragment() {
                         val vista = inflater.inflate(R.layout.item_comentario, binding.contenedorComentariosAmigo, false)
                         vista.findViewById<TextView>(R.id.autorComentario).text = comentario.autor
                         vista.findViewById<TextView>(R.id.textoComentario).text = comentario.texto
-                        vista.findViewById<TextView>(R.id.fechaComentario).text =
+
+                        val fechaTexto = if (comentario.timestamp is Long) {
                             formato.format(Date(comentario.timestamp))
+                        } else {
+                            "Sin fecha"
+                        }
+
+                        vista.findViewById<TextView>(R.id.fechaComentario).text = fechaTexto
                         binding.contenedorComentariosAmigo.addView(vista)
                     }
                 }
@@ -108,6 +118,7 @@ class DetallePlaylistAmigoFragment : Fragment() {
             override fun onCancelled(error: DatabaseError) {}
         })
     }
+
 
     private fun enviarComentario(texto: String) {
         val id = database.push().key ?: return
@@ -184,4 +195,16 @@ class DetallePlaylistAmigoFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+    private fun registrarArtistaEscuchado(nombreArtista: String, urlImagen: String = "") {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val timestamp = System.currentTimeMillis()
+        val datos = mapOf("timestamp" to timestamp, "imagen" to urlImagen)
+
+        FirebaseDatabase.getInstance().getReference("usuarios")
+            .child(uid)
+            .child("ultimosArtistas")
+            .child(nombreArtista)
+            .setValue(datos)
+    }
+
 }

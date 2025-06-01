@@ -62,7 +62,11 @@ class DetallePlaylistFragment(private val playlist: Playlist) : Fragment() {
         adapter = CancionPlaylistAdapter(
             playlist.canciones?.values?.toList()?.toMutableList() ?: mutableListOf(),
             R.layout.item_cancion_playlist
-        ) { track -> eliminarCancion(track) }
+        ) { track ->
+            registrarArtistaEscuchado(track.artist.name, track.artist.picture)
+            eliminarCancion(track)
+        }
+
 
         recyclerCanciones.layoutManager = LinearLayoutManager(context)
         recyclerCanciones.adapter = adapter
@@ -119,7 +123,14 @@ class DetallePlaylistFragment(private val playlist: Playlist) : Fragment() {
                         val vista = inflater.inflate(R.layout.item_comentario, contenedorComentarios, false)
                         vista.findViewById<TextView>(R.id.autorComentario).text = comentario.autor
                         vista.findViewById<TextView>(R.id.textoComentario).text = comentario.texto
-                        vista.findViewById<TextView>(R.id.fechaComentario).text = formato.format(Date(comentario.timestamp))
+
+                        val fechaTexto = if (comentario.timestamp is Long) {
+                            formato.format(Date(comentario.timestamp))
+                        } else {
+                            "Sin fecha"
+                        }
+
+                        vista.findViewById<TextView>(R.id.fechaComentario).text = fechaTexto
                         contenedorComentarios.addView(vista)
                     }
                 }
@@ -128,6 +139,7 @@ class DetallePlaylistFragment(private val playlist: Playlist) : Fragment() {
             override fun onCancelled(error: DatabaseError) {}
         })
     }
+
 
     private fun enviarComentario(texto: String) {
         val id = database.push().key ?: return
@@ -143,4 +155,16 @@ class DetallePlaylistFragment(private val playlist: Playlist) : Fragment() {
                 .child("comentarios").child(id).setValue(comentario)
         }
     }
+    private fun registrarArtistaEscuchado(nombreArtista: String, urlImagen: String = "") {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val timestamp = System.currentTimeMillis()
+        val datos = mapOf("timestamp" to timestamp, "imagen" to urlImagen)
+
+        FirebaseDatabase.getInstance().getReference("usuarios")
+            .child(uid)
+            .child("ultimosArtistas")
+            .child(nombreArtista)
+            .setValue(datos)
+    }
+
 }

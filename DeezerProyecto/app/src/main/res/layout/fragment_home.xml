@@ -4,23 +4,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorFondo"
-    android:padding="16dp"
     android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <!-- Encabezado con título y botón de perfil -->
+        <!-- CABECERA CON FONDO -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="24dp">
+            android:background="@drawable/fondo_degradado_home"
+            android:padding="16dp"
+            android:layout_marginBottom="24dp"
+            android:elevation="4dp"
+            android:clipToPadding="false">
 
-            <!-- Título centrado -->
+            <ImageView
+                android:id="@+id/logoSocialMusic"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:src="@drawable/socialmusic"
+                android:contentDescription="Logo Social Music"
+                android:scaleType="centerCrop"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/borde_redondo"
+                android:clipToOutline="true" />
+
             <TextView
                 android:id="@+id/tituloApp"
                 android:layout_width="0dp"
@@ -32,7 +46,6 @@
                 android:textColor="@android:color/white"
                 android:gravity="center" />
 
-            <!-- Botón perfil -->
             <ImageButton
                 android:id="@+id/botonPerfil"
                 android:layout_width="40dp"
@@ -43,58 +56,82 @@
                 android:contentDescription="Ir al perfil" />
         </LinearLayout>
 
-        <!-- Sección Canciones Populares -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Canciones Populares"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:layout_marginBottom="8dp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerCanciones"
+        <!-- SECCIÓN: CANCIONES -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:nestedScrollingEnabled="false"
-            android:clipToPadding="false" />
+            android:orientation="vertical"
+            android:background="@drawable/fondo_tarjeta_gris"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp">
 
-        <!-- Sección Artistas -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Artistas Destacados"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:layout_marginBottom="8dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Canciones Populares"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginBottom="8dp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerArtistas"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerCanciones"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:clipToPadding="false" />
+        </LinearLayout>
+
+        <!-- SECCIÓN: ARTISTAS -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:nestedScrollingEnabled="false"
-            android:clipToPadding="false" />
+            android:orientation="vertical"
+            android:background="@drawable/fondo_tarjeta_gris"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp">
 
-        <!-- Sección Álbumes -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Álbumes Recomendados"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:layout_marginBottom="8dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Artistas Destacados"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginBottom="8dp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerAlbums"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerArtistas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:clipToPadding="false" />
+        </LinearLayout>
+
+        <!-- SECCIÓN: ÁLBUMES -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
-            android:nestedScrollingEnabled="false"
-            android:clipToPadding="false" />
+            android:orientation="vertical"
+            android:background="@drawable/fondo_tarjeta_gris"
+            android:padding="16dp"
+            android:layout_marginBottom="32dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Álbumes Recomendados"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginBottom="8dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerAlbums"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:clipToPadding="false" />
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>
