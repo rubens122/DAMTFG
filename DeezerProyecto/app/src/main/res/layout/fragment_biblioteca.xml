@@ -28,8 +28,8 @@
         android:textColorHint="@android:color/darker_gray"
         android:backgroundTint="@color/colorGris"
         android:drawableStart="@android:drawable/ic_menu_search"
-        android:padding="10dp"
-        android:layout_marginBottom="12dp"/>
+        android:padding="12dp"
+        android:layout_marginBottom="12dp" />
 
     <!-- 📜 Lista de playlists -->
     <androidx.recyclerview.widget.RecyclerView
@@ -37,16 +37,17 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:paddingTop="8dp" />
+        android:paddingTop="8dp"
+        android:clipToPadding="false" />
 
-    <!-- ➕ Botón flotante para añadir -->
+    <!-- ➕ Botón flotante -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddPlaylist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
+        android:layout_gravity="end"
         android:layout_margin="16dp"
         android:src="@android:drawable/ic_input_add"
         android:contentDescription="Crear Playlist"
-        android:backgroundTint="@color/colorVerdeSpotify"/>
+        android:backgroundTint="@color/colorVerdeSpotify" />
 </LinearLayout>

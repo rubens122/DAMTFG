@@ -12,48 +12,60 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- CABECERA CON FONDO -->
+        <!-- CABECERA MEJORADA -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:background="@drawable/fondo_degradado_home"
             android:padding="16dp"
             android:layout_marginBottom="24dp"
-            android:elevation="4dp"
-            android:clipToPadding="false">
+            android:background="@drawable/fondo_degradado_home"
+            android:elevation="6dp">
 
+            <!-- Logo redondeado -->
             <ImageView
                 android:id="@+id/logoSocialMusic"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:src="@drawable/socialmusic"
-                android:contentDescription="Logo Social Music"
                 android:scaleType="centerCrop"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="12dp"
                 android:background="@drawable/borde_redondo"
-                android:clipToOutline="true" />
+                android:clipToOutline="true"
+                android:elevation="4dp"
+                android:contentDescription="Logo Social Music" />
 
+            <!-- Título elegante -->
             <TextView
                 android:id="@+id/tituloApp"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="Social Music"
-                android:textSize="24sp"
+                android:textSize="26sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
+                android:fontFamily="sans-serif-medium"
+                android:letterSpacing="0.03"
                 android:gravity="center" />
 
-            <ImageButton
-                android:id="@+id/botonPerfil"
+            <!-- Botón perfil redondo -->
+            <FrameLayout
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="8dp"
-                android:src="@drawable/ic_user"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Ir al perfil" />
+                android:background="@drawable/borde_transparente_blanco"
+                android:clipToOutline="true">
+
+                <ImageButton
+                    android:id="@+id/botonPerfil"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_user"
+                    android:background="@android:color/transparent"
+                    android:tint="@android:color/white"
+                    android:contentDescription="Ir al perfil" />
+            </FrameLayout>
         </LinearLayout>
 
         <!-- SECCIÓN: CANCIONES -->

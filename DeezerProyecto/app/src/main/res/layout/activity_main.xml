@@ -1,77 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorFondo"
     tools:context=".MainActivity">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="24dp"
-        android:gravity="center_horizontal"
-        android:layout_gravity="center"
-        android:layout_margin="16dp">
+        android:fillViewport="true">
 
-        <!-- Logo -->
-        <ImageView
-            android:id="@+id/logoLogin"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:src="@drawable/socialmusic"
-            android:layout_marginBottom="24dp" />
-
-        <!-- Campo correo -->
-        <EditText
-            android:id="@+id/campoCorreo"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Correo electrónico"
-            android:inputType="textEmailAddress"
-            android:textColor="@color/colorTexto"
-            android:textColorHint="@color/colorGris"
-            android:backgroundTint="@color/colorGris"
-            android:drawableStart="@android:drawable/ic_dialog_email"
-            android:padding="12dp"
-            android:layout_marginBottom="16dp" />
+            android:orientation="vertical"
+            android:padding="32dp"
+            android:gravity="center_horizontal">
 
-        <!-- Campo contraseña -->
-        <EditText
-            android:id="@+id/campoContrasena"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Contraseña"
-            android:inputType="textPassword"
-            android:textColor="@color/colorTexto"
-            android:textColorHint="@color/colorGris"
-            android:backgroundTint="@color/colorGris"
-            android:drawableStart="@android:drawable/ic_lock_idle_lock"
-            android:padding="12dp"
-            android:layout_marginBottom="24dp" />
+            <!-- Botón sol/luna arriba a la derecha -->
+            <ImageButton
+                android:id="@+id/botonModoTema"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="end"
+                android:layout_marginBottom="16dp"
+                android:src="@drawable/ic_sol"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Cambiar tema"
+                android:scaleType="centerInside" />
 
-        <!-- Botón login -->
-        <Button
-            android:id="@+id/botonIniciarSesion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Iniciar sesión"
-            android:backgroundTint="@color/colorVerdeSpotify"
-            android:textColor="@color/colorTexto"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
 
-        <!-- Enlace a registro -->
-        <TextView
-            android:id="@+id/textoIrARegistro"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="¿No tienes cuenta? Regístrate aquí"
-            android:textColor="@color/colorGris"
-            android:textSize="14sp" />
-    </LinearLayout>
+            <!-- Logo -->
+            <ImageView
+                android:id="@+id/logoLogin"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:src="@drawable/socialmusic"
+                android:layout_marginBottom="32dp"
+                android:background="@drawable/borde_redondo"
+                android:clipToOutline="true" />
 
+            <!-- Campo correo -->
+            <EditText
+                android:id="@+id/campoCorreo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Correo electrónico"
+                android:inputType="textEmailAddress"
+                android:textColor="@android:color/white"
+                android:textColorHint="#AAAAAA"
+                android:background="@drawable/fondo_campo_redondeado"
+                android:padding="14dp"
+                android:drawableStart="@android:drawable/ic_dialog_email"
+                android:drawablePadding="10dp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Campo contraseña -->
+            <EditText
+                android:id="@+id/campoContrasena"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Contraseña"
+                android:inputType="textPassword"
+                android:textColor="@android:color/white"
+                android:textColorHint="#AAAAAA"
+                android:background="@drawable/fondo_campo_redondeado"
+                android:padding="14dp"
+                android:drawableStart="@android:drawable/ic_lock_lock"
+                android:drawablePadding="10dp"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Botón iniciar sesión -->
+            <Button
+                android:id="@+id/botonIniciarSesion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Iniciar sesión"
+                android:backgroundTint="@color/colorVerdeSpotify"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:layout_marginBottom="20dp" />
+
+            <!-- Enlace a registro -->
+            <TextView
+                android:id="@+id/textoIrARegistro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¿No tienes cuenta? Regístrate"
+                android:textColor="#BBBBBB"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

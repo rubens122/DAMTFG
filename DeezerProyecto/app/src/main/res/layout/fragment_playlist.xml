@@ -26,6 +26,7 @@
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:background="@drawable/borde_redondo"
+                android:clipToOutline="true"
                 android:contentDescription="Imagen de la Playlist" />
 
             <ImageButton

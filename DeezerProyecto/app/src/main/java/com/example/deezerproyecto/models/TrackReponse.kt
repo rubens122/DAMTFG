@@ -21,8 +21,14 @@ data class Track(
 data class Artist(
     val id: Long = 0,
     val name: String = "",
-    val picture: String = ""
-) {
+    val picture: String = "",
+    val picture_medium: String = "",
+    val picture_big: String = "",
+    val picture_xl: String = "",
+    val nb_fan: Long = 0
+
+)
+ {
     constructor() : this(0, "", "")
 }
 

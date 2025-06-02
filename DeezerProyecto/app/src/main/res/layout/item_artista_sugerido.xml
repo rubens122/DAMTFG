@@ -2,13 +2,18 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="160dp"
-    android:layout_margin="8dp"
-    android:elevation="2dp">
+    android:layout_marginEnd="12dp"
+    android:layout_marginBottom="12dp"
+    android:elevation="4dp"
+    android:background="@drawable/fondo_tarjeta_gris">
+
     <ImageView
         android:id="@+id/imagenArtista"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
+        android:background="@drawable/borde_redondo"
+        android:clipToOutline="true"
         android:contentDescription="Foto artista" />
 
     <TextView
@@ -21,5 +26,5 @@
         android:textColor="@android:color/white"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:background="#66000000" />
+        android:background="#99000000" />
 </FrameLayout>

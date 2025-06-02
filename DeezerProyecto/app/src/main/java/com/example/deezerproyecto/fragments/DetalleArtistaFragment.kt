@@ -16,11 +16,13 @@ import com.example.deezerproyecto.adapters.AlbumAdapter
 import com.example.deezerproyecto.api.AlbumResponse
 import com.example.deezerproyecto.api.DeezerClient
 import com.example.deezerproyecto.api.DeezerService
+import com.example.deezerproyecto.models.Artist
 import com.example.deezerproyecto.models.TrackResponse
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.NumberFormat
 
 class DetalleArtistaFragment(
     private val artistaId: Long,
@@ -30,6 +32,7 @@ class DetalleArtistaFragment(
 
     private lateinit var imagenArtista: ImageView
     private lateinit var nombreArtista: TextView
+    private lateinit var textoOyentes: TextView
     private lateinit var recyclerTopCanciones: RecyclerView
     private lateinit var recyclerDiscografia: RecyclerView
     private lateinit var adapterCanciones: CancionHomeAdapter
@@ -44,22 +47,20 @@ class DetalleArtistaFragment(
 
         imagenArtista = view.findViewById(R.id.imagenArtista)
         nombreArtista = view.findViewById(R.id.nombreArtista)
+        textoOyentes = view.findViewById(R.id.textoOyentes)
         recyclerTopCanciones = view.findViewById(R.id.recyclerTopCanciones)
         recyclerDiscografia = view.findViewById(R.id.recyclerDiscografia)
 
         nombreArtista.text = artistaNombre
 
-        // ✅ URL de alta calidad
+        // ✅ Imagen en alta calidad
         val urlAltaCalidad = artistaImagen.replace("/image", "/image?size=1000x1000")
-
-        // ✅ Cargar imagen en alta resolución
         Picasso.get()
             .load(urlAltaCalidad)
             .fit()
             .centerCrop()
             .into(imagenArtista)
 
-        // 🔄 Ahora son horizontales
         recyclerTopCanciones.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         recyclerDiscografia.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
@@ -76,13 +77,11 @@ class DetalleArtistaFragment(
 
         cargarTopCanciones()
         cargarDiscografia()
+        cargarSeguidores() // 👈 NUEVO
 
         return view
     }
 
-    /**
-     * 🔄 Cargar las canciones más populares del artista
-     */
     private fun cargarTopCanciones() {
         val call = deezerService.buscarCancion(artistaNombre)
         call.enqueue(object : Callback<TrackResponse> {
@@ -101,9 +100,6 @@ class DetalleArtistaFragment(
         })
     }
 
-    /**
-     * 🔄 Cargar la discografía del artista
-     */
     private fun cargarDiscografia() {
         val call = deezerService.buscarDiscografia(artistaId)
         call.enqueue(object : Callback<AlbumResponse> {
@@ -118,6 +114,23 @@ class DetalleArtistaFragment(
 
             override fun onFailure(call: Call<AlbumResponse>, t: Throwable) {
                 Toast.makeText(requireContext(), "Error de conexión", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun cargarSeguidores() {
+        deezerService.obtenerDetalleArtista(artistaId).enqueue(object : Callback<Artist> {
+            override fun onResponse(call: Call<Artist>, response: Response<Artist>) {
+                if (response.isSuccessful) {
+                    val artista = response.body()
+                    val seguidores = artista?.nb_fan ?: 0
+                    val formateado = NumberFormat.getInstance().format(seguidores)
+                    textoOyentes.text = "$formateado seguidores"
+                }
+            }
+
+            override fun onFailure(call: Call<Artist>, t: Throwable) {
+                // No mostrar error
             }
         })
     }

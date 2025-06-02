@@ -31,10 +31,11 @@ class ArtistaSugeridoAdapter(
         holder.nombre.text = artista.name
 
         Picasso.get()
-            .load(artista.picture)
-            .fit()
+            .load(artista.picture_xl) // ✅ calidad alta
+            .resize(300, 300)         // Ajusta según el tamaño del ImageView
             .centerCrop()
             .into(holder.imagen)
+
 
         holder.itemView.setOnClickListener {
             onClick(artista.name)

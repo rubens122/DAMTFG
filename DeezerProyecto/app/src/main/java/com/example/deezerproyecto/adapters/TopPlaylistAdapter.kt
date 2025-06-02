@@ -3,6 +3,7 @@ package com.example.deezerproyecto.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.deezerproyecto.R
@@ -33,10 +34,15 @@ class TopPlaylistAdapter(
         holder.likes.text = "$cantidadLikes me gusta"
 
         holder.itemView.setOnClickListener {
-            val uidAutor = playlist.idUsuario // ✅ usamos idUsuario que ya tienes en el modelo
+            val uidAutor = playlist.idUsuario
             onClick(playlist, uidAutor)
         }
+
+        // ✅ Animación fade-in
+        val animacion = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.fade_in)
+        holder.itemView.startAnimation(animacion)
     }
+
 
     override fun getItemCount(): Int = lista.size
 }

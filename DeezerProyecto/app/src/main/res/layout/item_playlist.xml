@@ -4,8 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="8dp"
-    android:gravity="center_vertical">
+    android:padding="12dp"
+    android:gravity="center_vertical"
+    android:background="@drawable/fondo_tarjeta_gris"
+    android:layout_marginBottom="12dp"
+    android:elevation="2dp">
 
     <ImageView
         android:id="@+id/imagenPlaylist"
@@ -13,6 +16,8 @@
         android:layout_height="60dp"
         android:layout_marginEnd="12dp"
         android:scaleType="centerCrop"
+        android:background="@drawable/borde_redondo"
+        android:clipToOutline="true"
         android:contentDescription="Imagen de la Playlist" />
 
     <LinearLayout
@@ -35,10 +40,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Pública"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="#CCCCCC"
             android:textSize="14sp" />
 
-        <!-- NUEVA SECCIÓN: Likes -->
         <LinearLayout
             android:id="@+id/seccionLikes"
             android:layout_width="wrap_content"

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorFondo"
@@ -17,16 +16,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="24dp"
+            android:padding="32dp"
             android:gravity="center_horizontal">
 
             <!-- Logo -->
             <ImageView
                 android:id="@+id/logoRegistro"
-                android:layout_width="160dp"
-                android:layout_height="160dp"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
                 android:src="@drawable/socialmusic"
-                android:layout_marginBottom="24dp" />
+                android:layout_marginBottom="32dp"
+                android:background="@drawable/borde_redondo"
+                android:clipToOutline="true" />
 
             <!-- Campo correo -->
             <EditText
@@ -35,25 +36,27 @@
                 android:layout_height="wrap_content"
                 android:hint="Correo electrónico"
                 android:inputType="textEmailAddress"
-                android:textColor="@color/colorTexto"
-                android:textColorHint="@color/colorGris"
-                android:backgroundTint="@color/colorGris"
+                android:textColor="@android:color/white"
+                android:textColorHint="#AAAAAA"
+                android:background="@drawable/fondo_campo_redondeado"
+                android:padding="14dp"
                 android:drawableStart="@android:drawable/ic_dialog_email"
-                android:padding="12dp"
+                android:drawablePadding="10dp"
                 android:layout_marginBottom="16dp" />
 
-            <!-- Campo contraseña -->
+            <!-- Contraseña -->
             <EditText
                 android:id="@+id/campoContrasena"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Contraseña"
                 android:inputType="textPassword"
-                android:textColor="@color/colorTexto"
-                android:textColorHint="@color/colorGris"
-                android:backgroundTint="@color/colorGris"
-                android:drawableStart="@android:drawable/ic_lock_idle_lock"
-                android:padding="12dp"
+                android:textColor="@android:color/white"
+                android:textColorHint="#AAAAAA"
+                android:background="@drawable/fondo_campo_redondeado"
+                android:padding="14dp"
+                android:drawableStart="@android:drawable/ic_lock_lock"
+                android:drawablePadding="10dp"
                 android:layout_marginBottom="16dp" />
 
             <!-- Repetir contraseña -->
@@ -63,11 +66,12 @@
                 android:layout_height="wrap_content"
                 android:hint="Repetir contraseña"
                 android:inputType="textPassword"
-                android:textColor="@color/colorTexto"
-                android:textColorHint="@color/colorGris"
-                android:backgroundTint="@color/colorGris"
-                android:drawableStart="@android:drawable/ic_lock_idle_lock"
-                android:padding="12dp"
+                android:textColor="@android:color/white"
+                android:textColorHint="#AAAAAA"
+                android:background="@drawable/fondo_campo_redondeado"
+                android:padding="14dp"
+                android:drawableStart="@android:drawable/ic_lock_lock"
+                android:drawablePadding="10dp"
                 android:layout_marginBottom="24dp" />
 
             <!-- Botón registrar -->
@@ -77,10 +81,8 @@
                 android:layout_height="wrap_content"
                 android:text="Registrarse"
                 android:backgroundTint="@color/colorVerdeSpotify"
-                android:textColor="@color/colorTexto"
-                android:textStyle="bold"
-                android:layout_marginBottom="16dp" />
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
         </LinearLayout>
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

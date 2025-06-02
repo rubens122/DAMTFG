@@ -12,38 +12,39 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Imagen de la playlist -->
+        <!-- Imagen portada -->
         <ImageView
             android:id="@+id/imagenPlaylist"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_marginBottom="16dp"
             android:scaleType="centerCrop"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/borde_redondo"
+            android:clipToOutline="true"
             android:contentDescription="Imagen de la Playlist" />
 
-        <!-- Nombre -->
+        <!-- Nombre de la playlist -->
         <TextView
             android:id="@+id/nombrePlaylist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nombre de la Playlist"
-            android:textSize="20sp"
+            android:textSize="22sp"
             android:textStyle="bold"
-            android:textColor="@color/colorTexto"
+            android:textColor="@android:color/white"
             android:layout_marginBottom="4dp" />
 
-        <!-- Privacidad -->
+        <!-- Estado privacidad -->
         <TextView
             android:id="@+id/textoPrivacidad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Pública"
-            android:textSize="16sp"
-            android:textColor="@color/colorGris"
+            android:textSize="14sp"
+            android:textColor="#AAAAAA"
             android:layout_marginBottom="12dp" />
 
-        <!-- Botón Editar (visible por defecto ahora) -->
+        <!-- Botón editar -->
         <Button
             android:id="@+id/botonEditar"
             android:layout_width="match_parent"
@@ -54,7 +55,7 @@
             android:layout_marginBottom="16dp"
             android:visibility="visible" />
 
-        <!-- Texto si no hay canciones -->
+        <!-- Lista vacía -->
         <TextView
             android:id="@+id/textoVacio"
             android:layout_width="match_parent"
@@ -63,18 +64,19 @@
             android:textColor="@android:color/darker_gray"
             android:textSize="16sp"
             android:gravity="center"
-            android:visibility="gone"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:visibility="gone" />
 
-        <!-- Canciones -->
+        <!-- Recycler canciones -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerCanciones"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:clipToPadding="false" />
 
-        <!-- Comentarios -->
+        <!-- Sección comentarios -->
         <TextView
             android:id="@+id/tituloComentarios"
             android:layout_width="wrap_content"
@@ -82,8 +84,8 @@
             android:text="Comentarios"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="@color/colorTexto"
-            android:layout_marginTop="20dp"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp" />
 
         <LinearLayout
@@ -95,13 +97,12 @@
             android:showDividers="middle"
             android:dividerPadding="4dp" />
 
-        <!-- Campo para escribir comentario -->
+        <!-- Campo de nuevo comentario -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="8dp"
-            android:layout_marginTop="12dp">
+            android:paddingTop="12dp">
 
             <EditText
                 android:id="@+id/inputComentario"

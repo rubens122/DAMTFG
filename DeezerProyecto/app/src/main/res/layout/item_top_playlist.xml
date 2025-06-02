@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="12dp"
-    android:background="@drawable/fondo_tarjeta"
+    android:background="@drawable/fondo_tarjeta_gris"
     android:layout_marginBottom="12dp">
 
     <TextView
@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Nombre Playlist"
-        android:textColor="#FFFFFF"
+        android:textColor="@android:color/white"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Autor"
-        android:textColor="#FFFFFF"
+        android:textColor="#CCCCCC"
         android:textSize="14sp"
         android:layout_marginTop="4dp" />
 
@@ -30,7 +30,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="0 me gusta"
-        android:textColor="#FFFFFF"
+        android:textColor="#BBBBBB"
         android:textSize="14sp"
         android:layout_marginTop="2dp" />
 </LinearLayout>
+

@@ -5,44 +5,48 @@
     android:layout_height="70dp"
     android:orientation="horizontal"
     android:background="@drawable/fondo_barra"
-    android:padding="8dp"
+    android:padding="10dp"
     android:gravity="center_vertical"
     android:elevation="8dp"
     android:visibility="gone"
     android:layout_margin="12dp"
-    android:layout_gravity="bottom">
+    android:layout_gravity="bottom"
+    android:clipToPadding="false">
 
     <ImageView
         android:id="@+id/imagenAlbum"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher_foreground" />
+        android:src="@drawable/ic_launcher_foreground"
+        android:background="@drawable/borde_redondo"
+        android:clipToOutline="true"
+        android:contentDescription="Carátula" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:layout_marginStart="10dp">
+        android:layout_marginStart="12dp">
 
         <TextView
             android:id="@+id/textoCancion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Canción"
-            android:textColor="#FFFFFF"
+            android:text="Nombre de la canción"
+            android:textColor="@android:color/white"
             android:textStyle="bold"
+            android:textSize="14sp"
             android:maxLines="1"
-            android:ellipsize="end"
-            android:textSize="14sp" />
+            android:ellipsize="end" />
 
         <TextView
             android:id="@+id/textoArtista"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Artista"
-            android:textColor="#BBBBBB"
+            android:text="Nombre del artista"
+            android:textColor="#CCCCCC"
             android:textSize="12sp"
             android:maxLines="1"
             android:ellipsize="end" />
@@ -50,8 +54,8 @@
 
     <ImageButton
         android:id="@+id/botonPausa"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_media_pause"
-        android:background="?attr/selectableItemBackgroundBorderless" />
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="Pausar" />
 </LinearLayout>

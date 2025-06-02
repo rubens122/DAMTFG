@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorFondo"
-    android:padding="0dp"
     android:fillViewport="true">
 
     <LinearLayout
@@ -12,71 +11,90 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Imagen de fondo/artista -->
-        <ImageView
-            android:id="@+id/imagenArtista"
+        <!-- Imagen del artista con nombre y seguidores -->
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="280dp"
-            android:scaleType="centerCrop"
-            android:contentDescription="Imagen del artista" />
+            android:layout_height="300dp">
 
-        <!-- Contenido -->
+            <ImageView
+                android:id="@+id/imagenArtista"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:contentDescription="Imagen del artista" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/degradado_inferior" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/nombreArtista"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nombre del Artista"
+                    android:textColor="@android:color/white"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:id="@+id/textoOyentes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="123.456 seguidores"
+                    android:textColor="#BBBBBB"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- Secciones de contenido -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="20dp">
 
-            <!-- Nombre del artista -->
+            <!-- Top Canciones -->
             <TextView
-                android:id="@+id/nombreArtista"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nombre del Artista"
+                android:text="Top Canciones"
                 android:textColor="@android:color/white"
-                android:textSize="26sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="24dp" />
-
-            <!-- TOP CANCIONES -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TOP CANCIONES"
-                android:textColor="@color/colorVerdeSpotify"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="8dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerTopCanciones"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="32dp"
-                android:clipToPadding="false"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:scrollbars="horizontal" />
+                android:nestedScrollingEnabled="false"
+                android:layout_marginBottom="24dp" />
 
-            <!-- DISCOGRAFÍA -->
+            <!-- Discografía -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="DISCOGRAFÍA"
-                android:textColor="@color/colorVerdeSpotify"
+                android:text="Discografía"
+                android:textColor="@android:color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="8dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerDiscografia"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="32dp"
-                android:clipToPadding="false"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:scrollbars="horizontal" />
+                android:nestedScrollingEnabled="false"
+                android:layout_marginBottom="32dp" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

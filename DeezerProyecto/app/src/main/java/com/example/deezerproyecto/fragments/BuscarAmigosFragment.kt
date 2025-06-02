@@ -29,7 +29,10 @@ class BuscarAmigosFragment : Fragment() {
         binding = FragmentBuscarAmigosBinding.inflate(inflater, container, false)
         uidActual = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
-        adapter = AmigoAdapterBuscar(mutableListOf(), uidActual)
+        // ✅ Adaptador con callback de agregar
+        adapter = AmigoAdapterBuscar(mutableListOf(), uidActual) { usuario ->
+            agregarAmigo(usuario)
+        }
 
         binding.recyclerAmigos.layoutManager = LinearLayoutManager(context)
         binding.recyclerAmigos.adapter = adapter
@@ -96,5 +99,17 @@ class BuscarAmigosFragment : Fragment() {
                     Toast.makeText(context, "Error al buscar usuarios", Toast.LENGTH_SHORT).show()
                 }
             })
+    }
+
+    private fun agregarAmigo(usuario: Usuario) {
+        val ref = databaseRef.child(uidActual).child("amigos").child(usuario.uid)
+        ref.setValue(true)
+            .addOnSuccessListener {
+                Toast.makeText(context, "Amigo agregado correctamente", Toast.LENGTH_SHORT).show()
+                cargarSugerenciasIniciales()
+            }
+            .addOnFailureListener {
+                Toast.makeText(context, "Error al agregar amigo", Toast.LENGTH_SHORT).show()
+            }
     }
 }

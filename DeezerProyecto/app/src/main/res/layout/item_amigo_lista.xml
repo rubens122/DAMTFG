@@ -1,48 +1,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="72dp"
+    android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingHorizontal="16dp"
-    android:paddingVertical="12dp"
-    android:gravity="center_vertical"
-    android:background="?attr/selectableItemBackground">
+    android:padding="16dp"
+    android:layout_marginBottom="12dp"
+    android:background="@drawable/fondo_tarjeta_gris"
+    android:gravity="center_vertical">
 
-    <!-- Imagen redonda tipo Spotify -->
     <ImageView
         android:id="@+id/imagenPerfil"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginEnd="16dp"
-        android:scaleType="centerCrop"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_user"
+        android:layout_marginEnd="12dp"
         android:background="@drawable/borde_redondo"
-        android:contentDescription="Imagen de perfil" />
+        android:clipToOutline="true" />
 
-    <!-- Texto alineado verticalmente -->
-    <LinearLayout
+    <TextView
+        android:id="@+id/textoCorreo"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/textoCorreo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="correo@ejemplo.com"
-            android:textColor="@android:color/white"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:maxLines="1"
-            android:ellipsize="end" />
-
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:text="correo@ejemplo.com"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
 
     <ImageButton
         android:id="@+id/botonEliminar"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:background="?attr/selectableItemBackground"
-        android:src="@android:drawable/ic_menu_delete"
-        android:tint="@android:color/white"
-        android:contentDescription="Eliminar amigo" />
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@android:drawable/ic_delete"
+        android:contentDescription="Eliminar amigo"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:tint="@android:color/white" />
 </LinearLayout>
