@@ -1,29 +1,28 @@
 package com.example.deezerproyecto.fragments
 
-import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.example.deezerproyecto.MainActivity
 import com.example.deezerproyecto.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
-import java.util.*
+import java.io.ByteArrayOutputStream
 
 class PerfilFragment : Fragment() {
 
     private lateinit var imagenUsuario: ImageView
+    private lateinit var botonCambiarFoto: ImageButton
     private lateinit var campoNombre: EditText
     private lateinit var campoCorreo: EditText
     private lateinit var botonGuardar: Button
@@ -33,7 +32,6 @@ class PerfilFragment : Fragment() {
     private val usuario = FirebaseAuth.getInstance().currentUser
     private var imagenUri: Uri? = null
 
-    // 🔄 Selector de imágenes
     private val seleccionarImagen = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         if (uri != null) {
             imagenUri = uri
@@ -48,114 +46,71 @@ class PerfilFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_perfil, container, false)
 
         imagenUsuario = view.findViewById(R.id.imagenUsuario)
+        botonCambiarFoto = view.findViewById(R.id.botonCambiarFoto)
         campoNombre = view.findViewById(R.id.campoNombre)
         campoCorreo = view.findViewById(R.id.campoCorreo)
         botonGuardar = view.findViewById(R.id.botonGuardar)
         botonCerrarSesion = view.findViewById(R.id.botonCerrarSesion)
 
-        // 🔄 Cargar datos del usuario
         campoCorreo.setText(usuario?.email)
         cargarDatosUsuario()
 
-        // 🔄 Cambiar imagen al hacer click
-        imagenUsuario.setOnClickListener {
+        botonCambiarFoto.setOnClickListener {
             seleccionarImagen.launch("image/*")
         }
 
-        // 🔄 Botón para actualizar datos
         botonGuardar.setOnClickListener {
             actualizarPerfil()
         }
 
-        // 🔄 Botón para cerrar sesión
         botonCerrarSesion.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
-            val intent = Intent(requireContext(), MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
+            startActivity(Intent(requireContext(), MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            })
             requireActivity().finish()
         }
 
         return view
     }
 
-    /**
-     * 🔄 Cargar datos del usuario desde Firebase
-     */
     private fun cargarDatosUsuario() {
         val usuarioId = usuario?.uid ?: return
         reference.child(usuarioId).get().addOnSuccessListener {
-            val nombre = it.child("nombre").value as? String
-            val imagenUrl = it.child("imagenPerfil").value as? String
+            campoNombre.setText(it.child("nombre").value as? String ?: "")
+            val imagenBase64 = it.child("imagenPerfilBase64").value as? String
 
-            campoNombre.setText(nombre ?: "")
-            if (imagenUrl != null) {
-                Picasso.get()
-                    .load(imagenUrl)
-                    .placeholder(R.drawable.ic_user) // Imagen por defecto
-                    .fit()
-                    .centerCrop()
-                    .into(imagenUsuario)
+            if (!imagenBase64.isNullOrEmpty()) {
+                val decodedBytes = Base64.decode(imagenBase64, Base64.DEFAULT)
+                val bitmap = android.graphics.BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                imagenUsuario.setImageBitmap(bitmap)
             } else {
-                Picasso.get()
-                    .load("https://cdn-icons-png.flaticon.com/512/1946/1946429.png")
-                    .fit()
-                    .centerCrop()
-                    .into(imagenUsuario)
+                Picasso.get().load("https://cdn-icons-png.flaticon.com/512/1946/1946429.png")
+                    .fit().centerCrop().into(imagenUsuario)
             }
         }.addOnFailureListener {
-            Toast.makeText(requireContext(), "Error al cargar los datos del perfil", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Error al cargar los datos", Toast.LENGTH_SHORT).show()
         }
     }
 
-    /**
-     * 🔄 Actualizar datos del perfil y subir imagen si existe
-     */
     private fun actualizarPerfil() {
         val nuevoNombre = campoNombre.text.toString()
-
         if (usuario != null) {
-            if (imagenUri != null) {
-                subirImagenAFirebase(imagenUri!!) { url ->
-                    reference.child(usuario.uid).child("imagenPerfil").setValue(url)
-                    actualizarNombre(nuevoNombre)
-                }
-            } else {
-                actualizarNombre(nuevoNombre)
+            reference.child(usuario.uid).child("nombre").setValue(nuevoNombre)
+
+            val drawable = imagenUsuario.drawable
+            if (drawable is BitmapDrawable) {
+                val bitmap = drawable.bitmap
+                val stream = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream)
+                val bytes = stream.toByteArray()
+                val base64String = Base64.encodeToString(bytes, Base64.DEFAULT)
+
+                reference.child(usuario.uid).child("imagenPerfilBase64").setValue(base64String)
             }
+
+            Toast.makeText(requireContext(), "Perfil actualizado", Toast.LENGTH_SHORT).show()
+            requireActivity().supportFragmentManager.popBackStack()
         }
-    }
-
-    /**
-     * 🔄 Subir la imagen a Firebase Storage
-     */
-    private fun subirImagenAFirebase(uri: Uri, onSuccess: (String) -> Unit) {
-        val nombreArchivo = "perfil_${usuario!!.uid}.jpg"
-        val referenciaStorage = FirebaseStorage.getInstance().reference.child("imagenes_perfil/$nombreArchivo")
-
-        referenciaStorage.putFile(uri)
-            .addOnSuccessListener {
-                referenciaStorage.downloadUrl.addOnSuccessListener { url ->
-                    onSuccess(url.toString())
-                    Toast.makeText(requireContext(), "Imagen subida correctamente", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .addOnFailureListener {
-                Toast.makeText(requireContext(), "Error al subir imagen", Toast.LENGTH_SHORT).show()
-            }
-    }
-
-    /**
-     * 🔄 Actualizar el nombre en Firebase Realtime Database
-     */
-    private fun actualizarNombre(nuevoNombre: String) {
-        reference.child(usuario!!.uid).child("nombre").setValue(nuevoNombre)
-            .addOnSuccessListener {
-                Toast.makeText(requireContext(), "Perfil actualizado", Toast.LENGTH_SHORT).show()
-                requireActivity().supportFragmentManager.popBackStack()
-            }
-            .addOnFailureListener {
-                Toast.makeText(requireContext(), "Error al actualizar", Toast.LENGTH_SHORT).show()
-            }
     }
 }

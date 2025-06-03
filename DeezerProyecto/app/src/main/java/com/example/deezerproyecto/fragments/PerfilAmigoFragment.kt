@@ -1,6 +1,7 @@
 package com.example.deezerproyecto.fragments
 
 import android.os.Bundle
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,22 +65,28 @@ class PerfilAmigoFragment : Fragment() {
     private fun cargarDatosAmigo() {
         database.child(amigoId).get().addOnSuccessListener {
             val nombre = it.child("nombre").value as? String ?: "Sin Nombre"
-            val fotoUrl = it.child("imagenPerfil").value as? String
+            val imagenBase64 = it.child("imagenPerfilBase64").value as? String
 
             nombreUsuario.text = nombre
 
-            val imagenUrl = fotoUrl.takeUnless { it.isNullOrEmpty() }
-                ?: "https://cdn-icons-png.flaticon.com/512/1946/1946429.png"
-
-            Picasso.get().load(imagenUrl)
-                .fit()
-                .centerCrop()
-                .into(imagenPerfil)
+            if (!imagenBase64.isNullOrEmpty()) {
+                val bytes = Base64.decode(imagenBase64, Base64.DEFAULT)
+                val bitmap = android.graphics.BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                imagenPerfil.setImageBitmap(bitmap)
+            } else {
+                // Imagen por defecto
+                Picasso.get()
+                    .load("https://cdn-icons-png.flaticon.com/512/1946/1946429.png")
+                    .fit()
+                    .centerCrop()
+                    .into(imagenPerfil)
+            }
 
         }.addOnFailureListener {
             Toast.makeText(requireContext(), "Error al cargar el perfil", Toast.LENGTH_SHORT).show()
         }
     }
+
 
     private fun cargarPlaylistsPublicas() {
         database.child(amigoId).child("playlists")

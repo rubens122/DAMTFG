@@ -97,8 +97,6 @@ class DetallePlaylistFragment(private val playlist: Playlist) : Fragment() {
 
     private fun eliminarCancion(track: Track) {
         val nuevasCanciones = playlist.canciones?.toMutableMap() ?: mutableMapOf()
-
-        // Buscar la clave correspondiente al track y eliminarla
         val claveAEliminar = nuevasCanciones.entries.find { it.value.id == track.id }?.key
         if (claveAEliminar != null) {
             nuevasCanciones.remove(claveAEliminar)
