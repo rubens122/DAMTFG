@@ -17,8 +17,9 @@
         android:id="@+id/nombreArtista"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
+        android:textColor="@color/colorTextoGeneral"
         android:textSize="14sp"
         android:textStyle="bold"
-        android:layout_marginTop="4dp" />
+        android:layout_marginTop="4dp"
+        android:gravity="center"/>
 </LinearLayout>

@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nombre de la canción"
-            android:textColor="@android:color/white"
+            android:textColor="@color/colorTextoGeneral"
             android:textStyle="bold"
             android:textSize="14sp"
             android:maxLines="1"

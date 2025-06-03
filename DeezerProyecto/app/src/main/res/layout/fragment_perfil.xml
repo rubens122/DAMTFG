@@ -44,7 +44,7 @@
                     android:layout_margin="4dp"
                     android:src="@android:drawable/ic_menu_camera"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:tint="@android:color/white"
+                    android:tint="@color/colorTexto"
                     android:contentDescription="Cambiar imagen" />
             </FrameLayout>
         </LinearLayout>
@@ -63,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Nombre"
-                android:textColor="@android:color/white"
+                android:textColor="@color/colorTexto"
                 android:textColorHint="@android:color/darker_gray"
                 android:backgroundTint="@color/colorGris"
                 android:textSize="16sp"
@@ -76,7 +76,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Correo"
-                android:textColor="@android:color/white"
+                android:textColor="@color/colorTexto"
                 android:textColorHint="@android:color/darker_gray"
                 android:backgroundTint="@color/colorGris"
                 android:textSize="16sp"
@@ -90,7 +90,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Guardar Cambios"
-                android:textColor="@android:color/white"
+                android:textColor="@color/colorTextoGeneral"
                 android:backgroundTint="@color/colorVerdeSpotify"
                 android:padding="12dp"
                 android:layout_marginBottom="12dp" />
@@ -101,8 +101,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Cerrar Sesión"
-                android:textColor="@android:color/white"
-                android:backgroundTint="@color/colorGris"
+                android:textColor="@color/colorTextoGeneral"
+                android:backgroundTint="@color/colorVerdeSpotify"
                 android:padding="12dp" />
         </LinearLayout>
     </LinearLayout>

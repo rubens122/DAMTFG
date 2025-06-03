@@ -34,18 +34,22 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
 
-        // ✅ Establecer icono según el modo actual
         binding.botonModoTema.setImageResource(
-            if (modoOscuro) R.drawable.ic_luna else R.drawable.ic_sol
+            if (modoOscuro) R.drawable.ic_sol else R.drawable.ic_luna
         )
 
-        // ✅ Cambiar el modo al pulsar el botón
         binding.botonModoTema.setOnClickListener {
             val nuevoModo = if (modoOscuro) AppCompatDelegate.MODE_NIGHT_NO else AppCompatDelegate.MODE_NIGHT_YES
             AppCompatDelegate.setDefaultNightMode(nuevoModo)
+
             prefs.edit().putBoolean("modoOscuro", nuevoModo == AppCompatDelegate.MODE_NIGHT_YES).apply()
-            recreate() // 🔄 Refrescar actividad para aplicar cambios visuales
+
+            // Cambia el icono al que se va a cambiar
+            binding.botonModoTema.setImageResource(
+                if (nuevoModo == AppCompatDelegate.MODE_NIGHT_YES) R.drawable.ic_sol else R.drawable.ic_luna
+            )
         }
+
 
         binding.botonIniciarSesion.setOnClickListener {
             val correo = binding.campoCorreo.text.toString().trim()

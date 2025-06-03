@@ -37,20 +37,21 @@
                 android:contentDescription="Logo Social Music" />
 
             <!-- Título elegante -->
-            <TextView
-                android:id="@+id/tituloApp"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="Social Music"
-                android:textSize="26sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:fontFamily="sans-serif-medium"
-                android:letterSpacing="0.03"
-                android:gravity="center" />
 
             <!-- Botón perfil redondo -->
+            <TextView
+                android:id="@+id/tituloApp"
+                android:layout_width="178dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:letterSpacing="0.15"
+                android:text="Social Music"
+                android:textColor="@color/colorTexto"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
             <FrameLayout
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -63,7 +64,7 @@
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_user"
                     android:background="@android:color/transparent"
-                    android:tint="@android:color/white"
+                    android:tint="@color/colorTexto"
                     android:contentDescription="Ir al perfil" />
             </FrameLayout>
         </LinearLayout>
@@ -81,7 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Canciones Populares"
-                android:textColor="@android:color/white"
+                android:textColor="@color/colorTextoGeneral"
                 android:textStyle="bold"
                 android:textSize="18sp"
                 android:layout_marginBottom="8dp" />
@@ -107,7 +108,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Artistas Destacados"
-                android:textColor="@android:color/white"
+                android:textColor="@color/colorTextoGeneral"
                 android:textStyle="bold"
                 android:textSize="18sp"
                 android:layout_marginBottom="8dp" />
@@ -133,7 +134,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Álbumes Recomendados"
-                android:textColor="@android:color/white"
+                android:textColor="@color/colorTextoGeneral"
                 android:textStyle="bold"
                 android:textSize="18sp"
                 android:layout_marginBottom="8dp" />

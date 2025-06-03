@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nombre de la Playlist"
-            android:textColor="@android:color/white"
+            android:textColor="@color/colorTextoGeneral"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -63,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0 me gusta"
-                android:textColor="@android:color/white"
+                android:textColor="@color/colorTextoGeneral"
                 android:layout_marginStart="8dp" />
         </LinearLayout>
     </LinearLayout>

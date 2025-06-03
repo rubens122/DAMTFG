@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Explora lo Social"
-            android:textColor="@android:color/white"
+            android:textColor="@color/colorTexto"
             android:textSize="24sp"
             android:textStyle="bold"
             android:layout_marginBottom="4dp" />
@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Busca amigos o explora sus playlists públicas"
-            android:textColor="#BBBBBB"
+            android:textColor="@color/colorTexto"
             android:textSize="14sp"
             android:layout_marginBottom="24dp" />
 
@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Buscar Amigos"
-                android:textColor="@android:color/white"
+                android:textColor="@color/colorTextoGeneral"
                 android:textSize="18sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -89,7 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Mis Amigos"
-                android:textColor="@android:color/white"
+                android:textColor="@color/colorTextoGeneral"
                 android:textSize="18sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -118,7 +118,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Top Playlists"
-                android:textColor="@android:color/white"
+                android:textColor="@color/colorTextoGeneral"
                 android:textSize="18sp"
                 android:textStyle="bold" />
         </LinearLayout>

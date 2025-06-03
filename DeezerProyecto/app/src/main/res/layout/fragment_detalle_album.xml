@@ -43,7 +43,7 @@
                 android:text="Nombre del Álbum"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/white"
+                android:textColor="@color/colorTexto"
                 android:layout_marginBottom="6dp" />
 
             <TextView
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:text="Artista • Año • Número de canciones"
                 android:textSize="14sp"
-                android:textColor="#BBBBBB"
+                android:textColor="@color/colorTexto"
                 android:layout_marginBottom="20dp" />
         </LinearLayout>
 

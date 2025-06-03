@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Mis amigos"
-        android:textColor="@android:color/white"
+        android:textColor="@color/colorTexto"
         android:textSize="22sp"
         android:textStyle="bold"
         android:paddingBottom="8dp" />

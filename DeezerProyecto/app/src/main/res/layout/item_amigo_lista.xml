@@ -22,7 +22,7 @@
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:text="correo@ejemplo.com"
-        android:textColor="@android:color/white"
+        android:textColor="@color/colorTextoGeneral"
         android:textSize="14sp" />
 
     <ImageButton
@@ -31,6 +31,5 @@
         android:layout_height="40dp"
         android:src="@android:drawable/ic_delete"
         android:contentDescription="Eliminar amigo"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:tint="@android:color/white" />
+        android:background="?attr/selectableItemBackgroundBorderless" />
 </LinearLayout>

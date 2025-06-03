@@ -40,7 +40,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nombre del Artista"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/colorTextoGeneral"
                     android:textSize="28sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="4dp" />
@@ -50,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="123.456 seguidores"
-                    android:textColor="#BBBBBB"
+                    android:textColor="@color/colorGris"
                     android:textSize="14sp" />
             </LinearLayout>
         </FrameLayout>
@@ -67,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Top Canciones"
-                android:textColor="@android:color/white"
+                android:textColor="@color/colorTexto"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
@@ -84,7 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Discografía"
-                android:textColor="@android:color/white"
+                android:textColor="@color/colorTexto"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorFondo">#121212</color>
+    <color name="colorTexto">#FFFFFF</color>
+    <color name="colorGris">#FFFFFF</color>
+    <color name="colorVerdeSpotify">#1DB954</color>
+    <color name="colorVerdeOscuro">#1A8143</color>
+    <color name="colorEnlaceRegistro">#1DB954</color>
+    <color name="colorTituloApp">#FFFFFF</color>
+    <color name="colorTextoBoton">#000000</color>
+    <color name="colorFondoBoton">#FFFFFF</color>
+    <color name="colorTextoGeneral">#FFFFFF</color>
+    <color name="colorBotonReproducir">#1DB954</color>
+
+</resources>

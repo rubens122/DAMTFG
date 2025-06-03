@@ -23,7 +23,7 @@
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:text="correo@ejemplo.com"
-        android:textColor="@android:color/white"
+        android:textColor="@color/colorTextoGeneral"
         android:textSize="14sp" />
 
     <Button
@@ -32,6 +32,6 @@
         android:layout_height="wrap_content"
         android:text="Agregar"
         android:backgroundTint="@color/colorVerdeSpotify"
-        android:textColor="@android:color/white" />
+        android:textColor="@color/colorTexto" />
 </LinearLayout>
 

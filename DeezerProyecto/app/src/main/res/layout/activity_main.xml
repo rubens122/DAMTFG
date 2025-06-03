@@ -49,8 +49,8 @@
                 android:layout_height="wrap_content"
                 android:hint="Correo electrónico"
                 android:inputType="textEmailAddress"
-                android:textColor="@android:color/white"
-                android:textColorHint="#AAAAAA"
+                android:textColor="@color/colorTexto"
+                android:textColorHint="@color/colorGris"
                 android:background="@drawable/fondo_campo_redondeado"
                 android:padding="14dp"
                 android:drawableStart="@android:drawable/ic_dialog_email"
@@ -64,8 +64,8 @@
                 android:layout_height="wrap_content"
                 android:hint="Contraseña"
                 android:inputType="textPassword"
-                android:textColor="@android:color/white"
-                android:textColorHint="#AAAAAA"
+                android:textColor="@color/colorTexto"
+                android:textColorHint="@color/colorGris"
                 android:background="@drawable/fondo_campo_redondeado"
                 android:padding="14dp"
                 android:drawableStart="@android:drawable/ic_lock_lock"
@@ -79,18 +79,19 @@
                 android:layout_height="wrap_content"
                 android:text="Iniciar sesión"
                 android:backgroundTint="@color/colorVerdeSpotify"
-                android:textColor="@android:color/white"
+                android:textColor="@color/colorTextoBoton"
                 android:textStyle="bold"
                 android:layout_marginBottom="20dp" />
 
-            <!-- Enlace a registro -->
             <TextView
                 android:id="@+id/textoIrARegistro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="¿No tienes cuenta? Regístrate"
-                android:textColor="#BBBBBB"
+                android:textColor="@color/colorEnlaceRegistro"
                 android:textSize="14sp" />
+
+
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

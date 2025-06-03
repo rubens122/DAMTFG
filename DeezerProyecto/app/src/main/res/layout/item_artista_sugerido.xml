@@ -23,7 +23,7 @@
         android:layout_gravity="bottom"
         android:padding="12dp"
         android:text="Nombre"
-        android:textColor="@android:color/white"
+        android:textColor="@color/colorTextoGeneral"
         android:textSize="16sp"
         android:textStyle="bold"
         android:background="#99000000" />

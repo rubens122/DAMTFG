@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Título de la Canción"
-            android:textColor="@android:color/white"
+            android:textColor="@color/colorTextoGeneral"
             android:textSize="14sp"
             android:textStyle="bold" />
 
@@ -38,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nombre del Artista"
-            android:textColor="#BBBBBB"
+            android:textColor="@color/colorGris"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -49,7 +49,7 @@
         android:layout_marginStart="8dp"
         android:src="@android:drawable/ic_media_play"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:tint="@android:color/white"
+        android:tint="@color/colorBotonReproducir"
         android:contentDescription="Reproducir canción" />
 
     <ImageButton
@@ -59,7 +59,7 @@
         android:layout_marginStart="8dp"
         android:src="@android:drawable/ic_input_add"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:tint="@android:color/white"
+        android:tint="@color/colorBotonReproducir"
         android:contentDescription="Añadir a Playlist" />
 </LinearLayout>
 

@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:textColor="@color/colorGris"
+        android:textColor="@color/colorTexto"
         android:text="correo@ejemplo.com" />
 
     <TextView
@@ -26,6 +26,6 @@
         android:layout_height="wrap_content"
         android:text="21/05/2025 15:47"
         android:textSize="12sp"
-        android:textColor="@color/colorGris"
+        android:textColor="@color/colorTexto"
         android:layout_marginTop="2dp" />
 </LinearLayout>
