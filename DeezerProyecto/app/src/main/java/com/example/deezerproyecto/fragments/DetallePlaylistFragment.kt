@@ -97,17 +97,25 @@ class DetallePlaylistFragment(private val playlist: Playlist) : Fragment() {
 
     private fun eliminarCancion(track: Track) {
         val nuevasCanciones = playlist.canciones?.toMutableMap() ?: mutableMapOf()
-        nuevasCanciones.entries.removeIf { it.value.id == track.id }
 
-        uidActual?.let { uid ->
-            database.child(uid).child("playlists").child(playlist.id)
-                .child("canciones").setValue(nuevasCanciones)
-                .addOnSuccessListener {
-                    adapter.actualizarCanciones(nuevasCanciones.values.toList().toMutableList())
-                    textoVacio.visibility = if (nuevasCanciones.isEmpty()) View.VISIBLE else View.GONE
-                }
+        // Buscar la clave correspondiente al track y eliminarla
+        val claveAEliminar = nuevasCanciones.entries.find { it.value.id == track.id }?.key
+        if (claveAEliminar != null) {
+            nuevasCanciones.remove(claveAEliminar)
+
+            uidActual?.let { uid ->
+                database.child(uid).child("playlists").child(playlist.id)
+                    .child("canciones").setValue(nuevasCanciones)
+                    .addOnSuccessListener {
+                        // ✅ Actualizamos también el objeto local `playlist.canciones`
+                        playlist.canciones = nuevasCanciones
+                        adapter.actualizarCanciones(nuevasCanciones.values.toList().toMutableList())
+                        textoVacio.visibility = if (nuevasCanciones.isEmpty()) View.VISIBLE else View.GONE
+                    }
+            }
         }
     }
+
 
     private fun cargarComentarios() {
         val ref = database.child(uidActual!!).child("playlists").child(playlist.id).child("comentarios")
