@@ -52,7 +52,7 @@ Este proyecto utiliza el control de versiones proporcionado por Git y está aloj
 ## Autores
 
 - **Rubén Lozano Sánchez** - *Desarrollador principal* - [rubens122](https://github.com/rubens122)
-- **Ismael Morales Montesinos** - *Desarrollador principal*
+- **Ismael Morales Montesinos** *Desarrollador principal* - [ismaelmmm102](https://github.com/ismaelmmm102)
 
 ## Licencia
 
