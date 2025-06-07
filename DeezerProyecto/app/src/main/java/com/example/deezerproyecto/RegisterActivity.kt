@@ -3,11 +3,9 @@ package com.example.deezerproyecto
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.deezerproyecto.databinding.ActivityRegisterBinding
+import com.example.deezerproyecto.models.Usuario
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
@@ -37,18 +35,20 @@ class RegisterActivity : AppCompatActivity() {
                 auth.createUserWithEmailAndPassword(correo, contrasena)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            val usuario = auth.currentUser
-                            val referenciaUsuario = database.child(usuario!!.uid)
+                            val usuarioFirebase = auth.currentUser
+                            val uid = usuarioFirebase?.uid ?: return@addOnCompleteListener
 
-                            val datosUsuario = mapOf(
-                                "correo" to correo,
-                                "nombre" to "Usuario Nuevo",
-                                "imagenPerfil" to "https://cdn-icons-png.flaticon.com/512/1946/1946429.png"
+                            val nuevoUsuario = Usuario(
+                                uid = uid,
+                                nombre = "Usuario Nuevo",
+                                correo = correo,
+                                imagenPerfil = "https://cdn-icons-png.flaticon.com/512/1946/1946429.png"
                             )
 
-                            referenciaUsuario.setValue(datosUsuario)
+                            // 🔐 Guardar usando UID como clave
+                            database.child(uid).setValue(nuevoUsuario)
                                 .addOnSuccessListener {
-                                    Toast.makeText(this, "Usuario registrado y guardado con éxito", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(this, "Usuario registrado correctamente", Toast.LENGTH_SHORT).show()
                                     startActivity(Intent(this, MainActivity::class.java))
                                     finish()
                                 }
