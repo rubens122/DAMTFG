@@ -35,7 +35,6 @@ class CancionAmigoAdapter(
         canciones.addAll(nuevasCanciones)
         notifyDataSetChanged()
     }
-
     inner class CancionViewHolder(itemView: View, private val context: Context) :
         RecyclerView.ViewHolder(itemView) {
 
@@ -49,8 +48,6 @@ class CancionAmigoAdapter(
             tituloCancion.text = track.title
             artistaCancion.text = track.artist.name
             Picasso.get().load(track.album.cover).into(imagenAlbum)
-
-            // Reproducir usando la barra global
             botonReproducir.setOnClickListener {
                 if (track.preview.isNullOrEmpty()) {
                     Toast.makeText(context, "Esta canción no tiene preview.", Toast.LENGTH_SHORT).show()
@@ -64,7 +61,6 @@ class CancionAmigoAdapter(
                 }
             }
 
-            // Añadir a playlist
             botonAnadir.setOnClickListener {
                 onAnadir(track)
             }

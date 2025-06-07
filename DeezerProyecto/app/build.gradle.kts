@@ -41,6 +41,7 @@ android {
 
 
 dependencies {
+    implementation("com.google.android.gms:play-services-auth:21.3.0")
     implementation("androidx.palette:palette:1.0.0")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.picasso:picasso:2.71828")

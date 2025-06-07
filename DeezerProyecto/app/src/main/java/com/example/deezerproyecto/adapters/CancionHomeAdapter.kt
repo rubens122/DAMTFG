@@ -39,14 +39,19 @@ class CancionHomeAdapter(
         fun bind(track: Track) {
             tituloCancion.text = track.title
 
-            // 🔄 Validación de la URL
-            if (track.album.cover.isNotEmpty()) {
-                Picasso.get()
-                    .load(track.album.cover)
-                    .fit()
-                    .centerCrop()
-                    .into(imagenCancion)
+            val urlImagen = when {
+                track.album.cover_xl.isNotEmpty() -> track.album.cover_xl
+                track.album.cover_big.isNotEmpty() -> track.album.cover_big
+                track.album.cover_medium.isNotEmpty() -> track.album.cover_medium
+                else -> track.album.cover
             }
+
+            Picasso.get()
+                .load(urlImagen)
+                .placeholder(R.drawable.placeholder_image)
+                .fit()
+                .centerCrop()
+                .into(imagenCancion)
 
             itemView.setOnClickListener {
                 onClickCancion(track)

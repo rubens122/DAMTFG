@@ -31,8 +31,8 @@ class ArtistaSugeridoAdapter(
         holder.nombre.text = artista.name
 
         Picasso.get()
-            .load(artista.picture_xl) // ✅ calidad alta
-            .resize(300, 300)         // Ajusta según el tamaño del ImageView
+            .load(artista.picture_xl)
+            .resize(300, 300)
             .centerCrop()
             .into(holder.imagen)
 

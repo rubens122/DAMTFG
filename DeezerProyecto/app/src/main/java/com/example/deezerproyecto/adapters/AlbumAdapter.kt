@@ -39,12 +39,16 @@ class AlbumAdapter(
         fun bind(album: Album) {
             tituloAlbum.text = album.title
 
-            // 🔄 URL de alta calidad para el álbum
-            val urlAltaCalidad = album.cover.replace("/image", "/image?size=1000x1000")
+            val urlImagen = when {
+                album.cover_xl.isNotEmpty() -> album.cover_xl
+                album.cover_big.isNotEmpty() -> album.cover_big
+                album.cover.isNotEmpty() -> album.cover
+                else -> "https://cdn-icons-png.flaticon.com/512/833/833281.png"
+            }
 
-            // 🔄 Carga con Picasso en alta resolución
             Picasso.get()
-                .load(urlAltaCalidad)
+                .load(urlImagen)
+                .placeholder(R.drawable.placeholder_image)
                 .fit()
                 .centerCrop()
                 .into(imagenAlbum)

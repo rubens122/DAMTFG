@@ -1,5 +1,6 @@
 package com.example.deezerproyecto.adapters
 
+import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -57,7 +58,14 @@ class CancionPlaylistAdapter(
         }
 
         holder.botonEliminar?.setOnClickListener {
-            onEliminarCancion?.invoke(track)
+            AlertDialog.Builder(holder.itemView.context)
+                .setTitle("Eliminar canción")
+                .setMessage("¿Seguro que deseas eliminar \"${track.title}\"?")
+                .setPositiveButton("Sí") { _, _ ->
+                    onEliminarCancion?.invoke(track)
+                }
+                .setNegativeButton("Cancelar", null)
+                .show()
         }
 
         holder.botonReproducir.setImageResource(android.R.drawable.ic_media_play)

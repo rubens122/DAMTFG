@@ -21,7 +21,6 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Enlazar binding de la barra
         bindingBarra = BarraReproduccionBinding.bind(findViewById(R.id.barraReproduccion))
 
         bindingBarra.root.visibility = View.GONE
@@ -36,12 +35,10 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
-        // Fragment inicial
         if (savedInstanceState == null) {
             cambiarFragment(HomeFragment())
         }
 
-        // Navegación inferior
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> cambiarFragment(HomeFragment())

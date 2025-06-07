@@ -24,11 +24,9 @@ class CancionAdapter(
         val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
         return CancionViewHolder(view, parent.context)
     }
-
     override fun onBindViewHolder(holder: CancionViewHolder, position: Int) {
         holder.bind(canciones[position])
     }
-
     override fun getItemCount(): Int = canciones.size
 
     fun actualizarCanciones(nuevasCanciones: List<Track>) {
@@ -36,7 +34,6 @@ class CancionAdapter(
         canciones.addAll(nuevasCanciones)
         notifyDataSetChanged()
     }
-
     inner class CancionViewHolder(itemView: View, private val context: Context) : RecyclerView.ViewHolder(itemView) {
         private val imagenAlbum: ImageView = itemView.findViewById(R.id.imagenAlbum)
         private val tituloCancion: TextView = itemView.findViewById(R.id.tituloCancion)
@@ -55,7 +52,7 @@ class CancionAdapter(
             botonReproducir?.setImageResource(android.R.drawable.ic_media_play)
 
             botonReproducir?.setOnClickListener {
-                onClickPlay?.invoke(track)  // <--- aquí disparamos el callback
+                onClickPlay?.invoke(track)
                 (context as? HomeActivity)?.iniciarBarra(
                     titulo = track.title,
                     artista = track.artist.name,

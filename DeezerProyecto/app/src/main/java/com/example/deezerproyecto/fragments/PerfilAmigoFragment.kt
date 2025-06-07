@@ -48,9 +48,10 @@ class PerfilAmigoFragment : Fragment() {
         tituloUltimosArtistas = view.findViewById(R.id.tituloUltimosArtistas)
 
         recyclerPlaylists.layoutManager = LinearLayoutManager(context)
-        adapter = PlaylistAdapter(mutableListOf(), soloContador = false) { playlist ->
+        adapter = PlaylistAdapter(mutableListOf(), soloContador = true) { playlist ->
             abrirPlaylist(playlist)
         }
+
         recyclerPlaylists.adapter = adapter
 
         recyclerUltimosArtistas.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -74,7 +75,6 @@ class PerfilAmigoFragment : Fragment() {
                 val bitmap = android.graphics.BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
                 imagenPerfil.setImageBitmap(bitmap)
             } else {
-                // Imagen por defecto
                 Picasso.get()
                     .load("https://cdn-icons-png.flaticon.com/512/1946/1946429.png")
                     .fit()

@@ -1,6 +1,7 @@
 package com.example.deezerproyecto.fragments
 
 import android.os.Bundle
+import android.util.Base64
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
@@ -53,11 +54,20 @@ class DetallePlaylistFragment(private val playlist: Playlist) : Fragment() {
         nombrePlaylist.text = playlist.nombre
         textoPrivacidad.text = if (playlist.esPrivada) "Privada" else "Pública"
 
-        Picasso.get().load(
-            playlist.rutaFoto.ifEmpty {
+        if (playlist.rutaFoto.startsWith("/9j/")) {
+            try {
+                val bytes = Base64.decode(playlist.rutaFoto, Base64.DEFAULT)
+                val bitmap = android.graphics.BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                imagenPlaylist.setImageBitmap(bitmap)
+            } catch (e: Exception) {
+                imagenPlaylist.setImageResource(R.drawable.placeholder_image)
+            }
+        } else {
+            val url = playlist.rutaFoto.ifEmpty {
                 "https://cdn-icons-png.flaticon.com/512/833/833281.png"
             }
-        ).fit().centerCrop().into(imagenPlaylist)
+            Picasso.get().load(url).fit().centerCrop().placeholder(R.drawable.placeholder_image).into(imagenPlaylist)
+        }
 
         adapter = CancionPlaylistAdapter(
             playlist.canciones?.values?.toList()?.toMutableList() ?: mutableListOf(),
@@ -66,7 +76,6 @@ class DetallePlaylistFragment(private val playlist: Playlist) : Fragment() {
             registrarArtistaEscuchado(track.artist.name, track.artist.picture)
             eliminarCancion(track)
         }
-
 
         recyclerCanciones.layoutManager = LinearLayoutManager(context)
         recyclerCanciones.adapter = adapter
@@ -105,7 +114,6 @@ class DetallePlaylistFragment(private val playlist: Playlist) : Fragment() {
                 database.child(uid).child("playlists").child(playlist.id)
                     .child("canciones").setValue(nuevasCanciones)
                     .addOnSuccessListener {
-                        // ✅ Actualizamos también el objeto local `playlist.canciones`
                         playlist.canciones = nuevasCanciones
                         adapter.actualizarCanciones(nuevasCanciones.values.toList().toMutableList())
                         textoVacio.visibility = if (nuevasCanciones.isEmpty()) View.VISIBLE else View.GONE
@@ -113,7 +121,6 @@ class DetallePlaylistFragment(private val playlist: Playlist) : Fragment() {
             }
         }
     }
-
 
     private fun cargarComentarios() {
         val ref = database.child(uidActual!!).child("playlists").child(playlist.id).child("comentarios")
@@ -129,13 +136,9 @@ class DetallePlaylistFragment(private val playlist: Playlist) : Fragment() {
                         val vista = inflater.inflate(R.layout.item_comentario, contenedorComentarios, false)
                         vista.findViewById<TextView>(R.id.autorComentario).text = comentario.autor
                         vista.findViewById<TextView>(R.id.textoComentario).text = comentario.texto
-
                         val fechaTexto = if (comentario.timestamp is Long) {
                             formato.format(Date(comentario.timestamp))
-                        } else {
-                            "Sin fecha"
-                        }
-
+                        } else "Sin fecha"
                         vista.findViewById<TextView>(R.id.fechaComentario).text = fechaTexto
                         contenedorComentarios.addView(vista)
                     }
@@ -146,7 +149,6 @@ class DetallePlaylistFragment(private val playlist: Playlist) : Fragment() {
         })
     }
 
-
     private fun enviarComentario(texto: String) {
         val id = database.push().key ?: return
         val comentario = mapOf(
@@ -155,12 +157,12 @@ class DetallePlaylistFragment(private val playlist: Playlist) : Fragment() {
             "autor" to correoUsuario,
             "timestamp" to ServerValue.TIMESTAMP
         )
-
         uidActual?.let { uid ->
             database.child(uid).child("playlists").child(playlist.id)
                 .child("comentarios").child(id).setValue(comentario)
         }
     }
+
     private fun registrarArtistaEscuchado(nombreArtista: String, urlImagen: String = "") {
         val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
         val timestamp = System.currentTimeMillis()
@@ -172,5 +174,4 @@ class DetallePlaylistFragment(private val playlist: Playlist) : Fragment() {
             .child(nombreArtista)
             .setValue(datos)
     }
-
 }

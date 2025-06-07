@@ -46,11 +46,23 @@ class DetallePlaylistAmigoFragment : Fragment() {
         binding.nombrePlaylistAmigo.text = playlist.nombre
         binding.textoPrivacidadAmigo.text = if (playlist.esPrivada) "Privada" else "Pública"
 
-        val imagen = if (playlist.rutaFoto.isEmpty()) {
-            "https://cdn-icons-png.flaticon.com/512/833/833281.png"
-        } else playlist.rutaFoto
+        val ruta = playlist.rutaFoto
+        if (ruta.startsWith("/9j/")) {
+            try {
+                val bytes = android.util.Base64.decode(ruta, android.util.Base64.DEFAULT)
+                val bitmap = android.graphics.BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                binding.imagenPlaylistAmigo.setImageBitmap(bitmap)
+            } catch (e: Exception) {
+                binding.imagenPlaylistAmigo.setImageResource(R.drawable.ic_user)
+            }
+        } else {
+            val url = if (ruta.isEmpty()) {
+                "https://cdn-icons-png.flaticon.com/512/833/833281.png"
+            } else ruta
 
-        Picasso.get().load(imagen).fit().centerCrop().into(binding.imagenPlaylistAmigo)
+            Picasso.get().load(url).fit().centerCrop().into(binding.imagenPlaylistAmigo)
+        }
+
 
         adapter = CancionAmigoAdapter(
             canciones = mutableListOf(),

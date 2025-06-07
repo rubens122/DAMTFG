@@ -52,6 +52,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "108229615337-b9so4chd9ijh0tqq2405u2km8866ek8j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.deezerproyecto",
+            "certificate_hash": "8933dabfd7959b26899d9dd5c0c070b5db20454b"
+          }
+        },
+        {
           "client_id": "108229615337-ahd30gdm9pp69kads78htv5er76hnlto.apps.googleusercontent.com",
           "client_type": 3
         }

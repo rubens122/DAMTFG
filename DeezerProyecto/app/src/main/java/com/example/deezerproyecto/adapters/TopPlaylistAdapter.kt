@@ -10,7 +10,7 @@ import com.example.deezerproyecto.R
 import com.example.deezerproyecto.models.Playlist
 
 class TopPlaylistAdapter(
-    private val lista: List<Triple<Playlist, String, Int>>, // Playlist, correoAutor, likes
+    private val lista: List<Triple<Playlist, String, Int>>,
     private val onClick: (playlist: Playlist, uidAutor: String) -> Unit
 ) : RecyclerView.Adapter<TopPlaylistAdapter.ViewHolder>() {
 
@@ -38,7 +38,6 @@ class TopPlaylistAdapter(
             onClick(playlist, uidAutor)
         }
 
-        // ✅ Animación fade-in
         val animacion = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.fade_in)
         holder.itemView.startAnimation(animacion)
     }

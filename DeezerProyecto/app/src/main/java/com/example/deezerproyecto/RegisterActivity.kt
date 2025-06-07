@@ -40,14 +40,12 @@ class RegisterActivity : AppCompatActivity() {
                             val usuario = auth.currentUser
                             val referenciaUsuario = database.child(usuario!!.uid)
 
-                            // 🔄 Mapa con la información del usuario
                             val datosUsuario = mapOf(
                                 "correo" to correo,
-                                "nombre" to "Usuario Nuevo", // Nombre por defecto, se podrá editar en el perfil
+                                "nombre" to "Usuario Nuevo",
                                 "imagenPerfil" to "https://cdn-icons-png.flaticon.com/512/1946/1946429.png"
                             )
 
-                            // 🔄 Guardar en Firebase Database
                             referenciaUsuario.setValue(datosUsuario)
                                 .addOnSuccessListener {
                                     Toast.makeText(this, "Usuario registrado y guardado con éxito", Toast.LENGTH_SHORT).show()

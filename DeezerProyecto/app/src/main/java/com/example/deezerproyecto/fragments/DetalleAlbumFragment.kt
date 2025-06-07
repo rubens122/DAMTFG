@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,12 +22,12 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DetalleAlbumFragment(
-    private val albumId: String,
-    private val nombreAlbumTexto: String,
-    private val nombreArtistaTexto: String,
-    private val imagenUrl: String
-) : Fragment() {
+class DetalleAlbumFragment : Fragment() {
+
+    private lateinit var albumId: String
+    private lateinit var nombreAlbumTexto: String
+    private lateinit var nombreArtistaTexto: String
+    private lateinit var imagenUrl: String
 
     private lateinit var imagenAlbum: ImageView
     private lateinit var nombreAlbum: TextView
@@ -36,6 +37,16 @@ class DetalleAlbumFragment(
 
     private val canciones = mutableListOf<Track>()
     private val deezerService = DeezerClient.retrofit.create(DeezerService::class.java)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            albumId = it.getString("albumId") ?: ""
+            nombreAlbumTexto = it.getString("nombreAlbumTexto") ?: ""
+            nombreArtistaTexto = it.getString("nombreArtistaTexto") ?: ""
+            imagenUrl = it.getString("imagenUrl") ?: ""
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,9 +62,8 @@ class DetalleAlbumFragment(
         nombreAlbum.text = nombreAlbumTexto
         detallesAlbum.text = "$nombreArtistaTexto • Álbum"
 
-        val imagenAlta = imagenUrl.replace("/image", "/image?size=1000x1000")
-        if (imagenAlta.isNotEmpty()) {
-            Picasso.get().load(imagenAlta).fit().centerCrop().into(imagenAlbum)
+        if (imagenUrl.isNotEmpty()) {
+            Picasso.get().load(imagenUrl).fit().centerCrop().into(imagenAlbum)
         } else {
             Picasso.get()
                 .load("https://cdn-icons-png.flaticon.com/512/833/833281.png")
@@ -78,8 +88,6 @@ class DetalleAlbumFragment(
             )
         }
 
-
-
         recyclerCanciones.layoutManager = LinearLayoutManager(requireContext())
         recyclerCanciones.adapter = adapter
 
@@ -95,14 +103,17 @@ class DetalleAlbumFragment(
                     canciones.clear()
                     canciones.addAll(response.body()?.data ?: emptyList())
                     adapter.notifyDataSetChanged()
+                } else {
+                    Toast.makeText(requireContext(), "Error al cargar canciones", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                // opcional: mostrar error
+                Toast.makeText(requireContext(), "Error de conexión", Toast.LENGTH_SHORT).show()
             }
         })
     }
+
     private fun registrarArtistaEscuchado(nombreArtista: String, urlImagen: String = "") {
         val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
         val timestamp = System.currentTimeMillis()
@@ -114,5 +125,4 @@ class DetalleAlbumFragment(
             .child(nombreArtista)
             .setValue(datos)
     }
-
 }

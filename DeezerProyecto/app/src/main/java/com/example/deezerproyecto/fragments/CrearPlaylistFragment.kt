@@ -2,9 +2,12 @@ package com.example.deezerproyecto.fragments
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Base64
 import android.util.Log
 import android.view.*
 import android.widget.*
@@ -13,7 +16,7 @@ import com.example.deezerproyecto.R
 import com.example.deezerproyecto.models.Playlist
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.storage.FirebaseStorage
+import java.io.ByteArrayOutputStream
 import java.util.*
 
 class CrearPlaylistFragment : Fragment() {
@@ -26,7 +29,6 @@ class CrearPlaylistFragment : Fragment() {
 
     private var imagenUri: Uri? = null
     private val database = FirebaseDatabase.getInstance().getReference("usuarios")
-    private val storage = FirebaseStorage.getInstance().getReference("imagenesPlaylists")
     private val uid = FirebaseAuth.getInstance().currentUser?.uid
 
     override fun onCreateView(
@@ -77,6 +79,7 @@ class CrearPlaylistFragment : Fragment() {
         }
 
         val id = UUID.randomUUID().toString()
+
         val playlist = Playlist(
             id = id,
             nombre = nombre,
@@ -86,26 +89,16 @@ class CrearPlaylistFragment : Fragment() {
         )
 
         if (imagenUri != null) {
-            val refImagen = storage.child("playlist_$id.jpg")
+            val bitmap = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, imagenUri)
+            val stream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream)
+            val bytes = stream.toByteArray()
+            val base64 = Base64.encodeToString(bytes, Base64.DEFAULT)
 
-            refImagen.putFile(imagenUri!!)
-                .addOnSuccessListener {
-                    refImagen.downloadUrl.addOnSuccessListener { uri ->
-                        playlist.rutaFoto = uri.toString()
-                        Log.d("RutaFirebase", "URL guardada: ${playlist.rutaFoto}")
-                        guardarPlaylist(playlist)
-                    }.addOnFailureListener {
-                        Toast.makeText(requireContext(), "Error al obtener URL", Toast.LENGTH_SHORT).show()
-                        guardarPlaylist(playlist)
-                    }
-                }
-                .addOnFailureListener {
-                    Toast.makeText(requireContext(), "Error al subir imagen", Toast.LENGTH_SHORT).show()
-                    guardarPlaylist(playlist)
-                }
-        } else {
-            guardarPlaylist(playlist)
+            playlist.rutaFoto = base64
         }
+
+        guardarPlaylist(playlist)
     }
 
     private fun guardarPlaylist(playlist: Playlist) {

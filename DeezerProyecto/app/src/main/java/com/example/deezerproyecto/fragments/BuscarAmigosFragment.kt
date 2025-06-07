@@ -29,7 +29,6 @@ class BuscarAmigosFragment : Fragment() {
         binding = FragmentBuscarAmigosBinding.inflate(inflater, container, false)
         uidActual = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
-        // ✅ Adaptador con callback de agregar
         adapter = AmigoAdapterBuscar(mutableListOf(), uidActual) { usuario ->
             agregarAmigo(usuario)
         }

@@ -1,15 +1,14 @@
 package com.example.deezerproyecto.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.deezerproyecto.HomeActivity
 import com.example.deezerproyecto.R
 import com.example.deezerproyecto.adapters.CancionHomeAdapter
 import com.example.deezerproyecto.adapters.AlbumAdapter
@@ -42,7 +41,7 @@ class DetalleArtistaFragment(
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val view = inflater.inflate(R.layout.fragment_detalle_artista, container, false)
 
         imagenArtista = view.findViewById(R.id.imagenArtista)
@@ -53,8 +52,10 @@ class DetalleArtistaFragment(
 
         nombreArtista.text = artistaNombre
 
-        // ✅ Imagen en alta calidad
-        val urlAltaCalidad = artistaImagen.replace("/image", "/image?size=1000x1000")
+        val urlAltaCalidad = artistaImagen.ifEmpty {
+            "https://cdn-icons-png.flaticon.com/512/833/833281.png"
+        }
+
         Picasso.get()
             .load(urlAltaCalidad)
             .fit()
@@ -65,11 +66,28 @@ class DetalleArtistaFragment(
         recyclerDiscografia.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
         adapterCanciones = CancionHomeAdapter(mutableListOf()) { track ->
-            Toast.makeText(requireContext(), "Reproduciendo: ${track.title}", Toast.LENGTH_SHORT).show()
+            (activity as? HomeActivity)?.iniciarBarra(
+                titulo = track.title,
+                artista = track.artist.name,
+                imagenUrl = track.album.cover_xl.ifEmpty { track.album.cover_big },
+                urlCancion = track.preview
+            )
         }
 
         adapterDiscografia = AlbumAdapter(mutableListOf()) { album ->
-            Toast.makeText(requireContext(), "Álbum seleccionado: ${album.title}", Toast.LENGTH_SHORT).show()
+            val fragment = DetalleAlbumFragment().apply {
+                arguments = Bundle().apply {
+                    putString("albumId", album.id.toString())
+                    putString("nombreAlbumTexto", album.title)
+                    putString("nombreArtistaTexto", album.artist.name)
+                    putString("imagenUrl", album.cover_xl.ifEmpty { album.cover_big })
+                }
+            }
+
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.contenedorFragment, fragment)
+                .addToBackStack(null)
+                .commit()
         }
 
         recyclerTopCanciones.adapter = adapterCanciones
@@ -77,14 +95,13 @@ class DetalleArtistaFragment(
 
         cargarTopCanciones()
         cargarDiscografia()
-        cargarSeguidores() // 👈 NUEVO
+        cargarSeguidores()
 
         return view
     }
 
     private fun cargarTopCanciones() {
-        val call = deezerService.buscarCancion(artistaNombre)
-        call.enqueue(object : Callback<TrackResponse> {
+        deezerService.buscarCancion(artistaNombre).enqueue(object : Callback<TrackResponse> {
             override fun onResponse(call: Call<TrackResponse>, response: Response<TrackResponse>) {
                 if (response.isSuccessful) {
                     val canciones = response.body()?.data ?: emptyList()
@@ -101,8 +118,7 @@ class DetalleArtistaFragment(
     }
 
     private fun cargarDiscografia() {
-        val call = deezerService.buscarDiscografia(artistaId)
-        call.enqueue(object : Callback<AlbumResponse> {
+        deezerService.buscarDiscografia(artistaId).enqueue(object : Callback<AlbumResponse> {
             override fun onResponse(call: Call<AlbumResponse>, response: Response<AlbumResponse>) {
                 if (response.isSuccessful) {
                     val albums = response.body()?.data ?: emptyList()
@@ -129,9 +145,7 @@ class DetalleArtistaFragment(
                 }
             }
 
-            override fun onFailure(call: Call<Artist>, t: Throwable) {
-                // No mostrar error
-            }
+            override fun onFailure(call: Call<Artist>, t: Throwable) {}
         })
     }
 }

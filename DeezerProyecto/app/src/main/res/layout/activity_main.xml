@@ -19,7 +19,6 @@
             android:padding="32dp"
             android:gravity="center_horizontal">
 
-            <!-- Botón sol/luna arriba a la derecha -->
             <ImageButton
                 android:id="@+id/botonModoTema"
                 android:layout_width="40dp"
@@ -31,8 +30,6 @@
                 android:contentDescription="Cambiar tema"
                 android:scaleType="centerInside" />
 
-
-            <!-- Logo -->
             <ImageView
                 android:id="@+id/logoLogin"
                 android:layout_width="140dp"
@@ -42,14 +39,13 @@
                 android:background="@drawable/borde_redondo"
                 android:clipToOutline="true" />
 
-            <!-- Campo correo -->
             <EditText
                 android:id="@+id/campoCorreo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Correo electrónico"
                 android:inputType="textEmailAddress"
-                android:textColor="@color/colorTexto"
+                android:textColor="@color/colorTextoGeneral"
                 android:textColorHint="@color/colorGris"
                 android:background="@drawable/fondo_campo_redondeado"
                 android:padding="14dp"
@@ -57,14 +53,13 @@
                 android:drawablePadding="10dp"
                 android:layout_marginBottom="16dp" />
 
-            <!-- Campo contraseña -->
             <EditText
                 android:id="@+id/campoContrasena"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Contraseña"
                 android:inputType="textPassword"
-                android:textColor="@color/colorTexto"
+                android:textColor="@color/colorTextoGeneral"
                 android:textColorHint="@color/colorGris"
                 android:background="@drawable/fondo_campo_redondeado"
                 android:padding="14dp"
@@ -72,7 +67,6 @@
                 android:drawablePadding="10dp"
                 android:layout_marginBottom="24dp" />
 
-            <!-- Botón iniciar sesión -->
             <Button
                 android:id="@+id/botonIniciarSesion"
                 android:layout_width="match_parent"
@@ -90,7 +84,6 @@
                 android:text="¿No tienes cuenta? Regístrate"
                 android:textColor="@color/colorEnlaceRegistro"
                 android:textSize="14sp" />
-
 
         </LinearLayout>
     </ScrollView>

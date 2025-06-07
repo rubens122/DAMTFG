@@ -16,7 +16,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var prefs: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // ✅ Recuperar preferencia de tema antes de super.onCreate
         prefs = getSharedPreferences("ajustes", MODE_PRIVATE)
         val modoOscuro = prefs.getBoolean("modoOscuro", false)
         AppCompatDelegate.setDefaultNightMode(
@@ -44,7 +43,6 @@ class MainActivity : AppCompatActivity() {
 
             prefs.edit().putBoolean("modoOscuro", nuevoModo == AppCompatDelegate.MODE_NIGHT_YES).apply()
 
-            // Cambia el icono al que se va a cambiar
             binding.botonModoTema.setImageResource(
                 if (nuevoModo == AppCompatDelegate.MODE_NIGHT_YES) R.drawable.ic_sol else R.drawable.ic_luna
             )

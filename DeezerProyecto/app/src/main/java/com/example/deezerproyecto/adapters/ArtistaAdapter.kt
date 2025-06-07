@@ -38,7 +38,13 @@ class ArtistaAdapter(
 
         fun bind(artist: Artist) {
             nombreArtista.text = artist.name
-            Picasso.get().load(artist.picture).into(imagenArtista)
+            val urlAltaCalidad = artist.picture_xl.ifEmpty { artist.picture }
+            Picasso.get()
+                .load(urlAltaCalidad)
+                .fit()
+                .centerCrop()
+                .placeholder(R.drawable.ic_user)
+                .into(imagenArtista)
 
             itemView.setOnClickListener {
                 onClickArtista(artist)

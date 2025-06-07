@@ -36,8 +36,11 @@ data class Album(
     val id: Long = 0,
     val title: String = "",
     val cover: String = "",
+    val cover_medium: String = "",
+    val cover_big: String = "",
+    val cover_xl: String = "",
     val artist: Artist = Artist()
 ) {
-    constructor() : this(0, "", "", Artist())
+    constructor() : this(0, "", "", "", "", "", Artist())
 }
 

@@ -10,7 +10,7 @@ import com.example.deezerproyecto.R
 import com.squareup.picasso.Picasso
 
 class UltimosArtistasAdapter(
-    private val listaArtistas: List<Pair<String, String>> // nombre, urlImagen
+    private val listaArtistas: List<Pair<String, String>>
 ) : RecyclerView.Adapter<UltimosArtistasAdapter.ArtistaViewHolder>() {
 
     class ArtistaViewHolder(view: View) : RecyclerView.ViewHolder(view) {

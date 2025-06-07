@@ -67,4 +67,13 @@
                 android:layout_marginStart="8dp" />
         </LinearLayout>
     </LinearLayout>
+
+    <!-- ✅ Botón eliminar a la derecha -->
+    <ImageView
+        android:id="@+id/botonEliminarPlaylist"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:src="@android:drawable/ic_delete"
+        android:contentDescription="Eliminar playlist" />
 </LinearLayout>

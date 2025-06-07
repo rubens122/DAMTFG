@@ -33,7 +33,22 @@ class BibliotecaAdapter(
         holder.subtitulo.text = "${playlist.canciones?.size ?: 0} canciones"
 
         if (playlist.rutaFoto.isNotEmpty()) {
-            Picasso.get().load(playlist.rutaFoto).into(holder.imagen)
+            if (playlist.rutaFoto.startsWith("/9j/")) {
+                try {
+                    val bytes = android.util.Base64.decode(playlist.rutaFoto, android.util.Base64.DEFAULT)
+                    val bitmap = android.graphics.BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                    holder.imagen.setImageBitmap(bitmap)
+                } catch (e: Exception) {
+                    holder.imagen.setImageResource(R.drawable.ic_user)
+                }
+            } else {
+                Picasso.get()
+                    .load(playlist.rutaFoto)
+                    .placeholder(R.drawable.ic_user)
+                    .into(holder.imagen)
+            }
+        } else {
+            holder.imagen.setImageResource(R.drawable.ic_user)
         }
 
         holder.itemView.setOnClickListener {

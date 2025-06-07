@@ -1,5 +1,7 @@
 package com.example.deezerproyecto.adapters
 
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
@@ -32,7 +34,22 @@ class PlaylistSeleccionAdapter(
         holder.subtitulo.text = "${playlist.canciones?.size ?: 0} canciones"
 
         if (playlist.rutaFoto.isNotEmpty()) {
-            Picasso.get().load(playlist.rutaFoto).into(holder.imagen)
+            if (playlist.rutaFoto.startsWith("/9j/")) {
+                try {
+                    val bytes = Base64.decode(playlist.rutaFoto, Base64.DEFAULT)
+                    val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                    holder.imagen.setImageBitmap(bitmap)
+                } catch (e: Exception) {
+                    holder.imagen.setImageResource(R.drawable.placeholder_image)
+                }
+            } else {
+                Picasso.get()
+                    .load(playlist.rutaFoto)
+                    .placeholder(R.drawable.placeholder_image)
+                    .fit()
+                    .centerCrop()
+                    .into(holder.imagen)
+            }
         } else {
             holder.imagen.setImageResource(R.drawable.placeholder_image)
         }

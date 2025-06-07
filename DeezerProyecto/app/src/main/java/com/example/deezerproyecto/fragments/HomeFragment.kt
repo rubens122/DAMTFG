@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.widget.ImageButton
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.deezerproyecto.HomeActivity
 import com.example.deezerproyecto.R
 import com.example.deezerproyecto.adapters.AlbumAdapter
 import com.example.deezerproyecto.adapters.ArtistaAdapter
@@ -68,11 +68,20 @@ class HomeFragment : Fragment() {
 
     private fun inicializarAdaptadores() {
         adapterCanciones = CancionHomeAdapter(mutableListOf()) { track ->
-            Toast.makeText(requireContext(), "Pulsado: ${track.title}", Toast.LENGTH_SHORT).show()
+            val imagenArtista = track.artist.picture_xl.ifEmpty {
+                track.album.cover_xl.ifEmpty { track.album.cover }
+            }
+
+            (activity as? HomeActivity)?.iniciarBarra(
+                titulo = track.title,
+                artista = track.artist.name,
+                imagenUrl = imagenArtista,
+                urlCancion = track.preview
+            )
         }
 
         adapterArtistas = ArtistaAdapter(mutableListOf()) { artist ->
-            val fragment = DetalleArtistaFragment(artist.id, artist.name, artist.picture)
+            val fragment = DetalleArtistaFragment(artist.id, artist.name, artist.picture_xl)
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.contenedorFragment, fragment)
                 .addToBackStack(null)
@@ -80,12 +89,15 @@ class HomeFragment : Fragment() {
         }
 
         adapterAlbums = AlbumAdapter(mutableListOf()) { album ->
-            val fragment = DetalleAlbumFragment(
-                album.id.toString(),
-                album.title,
-                album.artist.name,
-                album.cover
-            )
+            val fragment = DetalleAlbumFragment().apply {
+                arguments = Bundle().apply {
+                    putString("albumId", album.id.toString())
+                    putString("nombreAlbumTexto", album.title)
+                    putString("nombreArtistaTexto", album.artist.name)
+                    putString("imagenUrl", album.cover_xl.ifEmpty { album.cover_big })
+                }
+            }
+
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.contenedorFragment, fragment)
                 .addToBackStack(null)
@@ -110,13 +122,10 @@ class HomeFragment : Fragment() {
                 if (response.isSuccessful) {
                     val canciones = response.body()?.data ?: emptyList()
                     adapterCanciones.actualizarCanciones(canciones)
-                } else {
-                    Toast.makeText(requireContext(), "Error al cargar canciones populares", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                Toast.makeText(requireContext(), "Error de conexión", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -127,13 +136,10 @@ class HomeFragment : Fragment() {
                 if (response.isSuccessful) {
                     val artistas = response.body()?.data ?: emptyList()
                     adapterArtistas.actualizarArtistas(artistas)
-                } else {
-                    Toast.makeText(requireContext(), "Error al cargar artistas", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<ArtistResponse>, t: Throwable) {
-                Toast.makeText(requireContext(), "Error de conexión", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -144,13 +150,10 @@ class HomeFragment : Fragment() {
                 if (response.isSuccessful) {
                     val albums = response.body()?.data ?: emptyList()
                     adapterAlbums.actualizarAlbums(albums)
-                } else {
-                    Toast.makeText(requireContext(), "Error al cargar álbumes", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<AlbumResponse>, t: Throwable) {
-                Toast.makeText(requireContext(), "Error de conexión", Toast.LENGTH_SHORT).show()
             }
         })
     }
