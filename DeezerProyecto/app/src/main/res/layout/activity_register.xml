@@ -19,8 +19,6 @@
             android:orientation="vertical"
             android:padding="32dp"
             android:gravity="center_horizontal">
-
-            <!-- Logo -->
             <ImageView
                 android:id="@+id/logoRegistro"
                 android:layout_width="140dp"

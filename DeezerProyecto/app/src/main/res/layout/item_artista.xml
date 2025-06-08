@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_margin="8dp">
-
     <ImageView
         android:id="@+id/imagenArtista"
         android:layout_width="150dp"

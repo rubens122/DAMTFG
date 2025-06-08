@@ -6,7 +6,6 @@
     android:orientation="vertical"
     android:background="@color/colorFondo"
     android:padding="16dp">
-
     <TextView
         android:id="@+id/tituloMisPlaylists"
         android:layout_width="wrap_content"
@@ -16,7 +15,6 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginBottom="16dp"/>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerPlaylists"
         android:layout_width="match_parent"

@@ -3,7 +3,7 @@
     android:shape="rectangle"
     android:elevation="4dp">
 
-    <solid android:color="#1E1E1E"/> <!-- Fondo nuevo -->
+    <solid android:color="#1E1E1E"/>
     <corners android:radius="16dp"/>
 </shape>
 

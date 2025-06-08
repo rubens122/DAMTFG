@@ -5,7 +5,6 @@
     android:layout_marginTop="25dp"
     android:background="@color/colorFondo"
     android:padding="16dp">
-
     <LinearLayout
         android:id="@+id/layoutOpciones"
         android:layout_width="match_parent"
@@ -32,7 +31,6 @@
             android:textColor="@color/colorTexto"
             android:textSize="14sp"
             android:layout_marginBottom="24dp" />
-
         <LinearLayout
             android:id="@+id/botonBuscarAmigos"
             android:layout_width="match_parent"
@@ -45,7 +43,6 @@
             android:clickable="true"
             android:focusable="true"
             android:elevation="4dp">
-
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"

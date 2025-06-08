@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:background="@color/colorFondo">
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewPlaylists"
         android:layout_width="match_parent"

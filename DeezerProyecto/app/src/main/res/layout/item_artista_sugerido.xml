@@ -6,7 +6,6 @@
     android:layout_marginBottom="12dp"
     android:elevation="4dp"
     android:background="@drawable/fondo_tarjeta_gris">
-
     <ImageView
         android:id="@+id/imagenArtista"
         android:layout_width="match_parent"

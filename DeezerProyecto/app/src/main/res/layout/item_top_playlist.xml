@@ -6,7 +6,6 @@
     android:padding="12dp"
     android:background="@drawable/fondo_tarjeta_gris"
     android:layout_marginBottom="12dp">
-
     <TextView
         android:id="@+id/textoNombrePlaylist"
         android:layout_width="wrap_content"
@@ -15,7 +14,6 @@
         android:textColor="@color/colorTextoGeneral"
         android:textSize="18sp"
         android:textStyle="bold" />
-
     <TextView
         android:id="@+id/textoAutor"
         android:layout_width="wrap_content"
@@ -24,7 +22,6 @@
         android:textColor="#CCCCCC"
         android:textSize="14sp"
         android:layout_marginTop="4dp" />
-
     <TextView
         android:id="@+id/textoLikes"
         android:layout_width="wrap_content"
