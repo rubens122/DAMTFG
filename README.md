@@ -65,6 +65,12 @@ Este proyecto utiliza el control de versiones proporcionado por Git y está aloj
 - Java
 - JavaFX
 - Firebase Realtime Database
+- 
+### Mejores prácticas aplicadas:
+
+- Estandarización de títulos
+- Separación clara entre proyecto Android y JavaFX
+- Notas de seguridad (`google-services.json`)
 
 ## Autores
 
