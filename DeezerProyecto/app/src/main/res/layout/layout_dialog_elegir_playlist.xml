@@ -7,7 +7,6 @@
     android:background="@color/colorFondo"
     android:padding="16dp">
 
-    <!-- Título -->
     <TextView
         android:id="@+id/tituloMisPlaylists"
         android:layout_width="wrap_content"
@@ -18,7 +17,6 @@
         android:textStyle="bold"
         android:layout_marginBottom="16dp"/>
 
-    <!-- RecyclerView de playlists -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerPlaylists"
         android:layout_width="match_parent"

@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="25dp"
     android:background="@color/colorFondo"
     android:padding="24dp"
     android:fillViewport="true">
@@ -13,7 +14,6 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
-        <!-- Imagen con botón de cámara -->
         <FrameLayout
             android:layout_width="160dp"
             android:layout_height="160dp"
@@ -39,8 +39,6 @@
                 android:tint="@color/colorTexto"
                 android:contentDescription="Cambiar imagen" />
         </FrameLayout>
-
-        <!-- Campo de nombre -->
         <EditText
             android:id="@+id/campoNombrePlaylist"
             android:layout_width="match_parent"
@@ -51,8 +49,6 @@
             android:backgroundTint="@color/colorGris"
             android:padding="12dp"
             android:layout_marginBottom="20dp" />
-
-        <!-- Switch de privacidad -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -77,7 +73,6 @@
                 android:trackTint="@color/colorGris" />
         </LinearLayout>
 
-        <!-- Botón para guardar -->
         <Button
             android:id="@+id/botonGuardarCambios"
             android:layout_width="match_parent"

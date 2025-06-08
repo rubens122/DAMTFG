@@ -42,6 +42,7 @@ class PlaylistAdapter(
         holder.textoNombre.text = playlist.nombre
         holder.textoPrivacidad.text = if (playlist.esPrivada) "Privada" else "Pública"
 
+        // Cargar imagen de la playlist
         if (playlist.rutaFoto.isNotEmpty()) {
             if (playlist.rutaFoto.startsWith("/9j/")) {
                 try {
@@ -63,30 +64,35 @@ class PlaylistAdapter(
             holder.imagenPlaylist.setImageResource(R.drawable.ic_user)
         }
 
+        val esPropia = playlist.idUsuario == uid
+
         if (soloContador) {
             holder.botonLike.visibility = View.GONE
             holder.botonEliminar.visibility = View.GONE
         } else {
-            holder.botonLike.visibility = View.VISIBLE
-            holder.botonEliminar.visibility = View.VISIBLE
+            holder.botonEliminar.visibility = if (esPropia) View.VISIBLE else View.GONE
+            holder.botonLike.visibility = if (!esPropia) View.VISIBLE else View.GONE
 
-            val refLike = referenciaLikes.child(playlist.id).child(uid)
-            refLike.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    holder.botonLike.setImageResource(
-                        if (snapshot.exists()) R.drawable.ic_corazon_lleno else R.drawable.ic_corazon_vacio
-                    )
-                }
+            if (!esPropia) {
+                val refLike = referenciaLikes.child(playlist.id).child(uid)
 
-                override fun onCancelled(error: DatabaseError) {}
-            })
+                refLike.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        holder.botonLike.setImageResource(
+                            if (snapshot.exists()) R.drawable.ic_corazon_lleno else R.drawable.ic_corazon_vacio
+                        )
+                    }
 
-            holder.botonLike.setOnClickListener {
-                refLike.get().addOnSuccessListener { snapshot ->
-                    if (snapshot.exists()) {
-                        refLike.removeValue()
-                    } else {
-                        refLike.setValue(true)
+                    override fun onCancelled(error: DatabaseError) {}
+                })
+
+                holder.botonLike.setOnClickListener {
+                    refLike.get().addOnSuccessListener { snapshot ->
+                        if (snapshot.exists()) {
+                            refLike.removeValue()
+                        } else {
+                            refLike.setValue(true)
+                        }
                     }
                 }
             }

@@ -45,7 +45,6 @@ class RegisterActivity : AppCompatActivity() {
                                 imagenPerfil = "https://cdn-icons-png.flaticon.com/512/1946/1946429.png"
                             )
 
-                            // 🔐 Guardar usando UID como clave
                             database.child(uid).setValue(nuevoUsuario)
                                 .addOnSuccessListener {
                                     Toast.makeText(this, "Usuario registrado correctamente", Toast.LENGTH_SHORT).show()

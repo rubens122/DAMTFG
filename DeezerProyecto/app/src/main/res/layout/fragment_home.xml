@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="25dp"
     android:background="@color/colorFondo"
     android:fillViewport="true">
 
@@ -11,8 +12,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
-
-        <!-- CABECERA MEJORADA -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -23,7 +22,6 @@
             android:background="@drawable/fondo_degradado_home"
             android:elevation="6dp">
 
-            <!-- Logo redondeado -->
             <ImageView
                 android:id="@+id/logoSocialMusic"
                 android:layout_width="60dp"
@@ -36,9 +34,6 @@
                 android:elevation="4dp"
                 android:contentDescription="Logo Social Music" />
 
-            <!-- Título elegante -->
-
-            <!-- Botón perfil redondo -->
             <TextView
                 android:id="@+id/tituloApp"
                 android:layout_width="178dp"
@@ -69,7 +64,6 @@
             </FrameLayout>
         </LinearLayout>
 
-        <!-- SECCIÓN: CANCIONES -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -94,8 +88,6 @@
                 android:nestedScrollingEnabled="false"
                 android:clipToPadding="false" />
         </LinearLayout>
-
-        <!-- SECCIÓN: ARTISTAS -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -120,8 +112,6 @@
                 android:nestedScrollingEnabled="false"
                 android:clipToPadding="false" />
         </LinearLayout>
-
-        <!-- SECCIÓN: ÁLBUMES -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

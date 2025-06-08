@@ -39,7 +39,6 @@
             android:textSize="12sp" />
     </LinearLayout>
 
-    <!-- 🔥 Botón para reproducir -->
     <ImageButton
         android:id="@+id/botonReproducir"
         android:layout_width="50dp"
@@ -50,7 +49,6 @@
         android:src="@android:drawable/ic_media_play"
         android:contentDescription="Reproducir canción" />
 
-    <!-- 🔥 Botón para eliminar la canción -->
     <ImageButton
         android:id="@+id/botonEliminar"
         android:layout_width="50dp"

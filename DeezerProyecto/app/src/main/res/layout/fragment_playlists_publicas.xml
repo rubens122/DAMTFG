@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="25dp"
     android:background="@color/colorFondo"
     android:padding="16dp">
 
@@ -13,7 +14,6 @@
         android:gravity="center_horizontal"
         android:paddingTop="24dp">
 
-        <!-- TÍTULO -->
         <TextView
             android:id="@+id/titulo"
             android:layout_width="wrap_content"
@@ -24,7 +24,6 @@
             android:textStyle="bold"
             android:layout_marginBottom="4dp" />
 
-        <!-- SUBTÍTULO -->
         <TextView
             android:id="@+id/subtitulo"
             android:layout_width="wrap_content"
@@ -34,7 +33,6 @@
             android:textSize="14sp"
             android:layout_marginBottom="24dp" />
 
-        <!-- BOTÓN: Buscar Amigos -->
         <LinearLayout
             android:id="@+id/botonBuscarAmigos"
             android:layout_width="match_parent"
@@ -63,8 +61,6 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
         </LinearLayout>
-
-        <!-- BOTÓN: Mis Amigos -->
         <LinearLayout
             android:id="@+id/botonMisAmigos"
             android:layout_width="match_parent"
@@ -94,7 +90,6 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <!-- BOTÓN: Top Playlists -->
         <LinearLayout
             android:id="@+id/botonTopPlaylists"
             android:layout_width="match_parent"

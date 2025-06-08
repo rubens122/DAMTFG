@@ -10,8 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
-        <!-- CABECERA CON FOTO Y DEGRADADO -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,8 +46,6 @@
                     android:contentDescription="Cambiar imagen" />
             </FrameLayout>
         </LinearLayout>
-
-        <!-- DATOS EDITABLES -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,7 +53,6 @@
             android:padding="24dp"
             android:gravity="center_horizontal">
 
-            <!-- Campo nombre -->
             <EditText
                 android:id="@+id/campoNombre"
                 android:layout_width="match_parent"
@@ -70,7 +65,6 @@
                 android:padding="12dp"
                 android:layout_marginBottom="16dp" />
 
-            <!-- Correo (no editable) -->
             <EditText
                 android:id="@+id/campoCorreo"
                 android:layout_width="match_parent"
@@ -84,7 +78,6 @@
                 android:enabled="false"
                 android:layout_marginBottom="24dp" />
 
-            <!-- Botón guardar -->
             <Button
                 android:id="@+id/botonGuardar"
                 android:layout_width="match_parent"
@@ -95,7 +88,6 @@
                 android:padding="12dp"
                 android:layout_marginBottom="12dp" />
 
-            <!-- Botón cerrar sesión -->
             <Button
                 android:id="@+id/botonCerrarSesion"
                 android:layout_width="match_parent"

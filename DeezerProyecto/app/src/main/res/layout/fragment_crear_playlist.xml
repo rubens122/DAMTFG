@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="25dp"
     android:background="@color/colorFondo"
     android:padding="24dp"
     android:fillViewport="true">
@@ -13,7 +14,6 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
-        <!-- Imagen + botón cámara -->
         <FrameLayout
             android:layout_width="160dp"
             android:layout_height="160dp"
@@ -40,7 +40,6 @@
                 android:contentDescription="Cambiar imagen" />
         </FrameLayout>
 
-        <!-- Nombre -->
         <EditText
             android:id="@+id/campoNombrePlaylist"
             android:layout_width="match_parent"
@@ -52,7 +51,6 @@
             android:padding="12dp"
             android:layout_marginBottom="20dp" />
 
-        <!-- Switch privacidad -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -77,7 +75,6 @@
                 android:trackTint="@color/colorGris" />
         </LinearLayout>
 
-        <!-- Botón crear -->
         <Button
             android:id="@+id/botonCrearPlaylist"
             android:layout_width="match_parent"

@@ -9,8 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
-        <!-- CABECERA CON DEGRADADO Y FOTO DE PERFIL -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,7 +38,6 @@
                 android:animation="@anim/deslizar_arriba" />
         </LinearLayout>
 
-        <!-- TÍTULO PLAYLISTS -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,7 +49,6 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp" />
 
-        <!-- RECYCLER DE PLAYLISTS -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerPlaylists"
             android:layout_width="match_parent"
@@ -60,7 +56,6 @@
             android:nestedScrollingEnabled="false"
             android:padding="8dp" />
 
-        <!-- TÍTULO ARTISTAS ESCUCHADOS -->
         <TextView
             android:id="@+id/tituloUltimosArtistas"
             android:layout_width="wrap_content"
@@ -74,7 +69,6 @@
             android:layout_marginBottom="8dp"
             android:visibility="gone" />
 
-        <!-- RECYCLER DE ARTISTAS -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerUltimosArtistas"
             android:layout_width="match_parent"

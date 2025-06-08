@@ -8,7 +8,6 @@
     android:gravity="center_vertical"
     android:background="@color/colorFondo">
 
-    <!-- Número -->
     <TextView
         android:id="@+id/numeroCancion"
         android:layout_width="24dp"
@@ -18,7 +17,6 @@
         android:textSize="14sp"
         android:gravity="center" />
 
-    <!-- Info canción -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -48,7 +46,6 @@
             android:ellipsize="end" />
     </LinearLayout>
 
-    <!-- Duración -->
     <TextView
         android:id="@+id/duracionCancion"
         android:layout_width="wrap_content"

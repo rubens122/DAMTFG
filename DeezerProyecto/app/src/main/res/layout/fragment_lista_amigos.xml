@@ -2,10 +2,10 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="25dp"
     android:background="@color/colorFondo"
     android:padding="16dp">
 
-    <!-- Título estilo Spotify -->
     <TextView
         android:id="@+id/tituloMisAmigos"
         android:layout_width="match_parent"
@@ -16,7 +16,6 @@
         android:textStyle="bold"
         android:paddingBottom="8dp" />
 
-    <!-- Lista de amigos -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerAmigos"
         android:layout_width="match_parent"
@@ -25,7 +24,6 @@
         android:clipToPadding="false"
         android:paddingBottom="16dp" />
 
-    <!-- Cargando -->
     <ProgressBar
         android:id="@+id/progressBarAmigos"
         android:layout_width="wrap_content"

@@ -48,10 +48,9 @@ class PerfilAmigoFragment : Fragment() {
         tituloUltimosArtistas = view.findViewById(R.id.tituloUltimosArtistas)
 
         recyclerPlaylists.layoutManager = LinearLayoutManager(context)
-        adapter = PlaylistAdapter(mutableListOf(), soloContador = true) { playlist ->
+        adapter = PlaylistAdapter(mutableListOf(), soloContador = false) { playlist ->
             abrirPlaylist(playlist)
         }
-
         recyclerPlaylists.adapter = adapter
 
         recyclerUltimosArtistas.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -87,7 +86,6 @@ class PerfilAmigoFragment : Fragment() {
         }
     }
 
-
     private fun cargarPlaylistsPublicas() {
         database.child(amigoId).child("playlists")
             .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -114,7 +112,7 @@ class PerfilAmigoFragment : Fragment() {
             .limitToLast(10)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val lista = mutableListOf<Pair<String, String>>() // nombre, imagen
+                    val lista = mutableListOf<Pair<String, String>>()
 
                     for (artistaSnap in snapshot.children.reversed()) {
                         val nombre = artistaSnap.key ?: continue

@@ -68,6 +68,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+
         binding.textoIrARegistro.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }

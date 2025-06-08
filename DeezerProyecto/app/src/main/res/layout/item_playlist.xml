@@ -68,7 +68,6 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- ✅ Botón eliminar a la derecha -->
     <ImageView
         android:id="@+id/botonEliminarPlaylist"
         android:layout_width="80dp"
