@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DeezerProyecto</string>
+    <string name="app_name">SocialMusic</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="google_client_id" formatted="false" translatable="false">"108229615337-b9so4chd9ijh0tqq2405u2km8866ek8j.apps.googleusercontent.com"</string>
