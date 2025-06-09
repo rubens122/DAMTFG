@@ -178,8 +178,6 @@ class DetallePlaylistFragment(private val playlist: Playlist) : Fragment() {
                 }
         }
     }
-
-
     private fun registrarArtistaEscuchado(nombreArtista: String, urlImagen: String = "") {
         val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
         val timestamp = System.currentTimeMillis()
