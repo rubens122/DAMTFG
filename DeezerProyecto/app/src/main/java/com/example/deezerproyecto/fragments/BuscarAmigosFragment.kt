@@ -36,8 +36,6 @@ class BuscarAmigosFragment : Fragment() {
         binding.recyclerAmigos.layoutManager = LinearLayoutManager(context)
         binding.recyclerAmigos.adapter = adapter
 
-        cargarSugerenciasIniciales()
-
         binding.campoBusqueda.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 val query = s.toString().trim()
@@ -52,10 +50,13 @@ class BuscarAmigosFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
 
+        cargarSugerenciasIniciales()
         return binding.root
     }
 
     private fun cargarSugerenciasIniciales() {
+        binding.progressBarBusqueda.visibility = View.VISIBLE
+
         databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val sugerencias = mutableListOf<Usuario>()
@@ -70,15 +71,19 @@ class BuscarAmigosFragment : Fragment() {
                 }
 
                 adapter.actualizarAmigos(sugerencias)
+                binding.progressBarBusqueda.visibility = View.GONE
             }
 
             override fun onCancelled(error: DatabaseError) {
+                binding.progressBarBusqueda.visibility = View.GONE
                 Toast.makeText(context, "Error al cargar sugerencias", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
     private fun buscarPorCorreo(correo: String) {
+        binding.progressBarBusqueda.visibility = View.VISIBLE
+
         databaseRef.orderByChild("correo").startAt(correo).endAt("$correo\uf8ff")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -92,9 +97,11 @@ class BuscarAmigosFragment : Fragment() {
                     }
 
                     adapter.actualizarAmigos(encontrados)
+                    binding.progressBarBusqueda.visibility = View.GONE
                 }
 
                 override fun onCancelled(error: DatabaseError) {
+                    binding.progressBarBusqueda.visibility = View.GONE
                     Toast.makeText(context, "Error al buscar usuarios", Toast.LENGTH_SHORT).show()
                 }
             })
@@ -112,3 +119,4 @@ class BuscarAmigosFragment : Fragment() {
             }
     }
 }
+

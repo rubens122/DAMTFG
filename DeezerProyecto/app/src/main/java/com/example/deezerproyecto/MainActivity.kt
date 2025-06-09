@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         prefs = getSharedPreferences("ajustes", MODE_PRIVATE)
-        val modoOscuro = prefs.getBoolean("modoOscuro", false)
+        val modoOscuro = prefs.getBoolean("modoOscuro", true)
         AppCompatDelegate.setDefaultNightMode(
             if (modoOscuro) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
         )

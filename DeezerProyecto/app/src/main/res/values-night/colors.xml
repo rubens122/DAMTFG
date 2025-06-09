@@ -3,6 +3,7 @@
     <color name="colorFondo">#121212</color>
     <color name="colorTexto">#FFFFFF</color>
     <color name="colorGris">#FFFFFF</color>
+    <color name="colorGrisClaro">#DDDDDD</color>
     <color name="colorVerdeSpotify">#1DB954</color>
     <color name="colorVerdeOscuro">#1A8143</color>
     <color name="colorEnlaceRegistro">#1DB954</color>

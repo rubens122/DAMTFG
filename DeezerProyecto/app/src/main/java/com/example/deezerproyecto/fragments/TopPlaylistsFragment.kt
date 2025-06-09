@@ -2,6 +2,7 @@ package com.example.deezerproyecto.fragments
 
 import android.os.Bundle
 import android.view.*
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,8 +15,9 @@ import com.google.firebase.database.*
 class TopPlaylistsFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
+    private lateinit var progressBar: ProgressBar
     private lateinit var adapter: TopPlaylistAdapter
-    private val listaTop = mutableListOf<Triple<Playlist, String, Int>>() // Playlist + autor + likes
+    private val listaTop = mutableListOf<Triple<Playlist, String, Int>>()
     private val database = FirebaseDatabase.getInstance().getReference("usuarios")
     private val refLikes = FirebaseDatabase.getInstance().getReference("likes")
 
@@ -25,6 +27,8 @@ class TopPlaylistsFragment : Fragment() {
     ): View? {
         val vista = inflater.inflate(R.layout.fragment_top_playlists, container, false)
         recyclerView = vista.findViewById(R.id.recyclerTopPlaylists)
+        progressBar = vista.findViewById(R.id.progressBarTop)
+
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         adapter = TopPlaylistAdapter(listaTop) { playlist, uidAutor ->
@@ -40,6 +44,7 @@ class TopPlaylistsFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
+
         recyclerView.adapter = adapter
 
         cargarPlaylistsConLikes()
@@ -48,8 +53,17 @@ class TopPlaylistsFragment : Fragment() {
     }
 
     private fun cargarPlaylistsConLikes() {
+        progressBar.visibility = View.VISIBLE
+
         database.get().addOnSuccessListener { snapshot ->
             val listaTemporal = mutableListOf<Triple<Playlist, String, Int>>()
+            var procesadas = 0
+            val total = contarPlaylistsPublicas(snapshot)
+
+            if (total == 0) {
+                progressBar.visibility = View.GONE
+                return@addOnSuccessListener
+            }
 
             for (usuarioSnap in snapshot.children) {
                 val nombreUsuario = usuarioSnap.child("correo").value as? String ?: "Desconocido"
@@ -61,12 +75,17 @@ class TopPlaylistsFragment : Fragment() {
                         refLikes.child(id).get().addOnSuccessListener { likesSnap ->
                             val cantidadLikes = likesSnap.childrenCount.toInt()
                             listaTemporal.add(Triple(playlist, nombreUsuario, cantidadLikes))
-
-                            if (listaTemporal.size == contarPlaylistsPublicas(snapshot)) {
-                                val ordenadas = listaTemporal.sortedByDescending { it.third }
+                            procesadas++
+                            if (procesadas == total) {
                                 listaTop.clear()
-                                listaTop.addAll(ordenadas)
+                                listaTop.addAll(listaTemporal.sortedByDescending { it.third })
                                 adapter.notifyDataSetChanged()
+                                progressBar.visibility = View.GONE
+                            }
+                        }.addOnFailureListener {
+                            procesadas++
+                            if (procesadas == total) {
+                                progressBar.visibility = View.GONE
                             }
                         }
                     }
@@ -74,6 +93,7 @@ class TopPlaylistsFragment : Fragment() {
             }
         }.addOnFailureListener {
             Toast.makeText(context, "Error al cargar playlists", Toast.LENGTH_SHORT).show()
+            progressBar.visibility = View.GONE
         }
     }
 

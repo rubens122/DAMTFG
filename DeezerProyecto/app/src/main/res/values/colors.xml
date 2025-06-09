@@ -10,10 +10,11 @@
     <color name="colorVerdeOscuro">#15803D</color>
 
     <color name="colorGris">#EEEEEE</color>
+    <color name="colorGrisClaro">#DDDDDD</color>
     <color name="colorEnlaceRegistro">#FF000000</color>
-    <color name="colorTituloApp">#000000</color>         <!-- Negro para texto en tema claro -->
-    <color name="colorTextoBoton">#FFFFFF</color>        <!-- Texto blanco en botones oscuros -->
-    <color name="colorFondoBoton">#000000</color>        <!-- Botón negro -->
+    <color name="colorTituloApp">#000000</color>
+    <color name="colorTextoBoton">#FFFFFF</color>
+    <color name="colorFondoBoton">#000000</color>
     <color name="colorTextoGeneral">#FFFFFF</color>
     <color name="colorBotonReproducir">#1DB954</color>
 

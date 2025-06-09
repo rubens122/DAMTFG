@@ -11,6 +11,7 @@ import com.example.deezerproyecto.R
 import com.example.deezerproyecto.adapters.CancionAmigoAdapter
 import com.example.deezerproyecto.adapters.PlaylistSeleccionAdapter
 import com.example.deezerproyecto.databinding.FragmentDetallePlaylistAmigoBinding
+import com.example.deezerproyecto.models.ActividadUsuario
 import com.example.deezerproyecto.models.Playlist
 import com.example.deezerproyecto.models.Track
 import com.google.firebase.auth.FirebaseAuth
@@ -134,16 +135,33 @@ class DetallePlaylistAmigoFragment : Fragment() {
 
     private fun enviarComentario(texto: String) {
         val id = database.push().key ?: return
+        val correo = FirebaseAuth.getInstance().currentUser?.email ?: "Anónimo"
         val comentario = mapOf(
             "id" to id,
             "texto" to texto,
-            ("autor" to FirebaseAuth.getInstance().currentUser?.email ?: "Anónimo") as Pair<Any, Any>,
+            "autor" to correo,
             "timestamp" to ServerValue.TIMESTAMP
         )
 
         database.child(uidAmigo).child("playlists").child(playlist.id)
             .child("comentarios").child(id).setValue(comentario)
+            .addOnSuccessListener {
+                val referenciaActividad = FirebaseDatabase.getInstance().getReference("actividadUsuarios")
+                val fecha = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date())
+                val uidComentador = FirebaseAuth.getInstance().currentUser?.uid ?: return@addOnSuccessListener
+
+                val actividad = ActividadUsuario(
+                    tipo = "comentario",
+                    detalle = "Ha comentado en la playlist de un amigo: ${playlist.nombre}",
+                    fecha = fecha,
+                    correo = correo
+                )
+
+                referenciaActividad.child(uidComentador).child(System.currentTimeMillis().toString())
+                    .setValue(actividad)
+            }
     }
+
 
     private fun mostrarDialogoSeleccionPlaylist(track: Track) {
         val uid = uidActual ?: return

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.deezerproyecto.R
 import com.example.deezerproyecto.adapters.CancionPlaylistAdapter
+import com.example.deezerproyecto.models.ActividadUsuario
 import com.example.deezerproyecto.models.Comentario
 import com.example.deezerproyecto.models.Playlist
 import com.example.deezerproyecto.models.Track
@@ -157,11 +158,27 @@ class DetallePlaylistFragment(private val playlist: Playlist) : Fragment() {
             "autor" to correoUsuario,
             "timestamp" to ServerValue.TIMESTAMP
         )
+
         uidActual?.let { uid ->
             database.child(uid).child("playlists").child(playlist.id)
                 .child("comentarios").child(id).setValue(comentario)
+                .addOnSuccessListener {
+                    val referenciaActividad = FirebaseDatabase.getInstance().getReference("actividadUsuarios")
+                    val fecha = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date())
+
+                    val actividad = ActividadUsuario(
+                        tipo = "comentario",
+                        detalle = "Ha comentado en la playlist: ${playlist.nombre}",
+                        fecha = fecha,
+                        correo = correoUsuario
+                    )
+
+                    referenciaActividad.child(uid).child(System.currentTimeMillis().toString())
+                        .setValue(actividad)
+                }
         }
     }
+
 
     private fun registrarArtistaEscuchado(nombreArtista: String, urlImagen: String = "") {
         val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return

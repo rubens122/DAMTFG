@@ -7,10 +7,13 @@ import android.view.*
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.example.deezerproyecto.R
+import com.example.deezerproyecto.models.ActividadUsuario
 import com.example.deezerproyecto.models.Playlist
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
+import java.text.SimpleDateFormat
+import java.util.*
 
 class PlaylistAdapter(
     private val listaPlaylists: MutableList<Playlist>,
@@ -36,13 +39,13 @@ class PlaylistAdapter(
     override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
         val playlist = listaPlaylists[position]
         val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val correo = FirebaseAuth.getInstance().currentUser?.email ?: "usuario@correo.com"
         val referenciaLikes = FirebaseDatabase.getInstance().getReference("likes")
         val referenciaDB = FirebaseDatabase.getInstance().getReference("usuarios").child(uid).child("playlists")
 
         holder.textoNombre.text = playlist.nombre
         holder.textoPrivacidad.text = if (playlist.esPrivada) "Privada" else "Pública"
 
-        // Cargar imagen de la playlist
         if (playlist.rutaFoto.isNotEmpty()) {
             if (playlist.rutaFoto.startsWith("/9j/")) {
                 try {
@@ -65,38 +68,47 @@ class PlaylistAdapter(
         }
 
         val esPropia = playlist.idUsuario == uid
+        holder.botonEliminar.visibility = if (esPropia) View.VISIBLE else View.GONE
+        holder.botonLike.visibility = if (!esPropia) View.VISIBLE else View.GONE
 
-        if (soloContador) {
-            holder.botonLike.visibility = View.GONE
-            holder.botonEliminar.visibility = View.GONE
-        } else {
-            holder.botonEliminar.visibility = if (esPropia) View.VISIBLE else View.GONE
-            holder.botonLike.visibility = if (!esPropia) View.VISIBLE else View.GONE
+        if (!esPropia) {
+            val refLike = referenciaLikes.child(playlist.id).child(uid)
 
-            if (!esPropia) {
-                val refLike = referenciaLikes.child(playlist.id).child(uid)
+            refLike.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    holder.botonLike.setImageResource(
+                        if (snapshot.exists()) R.drawable.ic_corazon_lleno else R.drawable.ic_corazon_vacio
+                    )
+                }
 
-                refLike.addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        holder.botonLike.setImageResource(
-                            if (snapshot.exists()) R.drawable.ic_corazon_lleno else R.drawable.ic_corazon_vacio
-                        )
-                    }
+                override fun onCancelled(error: DatabaseError) {}
+            })
 
-                    override fun onCancelled(error: DatabaseError) {}
-                })
+            holder.botonLike.setOnClickListener {
+                refLike.get().addOnSuccessListener { snapshot ->
+                    if (snapshot.exists()) {
+                        refLike.removeValue()
+                    } else {
+                        refLike.setValue(true).addOnSuccessListener {
+                            val referenciaActividad = FirebaseDatabase.getInstance().getReference("actividadUsuarios")
+                            val fecha = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date())
 
-                holder.botonLike.setOnClickListener {
-                    refLike.get().addOnSuccessListener { snapshot ->
-                        if (snapshot.exists()) {
-                            refLike.removeValue()
-                        } else {
-                            refLike.setValue(true)
+                            val actividad = ActividadUsuario(
+                                tipo = "like",
+                                detalle = "Ha dado like a la playlist: ${playlist.nombre}",
+                                fecha = fecha,
+                                correo = correo
+                            )
+
+                            referenciaActividad.child(uid).child(System.currentTimeMillis().toString())
+                                .setValue(actividad)
                         }
                     }
                 }
             }
+        }
 
+        if (esPropia) {
             holder.botonEliminar.setOnClickListener {
                 AlertDialog.Builder(holder.itemView.context)
                     .setTitle("Eliminar playlist")

@@ -3,20 +3,20 @@ package com.example.deezerproyecto.fragments
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64
-import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
 import com.example.deezerproyecto.R
+import com.example.deezerproyecto.models.ActividadUsuario
 import com.example.deezerproyecto.models.Playlist
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import java.io.ByteArrayOutputStream
+import java.text.SimpleDateFormat
 import java.util.*
 
 class CrearPlaylistFragment : Fragment() {
@@ -105,6 +105,21 @@ class CrearPlaylistFragment : Fragment() {
         val usuarioId = FirebaseAuth.getInstance().currentUser?.uid ?: return
         database.child(usuarioId).child("playlists").child(playlist.id).setValue(playlist)
             .addOnSuccessListener {
+                val referenciaActividad = FirebaseDatabase.getInstance().getReference("actividadUsuarios")
+                val fecha = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date())
+
+                val correo = FirebaseAuth.getInstance().currentUser?.email ?: "correo@desconocido.com"
+                val actividad = ActividadUsuario(
+                    tipo = "nueva_playlist",
+                    detalle = "Ha creado una nueva playlist: ${playlist.nombre}",
+                    fecha = fecha,
+                    correo = correo
+                )
+
+
+                referenciaActividad.child(usuarioId).child(System.currentTimeMillis().toString())
+                    .setValue(actividad)
+
                 Toast.makeText(requireContext(), "Playlist creada", Toast.LENGTH_SHORT).show()
                 parentFragmentManager.popBackStack()
             }

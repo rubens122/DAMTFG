@@ -3,10 +3,10 @@ package com.example.deezerproyecto.fragments
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.EditText
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +23,9 @@ class BibliotecaFragment : Fragment() {
     private lateinit var campoBusqueda: EditText
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PlaylistAdapter
+    private lateinit var progressBar: ProgressBar
+    private lateinit var textoVacio: TextView
+
     private val playlists = mutableListOf<Playlist>()
     private val database = FirebaseDatabase.getInstance()
     private val uidUsuario = FirebaseAuth.getInstance().currentUser?.uid
@@ -35,6 +38,9 @@ class BibliotecaFragment : Fragment() {
 
         campoBusqueda = view.findViewById(R.id.campoBusqueda)
         recyclerView = view.findViewById(R.id.recyclerPlaylists)
+        progressBar = view.findViewById(R.id.progressBarBiblioteca)
+        textoVacio = view.findViewById(R.id.textoVacio)
+
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         adapter = PlaylistAdapter(playlists.toMutableList(), soloContador = true) { playlist ->
@@ -54,6 +60,7 @@ class BibliotecaFragment : Fragment() {
                     it.nombre.lowercase().contains(texto)
                 }
                 adapter.actualizarPlaylists(filtradas)
+                textoVacio.visibility = if (filtradas.isEmpty()) View.VISIBLE else View.GONE
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -68,11 +75,14 @@ class BibliotecaFragment : Fragment() {
         }
 
         cargarPlaylists()
+
         return view
     }
 
     private fun cargarPlaylists() {
         uidUsuario?.let { uid ->
+            progressBar.visibility = View.VISIBLE
+
             database.getReference("usuarios").child(uid).child("playlists")
                 .get().addOnSuccessListener { snapshot ->
                     playlists.clear()
@@ -82,6 +92,13 @@ class BibliotecaFragment : Fragment() {
 
                     playlists.addAll(listaPlaylists)
                     adapter.actualizarPlaylists(playlists)
+
+                    textoVacio.visibility = if (playlists.isEmpty()) View.VISIBLE else View.GONE
+                    progressBar.visibility = View.GONE
+                }
+                .addOnFailureListener {
+                    textoVacio.visibility = View.VISIBLE
+                    progressBar.visibility = View.GONE
                 }
         }
     }
