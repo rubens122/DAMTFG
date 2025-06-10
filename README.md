@@ -78,7 +78,7 @@ Este proyecto utiliza el control de versiones proporcionado por Git y está aloj
 - Java
 - JavaFX
 - Firebase Realtime Database
-- 
+  
 ### Mejores prácticas aplicadas:
 
 - Estandarización de títulos
