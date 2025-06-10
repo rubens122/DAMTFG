@@ -59,8 +59,21 @@ Este proyecto utiliza el control de versiones proporcionado por Git y está aloj
 - Visualización y edición de **playlists** (nombre, descripción, privacidad).
 - Visualización de las **canciones** asociadas a cada playlist.
 - Gestión de **amigos**: visualización y eliminación de amigos vinculados a un usuario.
+  
+### Cómo ejecutar la aplicación
 
-## Tecnologías utilizadas
+1. Clonar el repositorio:
+   ```bash
+   git clone https://github.com/rubens122/DAMTFG.git
+   ```
+
+2. Abrir el proyecto en FireBase_Gestor-main en Intel IJ.
+
+3. Añadir el archivo google-services.json dentro de resources/ con el nombre proyectofinaldam.json.
+
+4. Ejecutar el proyecto desde el menú lateral de Maven/Plugins/javafx/javafx:run.
+
+## Construido con
 
 - Java
 - JavaFX
