@@ -18,6 +18,8 @@ El repositorio incluye los siguientes directorios y archivos:
 
 El proyecto fue desarrollado utilizando Kotlin, siguiendo la arquitectura típica de Android con actividades y fragments. Se integró Firebase para la autenticación y almacenamiento en la nube, y se utilizó la API pública de Deezer para mostrar información musical y reproducir canciones. La interfaz gráfica ha sido diseñada con soporte para tema claro/oscuro y navegación fluida mediante `BottomNavigationView`.
 
+## Base de datos
+
 ![image](https://github.com/user-attachments/assets/5e740cb2-38ac-462f-b326-e6cbf91edb9f)
 
 ## Despliegue
